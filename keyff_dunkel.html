@@ -374,7 +374,7 @@ h2 em{font-style:normal;color:var(--amber)}
 .bk-panel-in{overflow:hidden;min-height:0}
 .bk-det{
   margin:4px 0 14px;padding:14px;border-radius:12px;background:rgba(255,253,246,.62);border:1px solid var(--pline);
-  display:grid;grid-template-columns:104px minmax(0,1fr);grid-template-areas:"ph x" "ph zu" "nw nw" "buy buy";gap:12px 14px;
+  display:grid;grid-template-columns:104px minmax(0,1fr);grid-template-areas:"ph x" "ph zu" "buy buy";gap:12px 14px;
 }
 .bk-det>.bk-x{grid-area:x;justify-self:end}
 .bk-side{display:contents}
@@ -635,6 +635,10 @@ h2 em{font-style:normal;color:var(--amber)}
   .bk-dv.tight .bk-nt th,.bk-dv.tight .bk-nt td{padding:0}
   .bk-dv.tight .bk-dv-foot{margin-top:6px;padding-top:6px}
   .bk-dv.scroll .bk-dv-body{overflow-y:auto}
+  /* ohne Nährwerte (20.11): Foto-Feld füllt den Platz zwischen Zutaten und Preis, kein Loch auf der Seite */
+  .bk-dv .bk-dv-mid{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+  .bk-dv .bk-dv-side{flex:1 1 auto;gap:10px}
+  .bk-dv .bk-dv-side .bk-ph{flex:1 1 auto;min-height:72px;max-height:330px}
 
   .bk-bar{
     position:static;max-width:none;width:min(100%,calc(var(--bkh)*1.7),1080px);margin:4px auto 0;padding:0;background:none;border:0;box-shadow:none;gap:10px;
@@ -1060,6 +1064,16 @@ address .nm{color:var(--gold)}
   font-family:"Kalam","Segoe Print",cursive;font-size:1rem;font-weight:700;letter-spacing:0;text-transform:none;
 }
 .hours .tag::before{content:"← "}
+/* Telefon: die Zeile von heute bleibt einzeilig (ohne Pfeil, «Heute» klein) */
+@media (max-width:420px){
+  .hours th{white-space:nowrap}
+  .hours .tag{margin-left:6px;font-size:.8rem;vertical-align:2px}
+  .hours .tag::before{content:none}
+}
+@media (max-width:380px){
+  .hours th,.hours td{font-size:1.24rem;padding-left:6px;padding-right:6px}
+  .hours .tag{margin-left:5px;font-size:.74rem}
+}
 .ledge{position:absolute;left:10%;right:10%;bottom:-9px;height:10px;border-radius:2px 2px 4px 4px;background:linear-gradient(180deg,#8a5d36,#5c3a1f);box-shadow:0 6px 10px -4px rgba(0,0,0,.8)}
 .ledge i{position:absolute;bottom:8px;height:6px;border-radius:3px;background:linear-gradient(180deg,#fbf6ea,#d9d2c2)}
 .ledge i:first-child{left:18%;width:30px}
@@ -1169,6 +1183,12 @@ address .nm{color:var(--gold)}
 }
 .foot nav a,.place .reserve a,.textlink{transition:color .2s ease,text-decoration-color .2s ease}
 .foot nav a:hover,.place .reserve a:hover{text-decoration-thickness:2px}
+
+/* Dunkel: nur die dünnen Linien zwischen den Blöcken weg; Holzbänder und Hintergründe bleiben (19.11) */
+.menu,.reviews,#fotos,.sec{border-top:0;border-bottom:0}
+/* Just Eat: Beliebt-Zeichen, Bewertung (20.11) */
+.pop{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:.72em;font-weight:700;letter-spacing:.02em;vertical-align:2px;background:#5c3a1f;color:#fff3dc}
+.score .meta .je{color:var(--muted)}
 </style>
 <style id="vw-css">
 .vw-bar{position:relative;z-index:200;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:0;padding:8px 14px;
@@ -1189,10 +1209,9 @@ address .nm{color:var(--gold)}
 <body>
 <div class="vw-bar" role="region" aria-label="Variante wählen, nur im Entwurf sichtbar" lang="de">
 <span class="vw-l">Variante wählen</span>
-<span class="vw-b"><a class="vw-a" href="keyff_hell.html" data-v="hell">Hell</a><a class="vw-a" href="keyff_dunkel.html" data-v="dunkel" aria-current="true">Dunkel</a></span>
+<span class="vw-b"><a class="vw-a" href="keyff_hell.html">Hell</a><a class="vw-a" href="keyff_dunkel.html" aria-current="true">Dunkel</a></span>
 <span class="vw-n">Diese Leiste sehen nur Sie im Entwurf. Auf der fertigen Website erscheint sie nicht.</span>
 </div>
-<script>(function(){var as=document.querySelectorAll('.vw-a');for(var i=0;i<as.length;i++)as[i].addEventListener('click',function(e){var a=this;if(a.getAttribute('aria-current')==='true'){e.preventDefault();return;}if(!window.fetch)return;e.preventDefault();var v=a.getAttribute('data-v');try{sessionStorage.setItem('keyffVar',v);}catch(x){}fetch('keyff_'+v+'.html').then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){try{history.replaceState(null,'',location.pathname+location.search);}catch(x){}window.scrollTo(0,0);document.open();document.write(t);document.close();}).catch(function(){location.href=v+'.html';});});})();</script>
 
 <div class="ribbon">Entwurf – nur zur Ansicht</div>
 
@@ -1220,7 +1239,7 @@ address .nm{color:var(--gold)}
   <div class="wrap">
     <a class="brand" href="#start" aria-label="Kaffe de Keyff – zum Seitenanfang">
       <span class="plate"><img src="keyff_k6.png" alt="Logo Kaffe de Keyff" width="62" height="44" referrerpolicy="no-referrer"></span>
-      <b>Kaffe de Keyff</b>
+      <b translate="no">Kaffe de Keyff</b>
     </a>
     <a class="btn btn-amber" href="tel:+41715544224" aria-label="Anrufen: 071 554 42 24">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
@@ -1241,7 +1260,7 @@ address .nm{color:var(--gold)}
     <div class="wrap">
       <div class="hero-text">
         <p class="eyebrow">Grüezi in Flawil</p>
-        <h1 id="h-hero"><span>Kaffe de</span><span class="glow">Keyff</span></h1>
+        <h1 id="h-hero" translate="no"><span>Kaffe de</span><span class="glow">Keyff</span></h1>
         <p class="lede">Café und Restaurant in Flawil. <span>Vor Ort, zum Mitnehmen oder geliefert.</span></p>
 
         <div class="facts">
@@ -1308,7 +1327,7 @@ address .nm{color:var(--gold)}
                 <span class="bk-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
                 <span class="bk-cv">
                   <span class="plate bk-plate"><img src="keyff_k6.png" alt="" width="176" height="122" referrerpolicy="no-referrer"></span>
-                  <span class="bk-cv-k">Kaffe de Keyff</span>
+                  <span class="bk-cv-k" translate="no">Kaffe de Keyff</span>
                   <span class="bk-cv-t" data-t="Speisekarte">Speisekarte</span>
                   <span class="bk-cv-o" aria-hidden="true"><b></b></span>
                   <span class="bk-cv-btn"><span data-t="Karte öffnen">Karte öffnen</span>
@@ -1341,16 +1360,16 @@ address .nm{color:var(--gold)}
           <summary><span>Menüs</span><small>4</small></summary>
           <ul>
             <li><span class="pl-n">Pizza Menü</span><span class="pl-p">CHF 29.50</span><span class="pl-d">Pizza nach Wahl mit einem kleinen Salat und einem Getränk nach Wahl</span></li>
-            <li><span class="pl-n">Pide Menü</span><span class="pl-p">CHF 27.50</span><span class="pl-d">Pide nach Wahl mit Pommes Frites und Getränk nach Wahl</span></li>
-            <li><span class="pl-n">Dürüm Menü</span><span class="pl-p">CHF 29.50</span><span class="pl-d">Dürüm mit Pommes Frites und einem Getränk nach Wahl</span></li>
-            <li><span class="pl-n">Kebab Menü</span><span class="pl-p">CHF 29.50</span><span class="pl-d">Kebab mit Pommes Frites und einem Getränk nach Wahl</span></li>
+            <li><span class="pl-n">Pide Menü</span><span class="pl-p">CHF 27.50</span><span class="pl-d">Pide nach Wahl mit Pommes frites und Getränk nach Wahl</span></li>
+            <li><span class="pl-n">Dürüm Menü</span><span class="pl-p">CHF 29.50</span><span class="pl-d">Dürüm mit Pommes frites und einem Getränk nach Wahl</span></li>
+            <li><span class="pl-n">Kebab Menü</span><span class="pl-p">CHF 29.50</span><span class="pl-d">Kebab mit Pommes frites und einem Getränk nach Wahl</span></li>
           </ul>
         </details>
         <details class="pl-cat">
           <summary><span>Salate</span><small>5</small></summary>
           <ul>
             <li><span class="pl-n">Gemischter Salat (gross)</span><span class="pl-p">CHF 13.50</span></li>
-            <li><span class="pl-n">Hirtensalat (gross)</span><span class="pl-p">CHF 12.50</span><span class="pl-d">Gurken</span></li>
+            <li><span class="pl-n">Hirtensalat (gross)</span><span class="pl-p">CHF 12.50</span><span class="pl-d">Gurken, Feta, Tomaten und Oliven</span></li>
             <li><span class="pl-n">Hirtensalat (klein)</span><span class="pl-p">CHF 11.00</span><span class="pl-d">Gurken, Feta, Tomaten und Oliven</span></li>
             <li><span class="pl-n">Gemischter Salat (klein)</span><span class="pl-p">CHF 11.50</span></li>
             <li><span class="pl-n">Grüner Salat</span><span class="pl-p">CHF 10.50</span></li>
@@ -1359,12 +1378,12 @@ address .nm{color:var(--gold)}
         <details class="pl-cat">
           <summary><span>Snacks</span><small>12</small></summary>
           <ul>
-            <li><span class="pl-n">Pommes Frites</span><span class="pl-p">CHF 10.50</span></li>
-            <li><span class="pl-n">Rösti Kroketten (6 Stück)</span><span class="pl-p">CHF 12.50</span></li>
+            <li><span class="pl-n">Pommes frites</span><span class="pl-p">CHF 10.50</span></li>
+            <li><span class="pl-n">Röstikroketten (6 Stück)</span><span class="pl-p">CHF 12.50</span></li>
             <li><span class="pl-n">Chicken Nuggets (6 Stück)</span><span class="pl-p">CHF 12.50</span></li>
             <li><span class="pl-n">Börek mit Käse</span><span class="pl-p">CHF 14.50</span></li>
             <li><span class="pl-n">Börek mit Hackfleisch</span><span class="pl-p">CHF 14.50</span></li>
-            <li><span class="pl-n">Calamari Ringe (6 Stück)</span><span class="pl-p">CHF 12.50</span></li>
+            <li><span class="pl-n">Calamari-Ringe (6 Stück)</span><span class="pl-p">CHF 12.50</span></li>
             <li><span class="pl-n">Frühlingsrollen klein (6 Stück)</span><span class="pl-p">CHF 13.50</span></li>
             <li><span class="pl-n">Lahmacun</span><span class="pl-p">CHF 16.50</span></li>
             <li><span class="pl-n">Lahmacun mit Kalbfleisch</span><span class="pl-p">CHF 18.50</span></li>
@@ -1376,7 +1395,7 @@ address .nm{color:var(--gold)}
         <details class="pl-cat">
           <summary><span>Pizza (Ø 32 cm)</span><small>22</small></summary>
           <ul>
-            <li><span class="pl-n">Pizza Fruitti di Mare</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Meeresfrüchte, Oregano</span></li>
+            <li><span class="pl-n">Pizza Frutti di Mare</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Meeresfrüchte, Oregano</span></li>
             <li><span class="pl-n">Calzone</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Hinterschinken, Champignons, Peperoni, Ei, Oregano</span></li>
             <li><span class="pl-n">Pizza Hawaii</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Hinterschinken, Ananas, Oregano</span></li>
             <li><span class="pl-n">Pizza Kaffe de Keyff</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, gegrilltes Lammgeschnetzeltes, Peperoncini, Knoblauch, Oregano</span></li>
@@ -1387,11 +1406,11 @@ address .nm{color:var(--gold)}
             <li><span class="pl-n">Pizza Peperoni</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Peperoni, Oregano</span></li>
             <li><span class="pl-n">Pizza Peperoncini</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, scharfe Peperoncini, Oregano</span></li>
             <li><span class="pl-n">Pizza Spinat</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Spinat, Speck, Zwiebeln, Oregano</span></li>
-            <li><span class="pl-n">Pizza Prosciutto e Fungi</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Hinterschinken, Champignons, Oregano</span></li>
+            <li><span class="pl-n">Pizza Prosciutto e Funghi</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Hinterschinken, Champignons, Oregano</span></li>
             <li><span class="pl-n">Pizza Quattro Formaggi</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, 4 verschiedene Käsesorten, Oregano</span></li>
             <li><span class="pl-n">Pizza Diavolo</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Zwiebeln, Knoblauch, Peperoncini, Oregano</span></li>
             <li><span class="pl-n">Pizza Vegi</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, verschiedene Gemüsesorten, Oregano</span></li>
-            <li><span class="pl-n">Pizza Contandina</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Salami, Champignons, Zwiebeln, Oregano</span></li>
+            <li><span class="pl-n">Pizza Contadina</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Salami, Champignons, Zwiebeln, Oregano</span></li>
             <li><span class="pl-n">Pizza Quattro Stagioni</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Hinterschinken, Oregano</span></li>
             <li><span class="pl-n">Pizza Margherita</span><span class="pl-p">CHF 16.50</span><span class="pl-d">Tomatensauce, Mozzarella, Oregano</span></li>
             <li><span class="pl-n">Pizza Kebab</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Tomatensauce, Mozzarella, Dönerfleisch, Champignons, Oregano</span></li>
@@ -1403,8 +1422,8 @@ address .nm{color:var(--gold)}
         <details class="pl-cat">
           <summary><span>Frittiertes</span><small>3</small></summary>
           <ul>
-            <li><span class="pl-n">Poulet Schnitzel</span><span class="pl-p">CHF 17.50</span><span class="pl-d">Serviert mit einer Beilage nach Wahl</span></li>
-            <li><span class="pl-n">Chicken Nuggets</span><span class="pl-p">CHF 15.50</span><span class="pl-d">Serviert mit Pommes Frites</span></li>
+            <li><span class="pl-n">Pouletschnitzel</span><span class="pl-p">CHF 17.50</span><span class="pl-d">Serviert mit einer Beilage nach Wahl</span></li>
+            <li><span class="pl-n">Chicken Nuggets</span><span class="pl-p">CHF 15.50</span><span class="pl-d">Serviert mit Pommes frites</span></li>
             <li><span class="pl-n">Poulet Cordon Bleu</span><span class="pl-p">CHF 19.50</span><span class="pl-d">Frittiertes Poulet Cordon Bleu. Serviert mit Zitrone und einer Beilage nach Wahl</span></li>
           </ul>
         </details>
@@ -1412,14 +1431,14 @@ address .nm{color:var(--gold)}
           <summary><span>Vegetarische Gerichte</span><small>2</small></summary>
           <ul>
             <li><span class="pl-n">Frühlingsrollen</span><span class="pl-p">CHF 17.50</span><span class="pl-d">Gefüllt mit Gemüse</span></li>
-            <li><span class="pl-n">Falafel Teller</span><span class="pl-p">CHF 17.50</span><span class="pl-d">Gehackte Kichererbsen, Mais, und Mehl</span></li>
+            <li><span class="pl-n">Falafel Teller</span><span class="pl-p">CHF 17.50</span><span class="pl-d">Gehackte Kichererbsen, Mais und Mehl</span></li>
           </ul>
         </details>
         <details class="pl-cat">
           <summary><span>Grillgerichte</span><small>7</small></summary>
           <ul>
             <li><span class="pl-n">Poulet Pepito</span><span class="pl-p">CHF 15.00</span></li>
-            <li><span class="pl-n">Köfte - Cevapcici</span><span class="pl-p">CHF 16.00</span></li>
+            <li><span class="pl-n">Köfte – Cevapcici</span><span class="pl-p">CHF 16.00</span></li>
             <li><span class="pl-n">Cheeseburger</span><span class="pl-p">CHF 13.50</span></li>
             <li><span class="pl-n">Hamburger</span><span class="pl-p">CHF 12.50</span></li>
             <li><span class="pl-n">Poulet Kebab mit Gemüse</span><span class="pl-p">CHF 15.00</span><span class="pl-d">Zubereitet mit Gemüse und Sauce nach Wahl</span></li>
@@ -1431,7 +1450,7 @@ address .nm{color:var(--gold)}
           <summary><span>Tellergerichte</span><small>7</small></summary>
           <ul>
             <li><span class="pl-n">Lammfilet</span><span class="pl-p">CHF 28.50</span><span class="pl-d">Serviert mit Kräuterbutter und einer Beilage nach Wahl</span></li>
-            <li><span class="pl-n">Lamm Kotelett</span><span class="pl-p">CHF 28.50</span><span class="pl-d">Serviert mit Kräuterbutter und einer Beilage nach Wahl</span></li>
+            <li><span class="pl-n">Lammkotelett</span><span class="pl-p">CHF 28.50</span><span class="pl-d">Serviert mit Kräuterbutter und einer Beilage nach Wahl</span></li>
             <li><span class="pl-n">Poulet Kebab Teller</span><span class="pl-p">CHF 23.50</span><span class="pl-d">Serviert mit gegrilltem Gemüse und einer Beilage nach Wahl</span></li>
             <li><span class="pl-n">Adana Teller</span><span class="pl-p">CHF 24.50</span><span class="pl-d">Lammhackfleisch vom Grill nach hausgemachtem Rezept. Serviert mit einer Beilage nach Wahl</span></li>
             <li><span class="pl-n">Köfte Teller</span><span class="pl-p">CHF 24.50</span><span class="pl-d">Serviert mit einer Beilage nach Wahl</span></li>
@@ -1446,7 +1465,7 @@ address .nm{color:var(--gold)}
           </ul>
         </details>
         <details class="pl-cat">
-          <summary><span>Box Gerichte</span><small>5</small></summary>
+          <summary><span>Box-Gerichte</span><small>5</small></summary>
           <ul>
             <li><span class="pl-n">Lammschisch Box mit Gemüse</span><span class="pl-p">CHF 18.00</span></li>
             <li><span class="pl-n">Falafel Box</span><span class="pl-p">CHF 13.00</span></li>
@@ -1474,7 +1493,7 @@ address .nm{color:var(--gold)}
           <summary><span>Asiatische Gerichte</span><small>4</small></summary>
           <ul>
             <li><span class="pl-n">Poulet Curry</span><span class="pl-p">CHF 20.50</span><span class="pl-d">Poulet mit Gemüse an einer feinen Currysauce</span></li>
-            <li><span class="pl-n">Poulet Süss-Sauer</span><span class="pl-p">CHF 20.50</span><span class="pl-d">Poulet mit Gemüse an einer süss-sauer Sauce</span></li>
+            <li><span class="pl-n">Poulet Süss-Sauer</span><span class="pl-p">CHF 20.50</span><span class="pl-d">Poulet mit Gemüse an einer süss-sauren Sauce</span></li>
             <li><span class="pl-n">Nasi Goreng</span><span class="pl-p">CHF 20.50</span><span class="pl-d">Reis mit Gemüse, Poulet und Sojasauce im Wok gebraten</span></li>
             <li><span class="pl-n">Mah Meh</span><span class="pl-p">CHF 20.50</span><span class="pl-d">Nudeln mit Gemüse, Poulet und Sojasauce im Wok gebraten</span></li>
           </ul>
@@ -1490,10 +1509,10 @@ address .nm{color:var(--gold)}
           </ul>
         </details>
         <details class="pl-cat">
-          <summary><span>Extra Sauce</span><small>4</small></summary>
+          <summary><span>Extrasaucen</span><small>4</small></summary>
           <ul>
             <li><span class="pl-n">Tartaresauce</span><span class="pl-p">CHF 2.00</span></li>
-            <li><span class="pl-n">Scharf</span><span class="pl-p">CHF 2.00</span></li>
+            <li><span class="pl-n">Scharfe Sauce</span><span class="pl-p">CHF 2.00</span></li>
             <li><span class="pl-n">Cocktailsauce</span><span class="pl-p">CHF 2.00</span></li>
             <li><span class="pl-n">Joghurtsauce</span><span class="pl-p">CHF 2.00</span></li>
           </ul>
@@ -1549,24 +1568,24 @@ address .nm{color:var(--gold)}
   var MENU = [
     {s:"menues", t:"Menüs", n:"", d:[
       ["Pizza Menü", "Pizza nach Wahl mit einem kleinen Salat und einem Getränk nach Wahl", "29.50"],
-      ["Pide Menü", "Pide nach Wahl mit Pommes Frites und Getränk nach Wahl", "27.50"],
-      ["Dürüm Menü", "Dürüm mit Pommes Frites und einem Getränk nach Wahl", "29.50"],
-      ["Kebab Menü", "Kebab mit Pommes Frites und einem Getränk nach Wahl", "29.50"]
+      ["Pide Menü", "Pide nach Wahl mit Pommes frites und Getränk nach Wahl", "27.50"],
+      ["Dürüm Menü", "Dürüm mit Pommes frites und einem Getränk nach Wahl", "29.50"],
+      ["Kebab Menü", "Kebab mit Pommes frites und einem Getränk nach Wahl", "29.50"]
     ]},
     {s:"salate", t:"Salate", n:"", d:[
       ["Gemischter Salat (gross)", "", "13.50"],
-      ["Hirtensalat (gross)", "Gurken", "12.50"],
+      ["Hirtensalat (gross)", "Gurken, Feta, Tomaten und Oliven", "12.50"],
       ["Hirtensalat (klein)", "Gurken, Feta, Tomaten und Oliven", "11.00"],
       ["Gemischter Salat (klein)", "", "11.50"],
       ["Grüner Salat", "", "10.50"]
     ]},
     {s:"snacks", t:"Snacks", n:"", d:[
-      ["Pommes Frites", "", "10.50"],
-      ["Rösti Kroketten (6 Stück)", "", "12.50"],
+      ["Pommes frites", "", "10.50"],
+      ["Röstikroketten (6 Stück)", "", "12.50"],
       ["Chicken Nuggets (6 Stück)", "", "12.50"],
       ["Börek mit Käse", "", "14.50"],
       ["Börek mit Hackfleisch", "", "14.50"],
-      ["Calamari Ringe (6 Stück)", "", "12.50"],
+      ["Calamari-Ringe (6 Stück)", "", "12.50"],
       ["Frühlingsrollen klein (6 Stück)", "", "13.50"],
       ["Lahmacun", "", "16.50"],
       ["Lahmacun mit Kalbfleisch", "", "18.50"],
@@ -1575,7 +1594,7 @@ address .nm{color:var(--gold)}
       ["Falafel", "", "14.00"]
     ]},
     {s:"pizza", t:"Pizza", n:"Ø 32 cm", d:[
-      ["Pizza Fruitti di Mare", "Tomatensauce, Mozzarella, Meeresfrüchte, Oregano", "19.50"],
+      ["Pizza Frutti di Mare", "Tomatensauce, Mozzarella, Meeresfrüchte, Oregano", "19.50"],
       ["Calzone", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Peperoni, Ei, Oregano", "19.50"],
       ["Pizza Hawaii", "Tomatensauce, Mozzarella, Hinterschinken, Ananas, Oregano", "19.50"],
       ["Pizza Kaffe de Keyff", "Tomatensauce, Mozzarella, gegrilltes Lammgeschnetzeltes, Peperoncini, Knoblauch, Oregano", "19.50"],
@@ -1586,11 +1605,11 @@ address .nm{color:var(--gold)}
       ["Pizza Peperoni", "Tomatensauce, Mozzarella, Peperoni, Oregano", "19.50"],
       ["Pizza Peperoncini", "Tomatensauce, Mozzarella, scharfe Peperoncini, Oregano", "19.50"],
       ["Pizza Spinat", "Tomatensauce, Mozzarella, Spinat, Speck, Zwiebeln, Oregano", "19.50"],
-      ["Pizza Prosciutto e Fungi", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Oregano", "19.50"],
+      ["Pizza Prosciutto e Funghi", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Oregano", "19.50"],
       ["Pizza Quattro Formaggi", "Tomatensauce, Mozzarella, 4 verschiedene Käsesorten, Oregano", "19.50"],
       ["Pizza Diavolo", "Tomatensauce, Mozzarella, Zwiebeln, Knoblauch, Peperoncini, Oregano", "19.50"],
       ["Pizza Vegi", "Tomatensauce, Mozzarella, verschiedene Gemüsesorten, Oregano", "19.50"],
-      ["Pizza Contandina", "Tomatensauce, Mozzarella, Salami, Champignons, Zwiebeln, Oregano", "19.50"],
+      ["Pizza Contadina", "Tomatensauce, Mozzarella, Salami, Champignons, Zwiebeln, Oregano", "19.50"],
       ["Pizza Quattro Stagioni", "Tomatensauce, Mozzarella, Hinterschinken, Oregano", "19.50"],
       ["Pizza Margherita", "Tomatensauce, Mozzarella, Oregano", "16.50"],
       ["Pizza Kebab", "Tomatensauce, Mozzarella, Dönerfleisch, Champignons, Oregano", "19.50"],
@@ -1599,17 +1618,17 @@ address .nm{color:var(--gold)}
       ["Pizza Funghi", "Tomatensauce, Mozzarella, Champignons, Oregano", "19.50"]
     ]},
     {s:"frittiertes", t:"Frittiertes", n:"", d:[
-      ["Poulet Schnitzel", "Serviert mit einer Beilage nach Wahl", "17.50"],
-      ["Chicken Nuggets", "Serviert mit Pommes Frites", "15.50"],
+      ["Pouletschnitzel", "Serviert mit einer Beilage nach Wahl", "17.50"],
+      ["Chicken Nuggets", "Serviert mit Pommes frites", "15.50"],
       ["Poulet Cordon Bleu", "Frittiertes Poulet Cordon Bleu. Serviert mit Zitrone und einer Beilage nach Wahl", "19.50"]
     ]},
     {s:"vegetarische-gerichte", t:"Vegetarische Gerichte", n:"", d:[
       ["Frühlingsrollen", "Gefüllt mit Gemüse", "17.50"],
-      ["Falafel Teller", "Gehackte Kichererbsen, Mais, und Mehl", "17.50"]
+      ["Falafel Teller", "Gehackte Kichererbsen, Mais und Mehl", "17.50"]
     ]},
     {s:"grillgerichte", t:"Grillgerichte", n:"", d:[
       ["Poulet Pepito", "", "15.00"],
-      ["Köfte - Cevapcici", "", "16.00"],
+      ["Köfte – Cevapcici", "", "16.00"],
       ["Cheeseburger", "", "13.50"],
       ["Hamburger", "", "12.50"],
       ["Poulet Kebab mit Gemüse", "Zubereitet mit Gemüse und Sauce nach Wahl", "15.00"],
@@ -1618,7 +1637,7 @@ address .nm{color:var(--gold)}
     ]},
     {s:"tellergerichte", t:"Tellergerichte", n:"", d:[
       ["Lammfilet", "Serviert mit Kräuterbutter und einer Beilage nach Wahl", "28.50"],
-      ["Lamm Kotelett", "Serviert mit Kräuterbutter und einer Beilage nach Wahl", "28.50"],
+      ["Lammkotelett", "Serviert mit Kräuterbutter und einer Beilage nach Wahl", "28.50"],
       ["Poulet Kebab Teller", "Serviert mit gegrilltem Gemüse und einer Beilage nach Wahl", "23.50"],
       ["Adana Teller", "Lammhackfleisch vom Grill nach hausgemachtem Rezept. Serviert mit einer Beilage nach Wahl", "24.50"],
       ["Köfte Teller", "Serviert mit einer Beilage nach Wahl", "24.50"],
@@ -1628,7 +1647,7 @@ address .nm{color:var(--gold)}
     {s:"fitnessteller", t:"Fitnessteller", n:"", d:[
       ["Fitnessteller", "", "18.50"]
     ]},
-    {s:"box-gerichte", t:"Box Gerichte", n:"", d:[
+    {s:"box-gerichte", t:"Box-Gerichte", n:"", d:[
       ["Lammschisch Box mit Gemüse", "", "18.00"],
       ["Falafel Box", "", "13.00"],
       ["Fisch Box", "", "14.50"],
@@ -1649,7 +1668,7 @@ address .nm{color:var(--gold)}
     ]},
     {s:"asiatische-gerichte", t:"Asiatische Gerichte", n:"", d:[
       ["Poulet Curry", "Poulet mit Gemüse an einer feinen Currysauce", "20.50"],
-      ["Poulet Süss-Sauer", "Poulet mit Gemüse an einer süss-sauer Sauce", "20.50"],
+      ["Poulet Süss-Sauer", "Poulet mit Gemüse an einer süss-sauren Sauce", "20.50"],
       ["Nasi Goreng", "Reis mit Gemüse, Poulet und Sojasauce im Wok gebraten", "20.50"],
       ["Mah Meh", "Nudeln mit Gemüse, Poulet und Sojasauce im Wok gebraten", "20.50"]
     ]},
@@ -1660,9 +1679,9 @@ address .nm{color:var(--gold)}
       ["Penne Poulet", "Zubereitet mit Poulet, Gemüse und einer Tomatensauce", "18.50"],
       ["Penne all'Arrabbiata", "Zubereitet mit scharfer Tomatensauce", "18.50"]
     ]},
-    {s:"extra-sauce", t:"Extra Sauce", n:"", d:[
+    {s:"extra-sauce", t:"Extrasaucen", n:"", d:[
       ["Tartaresauce", "", "2.00"],
-      ["Scharf", "", "2.00"],
+      ["Scharfe Sauce", "", "2.00"],
       ["Cocktailsauce", "", "2.00"],
       ["Joghurtsauce", "", "2.00"]
     ]},
@@ -1694,14 +1713,16 @@ address .nm{color:var(--gold)}
   ];
 
   var EN = {
-    c:{"Menüs": "Set menus", "Salate": "Salads", "Frittiertes": "Deep-fried", "Vegetarische Gerichte": "Vegetarian dishes", "Grillgerichte": "From the grill", "Tellergerichte": "Plated meals", "Fitnessteller": "Fitness plate", "Box Gerichte": "Boxes", "Asiatische Gerichte": "Asian dishes", "Extra Sauce": "Extra sauce", "Alkoholfreie Getränke": "Soft drinks", "Alkoholische Getränke": "Alcoholic drinks"},
-    d:{"Dürüm mit Pommes Frites und einem Getränk nach Wahl": "Dürüm with chips and a drink of your choice", "Frittiertes Poulet Cordon Bleu. Serviert mit Zitrone und einer Beilage nach Wahl": "Deep-fried chicken cordon bleu. Served with lemon and a side of your choice", "Gefüllt mit Gemüse": "Filled with vegetables", "Gehackte Kichererbsen, Mais, und Mehl": "Ground chickpeas, sweetcorn and flour", "Gurken": "Cucumber", "Gurken, Feta, Tomaten und Oliven": "Cucumber, feta, tomatoes and olives", "Kebab mit Pommes Frites und einem Getränk nach Wahl": "Kebab with chips and a drink of your choice", "Lammhackfleisch vom Grill nach hausgemachtem Rezept. Serviert mit einer Beilage nach Wahl": "Grilled minced lamb, made to the house recipe. Served with a side of your choice", "Nudeln mit Gemüse, Poulet und Sojasauce im Wok gebraten": "Noodles stir-fried in the wok with vegetables, chicken and soy sauce", "Pide nach Wahl mit Pommes Frites und Getränk nach Wahl": "Pide of your choice with chips and a drink of your choice", "Pizza nach Wahl mit einem kleinen Salat und einem Getränk nach Wahl": "Pizza of your choice with a small salad and a drink of your choice", "Poulet mit Gemüse an einer feinen Currysauce": "Chicken with vegetables in a mild curry sauce", "Poulet mit Gemüse an einer süss-sauer Sauce": "Chicken with vegetables in a sweet-and-sour sauce", "Reis mit Gemüse, Poulet und Sojasauce im Wok gebraten": "Rice stir-fried in the wok with vegetables, chicken and soy sauce", "Serviert mit Kräuterbutter und einer Beilage nach Wahl": "Served with herb butter and a side of your choice", "Serviert mit Pommes Frites": "Served with chips", "Serviert mit Salat und einer Beilage nach Wahl": "Served with salad and a side of your choice", "Serviert mit einer Beilage nach Wahl": "Served with a side of your choice", "Serviert mit gegrilltem Gemüse und einer Beilage nach Wahl": "Served with grilled vegetables and a side of your choice", "Tomatensauce, Mozzarella, 4 verschiedene Käsesorten, Oregano": "Tomato sauce, mozzarella, four kinds of cheese, oregano", "Tomatensauce, Mozzarella, Champignons, Oregano": "Tomato sauce, mozzarella, mushrooms, oregano", "Tomatensauce, Mozzarella, Dönerfleisch, Champignons, Oregano": "Tomato sauce, mozzarella, döner kebab meat, mushrooms, oregano", "Tomatensauce, Mozzarella, Gorgonzola, Oregano": "Tomato sauce, mozzarella, gorgonzola, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Ananas, Oregano": "Tomato sauce, mozzarella, ham, pineapple, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Oregano": "Tomato sauce, mozzarella, ham, mushrooms, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Peperoni, Ei, Oregano": "Tomato sauce, mozzarella, ham, mushrooms, peppers, egg, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Oregano": "Tomato sauce, mozzarella, ham, oregano", "Tomatensauce, Mozzarella, Meeresfrüchte, Oregano": "Tomato sauce, mozzarella, seafood, oregano", "Tomatensauce, Mozzarella, Oregano": "Tomato sauce, mozzarella, oregano", "Tomatensauce, Mozzarella, Peperoni, Oregano": "Tomato sauce, mozzarella, peppers, oregano", "Tomatensauce, Mozzarella, Salami, Champignons, Zwiebeln, Oregano": "Tomato sauce, mozzarella, salami, mushrooms, onions, oregano", "Tomatensauce, Mozzarella, Salami, Oregano": "Tomato sauce, mozzarella, salami, oregano", "Tomatensauce, Mozzarella, Sardellen, Kapern, Oregano": "Tomato sauce, mozzarella, anchovies, capers, oregano", "Tomatensauce, Mozzarella, Spinat, Speck, Zwiebeln, Oregano": "Tomato sauce, mozzarella, spinach, bacon, onions, oregano", "Tomatensauce, Mozzarella, Zwiebeln, Knoblauch, Peperoncini, Oregano": "Tomato sauce, mozzarella, onions, garlic, chilli peppers, oregano", "Tomatensauce, Mozzarella, Zwiebeln, Thon, Kapern, Oregano": "Tomato sauce, mozzarella, onions, tuna, capers, oregano", "Tomatensauce, Mozzarella, gegrillte Pouletstreifen, Oliven, Oregano": "Tomato sauce, mozzarella, grilled chicken strips, olives, oregano", "Tomatensauce, Mozzarella, gegrilltes Lammgeschnetzeltes, Peperoncini, Knoblauch, Oregano": "Tomato sauce, mozzarella, grilled sliced lamb, chilli peppers, garlic, oregano", "Tomatensauce, Mozzarella, scharfe Peperoncini, Oregano": "Tomato sauce, mozzarella, hot chilli peppers, oregano", "Tomatensauce, Mozzarella, verschiedene Gemüsesorten, Oregano": "Tomato sauce, mozzarella, mixed vegetables, oregano", "Zubereitet mit Gemüse und Sauce nach Wahl": "Prepared with vegetables and a sauce of your choice", "Zubereitet mit Gemüse und einer Tomatensauce": "Prepared with vegetables and tomato sauce", "Zubereitet mit Lamm, Gemüse und einer Tomatensauce": "Prepared with lamb, vegetables and tomato sauce", "Zubereitet mit Poulet, Gemüse und einer Tomatensauce": "Prepared with chicken, vegetables and tomato sauce", "Zubereitet mit Rahm und Speck": "Prepared with cream and bacon", "Zubereitet mit scharfer Tomatensauce": "Prepared with spicy tomato sauce"},
-    u:{"Speisekarte": "Menu", "Karte öffnen": "Open the menu", "Karte schliessen": "Close the menu", "Inhalt": "Contents", "Zurück": "Back", "Weiter": "Next", "Seite": "Page", "Seiten": "Pages", "von": "of", "Fortsetzung": "continued", "Zurück zur Liste": "Back to the list", "Foto folgt": "Photo to follow", "Zutaten": "Ingredients", "Angaben folgen": "Details to follow", "Nährwerte": "Nutrition", "Energie": "Energy", "Fett": "Fat", "Kohlenhydrate": "Carbohydrates", "Eiweiss": "Protein", "Salz": "Salt", "folgt": "to follow", "Angaben folgen vom Betrieb": "Details to be provided by the restaurant", "Online bestellen": "Order online", "Alle Preise in Schweizer Franken (CHF).": "All prices in Swiss francs (CHF).", "Guten Appetit": "Enjoy your meal", "Vorherige Seite": "Previous page", "Nächste Seite": "Next page", "Seiten der Speisekarte": "Pages of the menu", "Speisekarte Kaffe de Keyff: Karte öffnen": "Kaffe de Keyff menu: open the menu", "Sprache der Karte": "Menu language", "Rubrik wählen oder weiterblättern. Ein Gericht antippen, dann klappen Foto, Zutaten, Nährwerte und Preis auf.": "Choose a section or turn the pages. Tap a dish to see its photo, ingredients, nutrition and price.", "Bestellen": "Order", "Kategorien": "sections", "Gerichte und Getränke": "dishes and drinks", "Teil": "part", "geht auf der nächsten Seite weiter": "continues on the next page", "Gericht antippen: Foto, Zutaten, Nährwerte und Preis klappen auf.": "Tap a dish to see its photo, ingredients, nutrition and price.", "In der Speisekarte blättern": "Turn the pages of the menu", "Schliessen": "Close", "Details": "Details", "weniger": "less", "Gericht antippen für Zutaten und Nährwerte": "Tap a dish for ingredients and nutrition", "Rubriken der Karte": "Sections of the menu"}
+    c:{"Menüs": "Set menus", "Salate": "Salads", "Frittiertes": "Deep-fried", "Vegetarische Gerichte": "Vegetarian dishes", "Grillgerichte": "From the grill", "Tellergerichte": "Plated meals", "Fitnessteller": "Fitness plate", "Box-Gerichte": "Boxes", "Asiatische Gerichte": "Asian dishes", "Extrasaucen": "Extra sauces", "Alkoholfreie Getränke": "Soft drinks", "Alkoholische Getränke": "Alcoholic drinks"},
+    d:{"Dürüm mit Pommes frites und einem Getränk nach Wahl": "Dürüm with chips and a drink of your choice", "Frittiertes Poulet Cordon Bleu. Serviert mit Zitrone und einer Beilage nach Wahl": "Deep-fried chicken cordon bleu. Served with lemon and a side of your choice", "Gefüllt mit Gemüse": "Filled with vegetables", "Gehackte Kichererbsen, Mais und Mehl": "Ground chickpeas, sweetcorn and flour", "Gurken, Feta, Tomaten und Oliven": "Cucumber, feta, tomatoes and olives", "Kebab mit Pommes frites und einem Getränk nach Wahl": "Kebab with chips and a drink of your choice", "Lammhackfleisch vom Grill nach hausgemachtem Rezept. Serviert mit einer Beilage nach Wahl": "Grilled minced lamb, made to the house recipe. Served with a side of your choice", "Nudeln mit Gemüse, Poulet und Sojasauce im Wok gebraten": "Noodles stir-fried in the wok with vegetables, chicken and soy sauce", "Pide nach Wahl mit Pommes frites und Getränk nach Wahl": "Pide of your choice with chips and a drink of your choice", "Pizza nach Wahl mit einem kleinen Salat und einem Getränk nach Wahl": "Pizza of your choice with a small salad and a drink of your choice", "Poulet mit Gemüse an einer feinen Currysauce": "Chicken with vegetables in a delicate curry sauce", "Poulet mit Gemüse an einer süss-sauren Sauce": "Chicken with vegetables in a sweet-and-sour sauce", "Reis mit Gemüse, Poulet und Sojasauce im Wok gebraten": "Rice stir-fried in the wok with vegetables, chicken and soy sauce", "Serviert mit Kräuterbutter und einer Beilage nach Wahl": "Served with herb butter and a side of your choice", "Serviert mit Pommes frites": "Served with chips", "Serviert mit Salat und einer Beilage nach Wahl": "Served with salad and a side of your choice", "Serviert mit einer Beilage nach Wahl": "Served with a side of your choice", "Serviert mit gegrilltem Gemüse und einer Beilage nach Wahl": "Served with grilled vegetables and a side of your choice", "Tomatensauce, Mozzarella, 4 verschiedene Käsesorten, Oregano": "Tomato sauce, mozzarella, four kinds of cheese, oregano", "Tomatensauce, Mozzarella, Champignons, Oregano": "Tomato sauce, mozzarella, mushrooms, oregano", "Tomatensauce, Mozzarella, Dönerfleisch, Champignons, Oregano": "Tomato sauce, mozzarella, döner kebab meat, mushrooms, oregano", "Tomatensauce, Mozzarella, Gorgonzola, Oregano": "Tomato sauce, mozzarella, gorgonzola, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Ananas, Oregano": "Tomato sauce, mozzarella, ham, pineapple, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Oregano": "Tomato sauce, mozzarella, ham, mushrooms, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Peperoni, Ei, Oregano": "Tomato sauce, mozzarella, ham, mushrooms, peppers, egg, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Oregano": "Tomato sauce, mozzarella, ham, oregano", "Tomatensauce, Mozzarella, Meeresfrüchte, Oregano": "Tomato sauce, mozzarella, seafood, oregano", "Tomatensauce, Mozzarella, Oregano": "Tomato sauce, mozzarella, oregano", "Tomatensauce, Mozzarella, Peperoni, Oregano": "Tomato sauce, mozzarella, peppers, oregano", "Tomatensauce, Mozzarella, Salami, Champignons, Zwiebeln, Oregano": "Tomato sauce, mozzarella, salami, mushrooms, onions, oregano", "Tomatensauce, Mozzarella, Salami, Oregano": "Tomato sauce, mozzarella, salami, oregano", "Tomatensauce, Mozzarella, Sardellen, Kapern, Oregano": "Tomato sauce, mozzarella, anchovies, capers, oregano", "Tomatensauce, Mozzarella, Spinat, Speck, Zwiebeln, Oregano": "Tomato sauce, mozzarella, spinach, bacon, onions, oregano", "Tomatensauce, Mozzarella, Zwiebeln, Knoblauch, Peperoncini, Oregano": "Tomato sauce, mozzarella, onions, garlic, chilli peppers, oregano", "Tomatensauce, Mozzarella, Zwiebeln, Thon, Kapern, Oregano": "Tomato sauce, mozzarella, onions, tuna, capers, oregano", "Tomatensauce, Mozzarella, gegrillte Pouletstreifen, Oliven, Oregano": "Tomato sauce, mozzarella, grilled chicken strips, olives, oregano", "Tomatensauce, Mozzarella, gegrilltes Lammgeschnetzeltes, Peperoncini, Knoblauch, Oregano": "Tomato sauce, mozzarella, grilled sliced lamb, chilli peppers, garlic, oregano", "Tomatensauce, Mozzarella, scharfe Peperoncini, Oregano": "Tomato sauce, mozzarella, hot chilli peppers, oregano", "Tomatensauce, Mozzarella, verschiedene Gemüsesorten, Oregano": "Tomato sauce, mozzarella, mixed vegetables, oregano", "Zubereitet mit Gemüse und Sauce nach Wahl": "Prepared with vegetables and a sauce of your choice", "Zubereitet mit Gemüse und einer Tomatensauce": "Prepared with vegetables and tomato sauce", "Zubereitet mit Lamm, Gemüse und einer Tomatensauce": "Prepared with lamb, vegetables and tomato sauce", "Zubereitet mit Poulet, Gemüse und einer Tomatensauce": "Prepared with chicken, vegetables and tomato sauce", "Zubereitet mit Rahm und Speck": "Prepared with cream and bacon", "Zubereitet mit scharfer Tomatensauce": "Prepared with spicy tomato sauce"},
+    u:{"Speisekarte": "Menu", "Karte öffnen": "Open the menu", "Karte schliessen": "Close the menu", "Inhalt": "Contents", "Zurück": "Back", "Weiter": "Next", "Seite": "Page", "Seiten": "Pages", "von": "of", "Fortsetzung": "continued", "Zurück zur Liste": "Back to the list", "Foto folgt": "Photo to follow", "Zutaten": "Ingredients", "Angaben folgen": "Details to follow", "Nährwerte": "Nutrition", "Energie": "Energy", "Fett": "Fat", "Kohlenhydrate": "Carbohydrates", "Eiweiss": "Protein", "Salz": "Salt", "folgt": "to follow", "Angaben folgen vom Betrieb": "Details to be provided by the restaurant", "Online bestellen": "Order online", "Alle Preise in Schweizer Franken (CHF).": "All prices in Swiss francs (CHF).", "Guten Appetit": "Enjoy your meal", "Vorherige Seite": "Previous page", "Nächste Seite": "Next page", "Seiten der Speisekarte": "Pages of the menu", "Speisekarte Kaffe de Keyff: Karte öffnen": "Kaffe de Keyff menu: open the menu", "Sprache der Karte": "Menu language", "Rubrik wählen oder weiterblättern. Ein Gericht antippen, dann klappen Foto, Zutaten und Preis auf.": "Choose a section or turn the pages. Tap a dish to see its photo, ingredients and price.", "Bestellen": "Order", "Kategorien": "sections", "Gerichte und Getränke": "dishes and drinks", "Teil": "part", "geht auf der nächsten Seite weiter": "continues on the next page", "Gericht antippen: Foto, Zutaten und Preis klappen auf.": "Tap a dish to see its photo, ingredients and price.", "In der Speisekarte blättern": "Turn the pages of the menu", "Schliessen": "Close", "Details": "Details", "weniger": "less", "Gericht antippen für Zutaten und Preis": "Tap a dish for ingredients and price", "Rubriken der Karte": "Sections of the menu", "Beliebt": "Popular"}
   };
   /* Sprache des Buchs: Deutsch (Standard) oder Englisch; Namen der Gerichte und Preise bleiben */
   var LKEY = 'keyff-karte-sprache', lang = 'de';
   try { if(window.localStorage.getItem(LKEY) === 'en') lang = 'en'; } catch(e){}
   function own(o, k){ return Object.prototype.hasOwnProperty.call(o, k); }
+  /* Auf Just Eat unter «Beliebt» (20.11) */
+  var POP = {'Dürüm Kalbfleisch':1,'Kebab Kalbfleisch':1,'Döner Box Kalbfleisch':1,'Pizza Kebab':1,'Pide Kalbfleisch':1};
   function tr(x){ return lang === 'en' && own(EN.u, x) ? EN.u[x] : x; }
   function catT(c){ return lang === 'en' && own(EN.c, c.t) ? EN.c[c.t] : c.t; }
   function descT(x){ return lang === 'en' && own(EN.d, x) ? EN.d[x] : x; }
@@ -1711,7 +1732,7 @@ address .nm{color:var(--gold)}
   /* Kurznamen auf den Registerlaschen (der ganze Name steht im Tooltip) */
   var TABS = ['Menüs','Salate','Snacks','Pizza','Frittiertes','Vegi','Grill','Teller','Fitness','Box','Pide','Asiatisch','Penne','Sauce','Desserts','Getränke','Alkohol'];
   var TABS_EN = ['Menus','Salads','Snacks','Pizza','Fried','Veggie','Grill','Plates','Fitness','Boxes','Pide','Asian','Penne','Sauce','Desserts','Drinks','Alcohol'];
-  var SKEY = 'keyff-karte-gericht-gesehen', HINT = 'Gericht antippen für Zutaten und Nährwerte', seen = false, pulsed = false;
+  var SKEY = 'keyff-karte-gericht-gesehen', HINT = 'Gericht antippen für Zutaten und Preis', seen = false, pulsed = false;
   try { if(window.localStorage.getItem(SKEY) === '1') seen = true; } catch(e){}
 
   var bk = document.getElementById('buch'), plain = document.getElementById('karte-liste');
@@ -1831,7 +1852,7 @@ address .nm{color:var(--gold)}
       h += '<li><a href="#karte-' + c.s + '" data-cat="' + i + '"><span class="n">' + esc(catT(c)) + (c.n ? ' <small>(' + esc(c.n) + ')</small>' : '') +
            '</span><span class="l" aria-hidden="true"></span><span class="p"><span class="sr">' + tr('Seite') + ' </span>' + (catPage[i]+1) + '</span></a></li>';
     }
-    return h + '</ol>' + (tip ? '<p class="bk-tip">' + tr('Gericht antippen: Foto, Zutaten, Nährwerte und Preis klappen auf.') + '</p>' : '');
+    return h + '</ol>' + (tip ? '<p class="bk-tip">' + tr('Gericht antippen: Foto, Zutaten und Preis klappen auf.') + '</p>' : '');
   }
   /* Hinweis unter dem Titel einer Rubrik. show = diese Seite zeigt ihn; auf der zweiten Seite derselben Rubrik bleibt nur sein Platz,
      damit beide Seiten gleich eingeteilt sind */
@@ -1852,14 +1873,13 @@ address .nm{color:var(--gold)}
       '<div class="bk-dv-body"><div class="bk-zu"><h5>' + tr('Zutaten') + '</h5><p>' + (d[1] ? esc(descT(d[1])) : tr('Angaben folgen')) + '</p></div>' +
         '<div class="bk-dv-mid"><div class="bk-dv-side"><figure class="bk-ph">' + ICON + '<figcaption>' + tr('Foto folgt') + '</figcaption></figure>' +
           '<span class="bk-big">' + price + '</span></div>' +
-          '<div class="bk-nw"><h5>' + tr('Nährwerte') + '</h5><table class="bk-nt"><tbody>' + nwHTML() + '</tbody></table></div></div>' +
-        '<p class="bk-note">' + tr('Angaben folgen vom Betrieb') + '</p></div>' +
+          '</div></div>' +
       '<div class="bk-dv-foot"><button type="button" class="bk-back">' + BACK + tr('Zurück zur Liste') + '</button>' +
         '<a class="bk-order" href="' + ORDER + '" target="_blank" rel="noopener">' + tr('Online bestellen') + '</a></div>';
   }
   function dishHTML(ci, j, pfx){
     var d = MENU[ci].d[j], id = pfx + '-' + ci + '-' + j, price = 'CHF ' + d[2];
-    var row = '<span class="n"' + nl() + '>' + esc(d[0]) + '</span><span class="l" aria-hidden="true"></span><span class="p">' + price + '</span>' +
+    var row = '<span class="n"' + nl() + '>' + esc(d[0]) + (own(POP, d[0]) ? ' <span class="pop">' + tr('Beliebt') + '</span>' : '') + '</span><span class="l" aria-hidden="true"></span><span class="p">' + price + '</span>' +
       '<span class="go" aria-hidden="true"><span class="go-a">' + tr('Details') + '</span><span class="go-b">' + tr('weniger') + '</span>' + GO + '</span></button>';
     /* Doppelseite: das Gericht übernimmt beim Antippen seine Seite (siehe openDetail), darum kein Aufklappfeld in der Zeile */
     if(wide) return '<li class="bk-dish"><button type="button" class="bk-row" id="b' + id + '" aria-expanded="false" data-c="' + ci + '" data-j="' + j + '">' + row + '</li>';
@@ -1871,7 +1891,6 @@ address .nm{color:var(--gold)}
           '<div class="bk-buy"><span class="bk-big">' + price + '</span><a class="bk-order" href="' + ORDER + '" target="_blank" rel="noopener">' + tr('Online bestellen') + '</a>' +
             '<button type="button" class="bk-back">' + BACK + tr('Zurück zur Liste') + '</button></div></div>' +
         '<div class="bk-zu"><h4>' + tr('Zutaten') + '</h4><p>' + (d[1] ? esc(descT(d[1])) : tr('Angaben folgen')) + '</p></div>' +
-        '<div class="bk-nw"><h4>' + tr('Nährwerte') + '</h4><table class="bk-nt"><tbody>' + nwHTML() + '</tbody></table><p class="bk-note">' + tr('Angaben folgen vom Betrieb') + '</p></div>' +
       '</div></div></div></li>';
   }
   function pageHTML(idx, pfx){
@@ -1957,7 +1976,7 @@ address .nm{color:var(--gold)}
     var b = base(pos), last = pages.length - 1, t;
     if(wide){
       var a = pageName(b), z = pageName(b+1);
-      t = (lang === 'en' ? 'Pages' : 'Seite') + ' ' + (b+1) + '–' + (b+2) + ' ' + tr('von') + ' ' + pages.length + ' · ' + (a === z ? a : a + ' · ' + z);
+      t = tr('Seiten') + ' ' + (b+1) + '–' + (b+2) + ' ' + tr('von') + ' ' + pages.length + ' · ' + (a === z ? a : a + ' · ' + z);
       bPrev.disabled = b <= 0; bNext.disabled = b + 1 >= last;
     } else {
       t = tr('Seite') + ' ' + (pos+1) + ' ' + tr('von') + ' ' + pages.length + ' · ' + pageName(pos);
@@ -2601,29 +2620,26 @@ address .nm{color:var(--gold)}
         <div class="meta">
           <svg class="stars" aria-hidden="true"><use href="#s45"/></svg>
           <span><span class="sr">4,5 </span>von 5 · 197 Bewertungen auf Google</span>
+          <span class="je">4,9 von 5 · 360+ Bewertungen auf Just Eat</span>
         </div>
       </div>
 
       <div class="quotes">
         <blockquote class="quote">
           <span class="hang" aria-hidden="true"><i></i><svg viewBox="0 0 26 42" focusable="false"><g fill="none" stroke="#ffd28a" stroke-width="1.2" stroke-linejoin="round"><path d="M13 1 25 17 13 41 1 17z"/><path d="M13 1 8.5 17 13 41 17.5 17z"/><path d="M1 17h24"/></g><circle cx="13" cy="19" r="4.2" fill="#ffe7b8"/></svg></span>
-          <svg class="stars" fill="#eca94a" role="img" aria-label="5 von 5 Sternen"><use href="#s5"/></svg>
-          <p>«Essen immer frisch, immer warm. Service freundlich, aufmerksam. Cooler laden, gemütliches Ambiente. Immer wieder gerne»</p>
+          <p>«Essen immer frisch, immer warm. Service freundlich, aufmerksam. Cooler Laden, gemütliches Ambiente. Immer wieder gerne»</p>
           <footer><b>Christian</b> auf Google</footer>
         </blockquote>
         <blockquote class="quote">
-          <svg class="stars" fill="#eca94a" role="img" aria-label="5 von 5 Sternen"><use href="#s5"/></svg>
           <p>«Top Essen, Top Service, sehr freundliches Personal.»</p>
           <footer><b>Marcel</b> auf Google</footer>
         </blockquote>
         <blockquote class="quote">
-          <svg class="stars" fill="#eca94a" role="img" aria-label="5 von 5 Sternen"><use href="#s5"/></svg>
-          <p>«Sehr gutes Essen vor allem das Lammfleisch. Sehr freundliches Personal.»</p>
+          <p>«Sehr gutes Essen, vor allem das Lammfleisch. Sehr freundliches Personal.»</p>
           <footer><b>Bruno</b> auf Google</footer>
         </blockquote>
         <blockquote class="quote">
-          <svg class="stars" fill="#eca94a" role="img" aria-label="5 von 5 Sternen"><use href="#s5"/></svg>
-          <p>«Sehr netter Bediener und Essen ist immer Top»</p>
+          <p>«Sehr netter Bediener, und das Essen ist immer top.»</p>
           <footer><b>Nico</b> auf Google</footer>
         </blockquote>
       </div>
@@ -2639,7 +2655,7 @@ address .nm{color:var(--gold)}
       <section id="zeiten" aria-labelledby="h-zeiten">
         <div class="sec-head">
           <p class="kicker">Öffnungszeiten</p>
-          <h2 id="h-zeiten">Jeden Tag <em>offen</em></h2>
+          <h2 id="h-zeiten">Jeden Tag <em>geöffnet</em></h2>
         </div>
         <div class="board">
         <div class="slate">
@@ -2698,7 +2714,18 @@ address .nm{color:var(--gold)}
 
 <script>
 (function(){
-  var d = new Date().getDay(); // 0 = Sonntag
+  /* Wochentag und Uhrzeit in der Schweiz (Europe/Zurich), nicht die Uhr des Besuchers; ohne Intl die eigene Uhr */
+  var zh = (function(){
+    try {
+      var o = {};
+      new Intl.DateTimeFormat('en-US', {timeZone:'Europe/Zurich', weekday:'short', hour:'2-digit', minute:'2-digit', hourCycle:'h23'})
+        .formatToParts(new Date()).forEach(function(p){ o[p.type] = p.value; });
+      var w = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(o.weekday), h = parseInt(o.hour, 10) % 24, m = parseInt(o.minute, 10);
+      if(w < 0 || isNaN(h) || isNaN(m)) throw new Error('tz');
+      return {d:w, min:h*60 + m};
+    } catch(e){ var n = new Date(); return {d:n.getDay(), min:n.getHours()*60 + n.getMinutes()}; }
+  })();
+  var d = zh.d; // 0 = Sonntag
   var row = document.querySelector('.hours tr[data-day="' + d + '"]');
   if(!row) return;
   row.classList.add('is-today');
@@ -2716,8 +2743,9 @@ address .nm{color:var(--gold)}
     slate.appendChild(ring);
     var place = function(){
       var a = row.getBoundingClientRect(), b = slate.getBoundingClientRect();
-      ring.style.top = Math.round(a.top - b.top - 4) + 'px';
-      ring.style.height = Math.round(a.height + 8) + 'px';
+      var pad = (window.innerWidth || 999) <= 420 ? 7 : 4;
+      ring.style.top = Math.round(a.top - b.top - pad) + 'px';
+      ring.style.height = Math.round(a.height + 2*pad) + 'px';
     };
     place();
     window.addEventListener('load', place); window.addEventListener('resize', place);
@@ -2732,7 +2760,7 @@ address .nm{color:var(--gold)}
     return m ? {a:+m[1]*60 + +m[2], b:+m[3]*60 + +m[4], from:m[1]+':'+m[2], to:m[3]+':'+m[4]} : null;
   }
   var t = span(row); if(!t) return;
-  var now = new Date(), min = now.getHours()*60 + now.getMinutes();
+  var min = zh.min;
   var dot = line.parentNode.querySelector('.dot');
   if(min >= t.a && min < t.b){
     line.innerHTML = 'Jetzt geöffnet · heute bis <strong>' + t.to + ' Uhr</strong>';
@@ -2782,8 +2810,9 @@ address .nm{color:var(--gold)}
   var cur = null;
   function place(r){
     var a = r.getBoundingClientRect(), b = slate.getBoundingClientRect();
-    ring.style.top = Math.round(a.top - b.top - 4) + 'px';
-    ring.style.height = Math.round(a.height + 8) + 'px';
+    var pad = (window.innerWidth || 999) <= 420 ? 7 : 4;
+    ring.style.top = Math.round(a.top - b.top - pad) + 'px';
+    ring.style.height = Math.round(a.height + 2*pad) + 'px';
   }
   function show(r){
     if(cur && cur !== r) cur.classList.remove('is-hover');
