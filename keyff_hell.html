@@ -1682,6 +1682,19 @@ main > .parquet{display:none}
 .bk-dv-orn span{font-family:var(--display);font-weight:700;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;opacity:.45}
 @media (max-height:640px){.bk-dv-orn{display:none!important}}
 @media (max-width:699px){#ab-preise{display:none}.hero-text{display:flex;flex-direction:column;align-items:stretch}.hero-text>.cta{order:1}.hero-text>.hero-info{order:2;margin:14px 0 0}.hero-text>.hero-info~*:not(.cta){order:3}}
+.day-frame{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;opacity:0;z-index:2;box-sizing:border-box;
+  transition:opacity .2s ease,top .2s cubic-bezier(.3,.7,.2,1),height .2s ease}
+.day-frame.on{opacity:1}
+.hw-wait .day-frame{opacity:0!important}
+.days-on tbody tr{cursor:pointer}
+tbody tr[role=button]:focus{outline:none}
+tbody tr[role=button]:focus-visible th{text-decoration:underline;text-underline-offset:4px}
+.day-out{margin:14px 0 0;text-align:center;font-size:1rem;min-height:1.5em}
+@media (prefers-reduced-motion:reduce){.day-frame{transition:none}}
+.day-hov{border:1.5px solid rgba(126,31,44,.4);border-radius:4px}
+.day-sel{border:2px solid #7E1F2C;border-radius:5px;background:rgba(126,31,44,.05)}
+.block.zeit .day-out{color:var(--mocha,#5a4030);text-align:left}
+.block.zeit .day-out strong{color:#7E1F2C}
 </style>
 <style id="vw-css">
 .vw-bar{position:relative;z-index:200;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:0;padding:8px 14px;
@@ -3558,7 +3571,7 @@ main > .parquet{display:none}
 </script>
 <script>
 /* Öffnungszeiten-Zettel: der Tag unter der Maus (Telefon: angetippt) wird hervorgehoben wie heute; heute bleibt immer */
-(function(){
+(function(){ return; /* ersetzt durch «Tage zum Anklicken» (21.11) */
   var slip = document.querySelector('.block.zeit'); if(!slip) return;
   var rows = slip.querySelectorAll('.zeiten tbody tr'); if(!rows.length) return;
   var cur = null;
@@ -3659,6 +3672,65 @@ main > .parquet{display:none}
       }, k * 90);
     }, 0);
   });
+})();
+</script>
+<script>
+/* Tage zum Anklicken (21.11): Maus über einen Tag = Rahmen, Klick / Tippen / Enter = Tag gewählt, seine Zeiten stehen unter der Tafel.
+   Heute ist am Anfang gewählt. Erst aktiv, wenn die Zeiten fertig geschrieben sind. */
+(function(){
+  var box = document.querySelector('.board') || document.querySelector('.block.zeit'); if(!box) return;
+  var host = box.querySelector('.slate') || box;
+  var table = host.querySelector('table'); if(!table) return;
+  var rows = table.querySelectorAll('tbody tr'); if(!rows.length) return;
+  var hov = document.createElement('i'), sel = document.createElement('i');
+  hov.className = 'day-frame day-hov'; sel.className = 'day-frame day-sel';
+  hov.setAttribute('aria-hidden', 'true'); sel.setAttribute('aria-hidden', 'true');
+  host.appendChild(hov); host.appendChild(sel);
+  var out = document.createElement('p'); out.className = 'day-out'; out.setAttribute('aria-live', 'polite');
+  table.parentNode.insertBefore(out, table.nextSibling);
+  var today = table.querySelector('tr.is-today, tr.jetzt');
+  var cur = null, over = null;
+  function dayName(r){ var th = r.querySelector('th'), t = th.querySelector('.tg'); return (t ? t.textContent : th.firstChild.textContent).trim(); }
+  function hrs(r){ return r.querySelector('td').textContent.replace(/\s+/g, '').trim(); }
+  function put(f, r){
+    var x = 0, y = 0, el = table;
+    while(el && el !== host){ x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+    var pad = host.classList.contains('zeit') ? 11 : 6;
+    f.style.left = (x - pad) + 'px'; f.style.width = (table.offsetWidth + 2*pad) + 'px';
+    f.style.top = (y + r.offsetTop - 2) + 'px'; f.style.height = (r.offsetHeight + 4) + 'px';
+  }
+  function ready(){ return !box.classList.contains('hw-wait'); }
+  function choose(r){
+    if(!r) return;
+    if(cur) { cur.classList.remove('is-sel'); cur.setAttribute('aria-pressed', 'false'); }
+    cur = r; r.classList.add('is-sel'); r.setAttribute('aria-pressed', 'true');
+    var isT = (r === today);
+    out.innerHTML = (isT ? 'Heute, ' : '') + dayName(r) + ': <strong>' + hrs(r) + ' Uhr</strong>';
+    host.classList.toggle('sel-today', isT);
+    put(sel, r); sel.classList.add('on');
+  }
+  function hover(r){
+    over = r;
+    if(!r || !ready()){ hov.classList.remove('on'); return; }
+    if(!hov.classList.contains('on')){ hov.style.transition = 'none'; put(hov, r); void hov.offsetHeight; hov.style.transition = ''; }
+    else put(hov, r);
+    hov.classList.add('on');
+  }
+  var canHover = window.matchMedia ? window.matchMedia('(hover:hover)').matches : true;
+  Array.prototype.forEach.call(rows, function(r){
+    r.tabIndex = 0; r.setAttribute('role', 'button'); r.setAttribute('aria-pressed', 'false');
+    r.setAttribute('aria-label', dayName(r) + ', ' + hrs(r) + ' Uhr');
+    if(canHover){ r.addEventListener('mouseenter', function(){ hover(r); }); }
+    r.addEventListener('click', function(){ if(ready()) choose(r); });
+    r.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); if(ready()) choose(r); } });
+  });
+  if(canHover) host.addEventListener('mouseleave', function(){ hover(null); });
+  choose(today || rows[0]);
+  function sync(){ box.classList.toggle('days-on', ready()); if(cur) put(sel, cur); if(over && hov.classList.contains('on')) put(hov, over); }
+  if('MutationObserver' in window) new MutationObserver(sync).observe(box, {attributes:true, attributeFilter:['class']});
+  window.addEventListener('resize', sync); window.addEventListener('load', sync);
+  if(document.fonts && document.fonts.ready && document.fonts.ready.then) document.fonts.ready.then(sync);
+  sync();
 })();
 </script>
 </body>
