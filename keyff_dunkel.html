@@ -1561,6 +1561,12 @@ tbody tr[role=button]:focus-visible th{text-decoration:underline;text-underline-
   .brass address{font-size:1.3rem}
   .quote:first-child{margin-top:84px}
 }
+/* Julia 21.11 (6a): kein blauer Rahmen beim Klicken/Tippen; nur mit Tastatur ein Rahmen in der Farbe der Seite */
+html{-webkit-tap-highlight-color:transparent}
+*{-webkit-tap-highlight-color:transparent}
+:focus:not(:focus-visible){outline:none!important}
+[tabindex="-1"]:focus{outline:none!important}
+a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid #e9a23b!important;outline-offset:3px;border-radius:6px}
 </style>
 <style id="vw-css">
 .vw-bar{position:relative;z-index:200;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:0;padding:8px 14px;
