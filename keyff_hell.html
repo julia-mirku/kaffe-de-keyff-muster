@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="de-CH">
+<html lang="de-CH" translate="no">
 <head>
 <meta charset="utf-8">
+<meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Kaffe de Keyff – Café und Restaurant in Flawil</title>
@@ -168,7 +169,7 @@ h1 .glow{color:var(--amber)}
 .fact + .fact{border-top:1px solid var(--line-soft)}
 .fact .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px 3px rgba(233,162,59,.55);flex:none}
 .fact .dot.is-closed{background:#7a6a58;box-shadow:none}
-.fact strong{font-weight:700}
+.fact strong{font-weight:700;white-space:nowrap}
 a.fact:hover{color:var(--gold)}
 .stars{width:92px;height:18px;flex:none}
 .cta{display:grid;grid-template-columns:1.7fr 1fr;gap:10px;max-width:460px}
@@ -885,7 +886,6 @@ address .nm{color:var(--gold)}
   .lamp{animation:sway 7s ease-in-out infinite alternate}
   .lamp:nth-child(2){animation-delay:-2.3s}
   .lamp:nth-child(3){animation-delay:-4.6s}
-  .fact .dot.is-open{animation:pulse 2.4s ease-in-out infinite}
 }
 @keyframes sway{from{transform:rotate(-1.3deg)}to{transform:rotate(1.3deg)}}
 @keyframes pulse{0%,100%{box-shadow:0 0 8px 2px rgba(233,162,59,.45)}50%{box-shadow:0 0 14px 6px rgba(233,162,59,.7)}}
@@ -1117,7 +1117,7 @@ address .nm{color:var(--gold)}
 .gallery figure:nth-child(2){grid-column:1/-1;order:3}
 .gallery figure:nth-child(2) img{aspect-ratio:4/3;object-position:50% 50%}
 .gallery figure:nth-child(3) img{object-position:50% 72%}
-@media (min-width:760px){
+@media (min-width:900px){
   .gallery{grid-template-columns:1fr 1.333fr 1fr;gap:24px;padding:0;align-items:end}
   .gallery figure:nth-child(n){margin-top:0}
   .gallery figure:nth-child(2){grid-column:auto;order:0;border-radius:50% 50% 22px 22px / 30% 30% 22px 22px}
@@ -1370,11 +1370,11 @@ h2 em{color:var(--brick)}
 @media (hover:hover) and (prefers-reduced-motion:no-preference){
   .brand .plate{transition:transform .3s ease}
   .brand:hover .plate{transform:rotate(-6deg) scale(1.08)}
-  .gallery figure,.js .gallery figure.rv.in{transition:transform .35s ease,box-shadow .35s ease}
-  .gallery figure:hover,.js .gallery figure.rv.in:hover{transform:translateY(-6px)}
-  .quote,.js .quote.rv.in{transition:transform .3s ease}
-  .quote:hover,.js .quote.rv.in:hover{transform:translateX(5px)}
-  .quote:first-child:hover,.js .quote:first-child.rv.in:hover{transform:translateY(-5px)}
+  .gallery figure:not(.rv){transition:transform .35s ease,box-shadow .35s ease}
+  .gallery figure:not(.rv):hover,.js .gallery figure.rv.done:hover{transform:translateY(-6px)}
+  .quote:not(.rv){transition:transform .3s ease}
+  .quote:not(.rv):hover,.js .quote.rv.done:hover{transform:translateX(5px)}
+  .quote:first-child:not(.rv):hover,.js .quote:first-child.rv.done:hover{transform:translateY(-5px)}
   .brass{transition:transform .35s ease,filter .35s ease}
   .brass:hover{transform:rotate(-1.2deg) scale(1.02);filter:brightness(1.07)}
   .score .neon{transition:transform .3s ease}
@@ -1472,14 +1472,14 @@ h2 em{color:var(--brick)}
 }
 @media (hover:hover) and (prefers-reduced-motion:no-preference){
   .gbuch .zettel{transition:transform .3s ease,box-shadow .3s ease}
-  .gbuch .zettel:hover{z-index:1;box-shadow:var(--sh-up)}
-  .gbuch .zettel:nth-child(odd):hover{transform:translateY(-6px) rotate(-2.4deg)}
-  .gbuch .zettel:nth-child(even):hover{transform:translateY(-6px) rotate(2.6deg)}
+  .gbuch .zettel:not(.zl-wait):hover{z-index:1;box-shadow:var(--sh-up)}
+  .gbuch .zettel:nth-child(odd):not(.zl-wait):hover{transform:translateY(-6px) rotate(-2.4deg)}
+  .gbuch .zettel:nth-child(even):not(.zl-wait):hover{transform:translateY(-6px) rotate(2.6deg)}
   .stempel{transition:transform .45s cubic-bezier(.3,.7,.2,1)}
-  .wertung:hover .stempel{transform:rotate(-1deg) scale(1.04)}
+  .wertung:hover .st-wrap:not(.st-wait) .stempel{transform:rotate(-1deg) scale(1.04)}
   .block{transition:transform .35s ease,box-shadow .35s ease}
-  .block:hover{box-shadow:var(--sh-up)}
-  .block.zeit:hover{transform:translateY(-5px) rotate(-.7deg)}
+  .block:not(.hw-wait):hover{box-shadow:var(--sh-up)}
+  .block.zeit:not(.hw-wait):hover{transform:translateY(-5px) rotate(-.7deg)}
   .block.ort:hover{transform:translateY(-5px) rotate(.8deg)}
 }
 
@@ -1488,6 +1488,199 @@ main > .parquet{display:none}
 .menu,.reviews,.gaeste,#fotos,.sec{border-top:0;border-bottom:0}
 /* Just Eat: Beliebt-Zeichen, Bewertung (20.11) */
 .pop{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:.72em;font-weight:700;letter-spacing:.02em;vertical-align:2px;background:var(--olive,#4F5B2A);color:#FFFDF8}
+
+/* ==========================================================
+   21.11: Ruhe beim Blättern, Bewegung erst nach dem Ende
+   ========================================================== */
+/* Während ein Blatt geht, reagiert keine Zeile auf die Maus */
+.bk.is-turning .bk-spread{pointer-events:none}
+.bk.is-turning .bk-row,.bk.is-turning .bk-row *{transition:none!important}
+.bk-leaf *{animation:none!important}
+.bk[data-state="open"] .bk-stage{touch-action:pan-y pinch-zoom}
+.bk-csh{position:absolute;bottom:0;width:150px;height:150px;pointer-events:none;z-index:2;background:radial-gradient(100% 100% at 100% 100%,rgba(40,20,6,.25),rgba(40,20,6,0) 72%)}
+.bk-csh.l{background:radial-gradient(100% 100% at 0 100%,rgba(40,20,6,.25),rgba(40,20,6,0) 72%)}
+/* Preis: eigenes Zeichen beim Überfahren, ein weiches Leuchten und ein Hauch nach oben (kein Farbfeld) */
+.bk-row .p{transition:text-shadow .18s ease,transform .18s ease}
+@media (hover:hover){
+  .bk:not(.is-turning) .bk-row:hover .p{text-shadow:0 0 10px var(--pglow);transform:translateY(-1px)}
+}
+/* Gericht ohne Foto-Feld: Zutaten über die ganze Breite, Preis und Knöpfe darunter */
+.bk-det{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"h x" "p p" "buy buy" "back back";align-items:center;gap:12px 14px}
+.bk-det>.bk-x{grid-area:x;justify-self:end}
+.bk-det>.bk-zu{display:contents}
+.bk-det>.bk-zu>h4{grid-area:h;margin:0}
+.bk-det>.bk-zu>p{grid-area:p;margin-top:-4px}
+.bk-det>.bk-buy{grid-area:buy}
+.bk-det>.bk-back{grid-area:back}
+.bk-det .bk-big{line-height:1.1}
+.bk-det.nozu{grid-template-areas:"big x" "ord ord" "back back"}
+.bk-det.nozu>.bk-buy{display:contents}
+.bk-det.nozu .bk-big{grid-area:big}
+.bk-det.nozu .bk-order{grid-area:ord}
+.zi{display:inline-block}
+.bk-dv-price{display:flex;align-items:baseline}
+.bk-dv .bk-dv-price .bk-big{text-align:left}
+.bk-zu + .bk-dv-price{padding-top:12px;border-top:1px solid var(--pline)}
+@media (prefers-reduced-motion:no-preference){
+  /* Gericht öffnet: der Preis leuchtet kurz auf, die Zutaten kommen Stück für Stück */
+  .bk-dish.open .bk-row .p{animation:bk-pglow .5s ease-out both}
+  .bk-dish.open .bk-det .zi,.bk-dv.in .zi,.bk-dv.sw .zi{animation:bk-zi .26s ease-out both;animation-delay:calc(var(--i,0)*40ms + 140ms)}
+  /* Register: die Lasche der neuen Rubrik zieht sich heraus, die alte schiebt sich zurück */
+  .bk-tab.pull{animation:bk-pull .28s cubic-bezier(.3,1.5,.5,1)}
+  .bk-tab.tuck{animation:bk-tuck .18s ease-in}
+  /* Telefon, einmal: die Seite rückt kurz nach links (man kann wischen) */
+  .bk-spread>.bk-page.bk-nudge{animation:bk-nudge .6s both}
+}
+@keyframes bk-pglow{0%{text-shadow:0 0 0 rgba(0,0,0,0)}45%{text-shadow:0 0 10px var(--pglow)}100%{text-shadow:0 0 4px var(--pglow)}}
+@keyframes bk-zi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes bk-pull{from{transform:translateY(6px)}to{transform:none}}
+@keyframes bk-tuck{0%{transform:none}60%{transform:translateY(3px)}100%{transform:none}}
+@keyframes bk-nudge{0%{transform:none;animation-timing-function:cubic-bezier(.3,.6,.4,1)}35%{transform:translateX(-14px);animation-timing-function:cubic-bezier(.3,1.4,.5,1)}100%{transform:none}}
+
+/* DE/EN: klar, dass nur die Karte übersetzt wird */
+.bk-lang-wrap{align-items:center;gap:8px}
+.bk-lang-lbl{font-size:.8rem;font-weight:600;line-height:1.1;white-space:nowrap;color:var(--muted)}
+.bk-lang-bar.bk-lang-wrap{flex:none}
+/* Ganze Karte als Liste */
+.bk-listrow{display:flex;justify-content:center;margin-top:14px}
+.bk-listbtn{
+  -webkit-appearance:none;appearance:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0;padding:0 18px;border-radius:999px;
+  border:1.5px solid var(--lb-line);background:transparent;color:var(--cream);font:inherit;font-weight:700;font-size:.95rem;cursor:pointer;
+  transition:border-color .18s ease,color .18s ease,background-color .18s ease;
+}
+.bk-listbtn svg{width:18px;height:18px;flex:none}
+@media (hover:hover){.bk-listbtn:hover{border-color:var(--gold);color:var(--gold)}}
+#karte-liste{margin-top:14px}
+.pl-close-row{display:flex;justify-content:center;padding:16px 0 12px;border-top:1px solid var(--line-soft)}
+/* Telefon schmal: «Speisekarte schliessen» darf zweizeilig stehen, die Leiste bleibt in einer Reihe */
+@media (max-width:420px){
+  #bk-close{white-space:normal;line-height:1.05;font-size:.88rem;max-width:8.6em;text-align:center;padding:0 10px}
+  .bk-cv-btn{padding-left:16px;padding-right:16px;gap:8px}
+}
+@media (max-width:360px){
+  .bk-bar{gap:4px}
+  .bk-btn{padding:0 8px}
+  .bk-nav{min-width:44px;padding:0}
+  .bk-cv-btn{font-size:.95rem;padding-left:12px;padding-right:12px}
+  .bk-cv-btn svg{width:18px;height:18px}
+}
+
+/* Erster Bildschirm: Adresse, Lieferung, Einstiegspreise (klein, ruhig, unter «Jetzt geöffnet») */
+.hero-info{display:grid;gap:2px;margin:-12px 0 22px;font-size:.93rem;line-height:1.45;color:var(--muted)}
+.hero-info li{min-width:0}
+.hero-info a{display:inline-flex;align-items:center;gap:7px;min-height:36px;color:inherit;text-decoration:underline;text-decoration-color:var(--hi-line);text-underline-offset:4px;text-decoration-thickness:1px}
+.hero-info a:hover{color:var(--gold);text-decoration-color:currentColor}
+.hero-info svg{width:16px;height:16px;flex:none}
+.hero-info .nw{white-space:nowrap}
+@media (min-width:900px){.hero-info{margin:-16px 0 26px}}
+@media (max-width:360px){.hero-info{font-size:.86rem}}
+/* Tablet hochkant: Text und Knöpfe als ruhiger Block in der Mitte, Knöpfe in einer Reihe */
+@media (min-width:700px) and (max-width:899px){
+  .hero-text{max-width:640px;margin-left:auto;margin-right:auto;text-align:center}
+  .eyebrow{justify-content:center}
+  .lede{margin-left:auto;margin-right:auto}
+  .lede span{display:block}
+  .facts,.hero-info{justify-items:center}
+  .fact{justify-content:center}
+  .cta{grid-template-columns:repeat(3,auto);justify-content:center;max-width:none}
+  .cta .btn:first-child{grid-column:auto}
+  .cta .btn{padding-left:24px;padding-right:24px}
+}
+/* Tablet: Fotos in zwei Spalten */
+@media (min-width:760px) and (max-width:899px){
+  .gallery{grid-template-columns:1fr 1fr;gap:20px;padding:0;align-items:start}
+  .gallery figure:nth-child(n){margin-top:0}
+  .gallery figure:first-child{grid-column:auto}
+  .gallery img,.gallery figure:first-child img{aspect-ratio:1/1}
+  .gallery figure:nth-child(2){grid-column:1/-1;order:3;border-radius:20px}
+  .gallery figure:nth-child(2) img,.gallery figure:nth-child(2)::after{border-radius:10px}
+  .gallery figure:nth-child(2) img{aspect-ratio:16/9}
+}
+/* Telefon quer: Kopfzeile 48 px, die Leiste eine dünne Reihe (44 px) ganz unten */
+@media (max-height:500px) and (orientation:landscape){
+  .top .wrap{height:48px}
+  .plate:not(.bk-plate):not(.plate-lg){width:58px;height:40px}
+  section{scroll-margin-top:58px}
+}
+@media (max-height:500px) and (orientation:landscape) and (max-width:899px){
+  .bk-bar{bottom:0;height:44px;margin-top:10px;padding:0 3px;gap:4px;border-radius:14px 14px 0 0}
+  .bk-btn{min-height:40px}
+  .bk-nav{min-width:44px;min-height:40px}
+  .bk-h{scroll-margin-top:60px;scroll-margin-bottom:52px}
+  .bk-spread>.bk-page.r{padding-bottom:30px}
+  #karte .bk{scroll-margin-top:56px;scroll-margin-bottom:50px}
+}
+/* Fotos der Gäste: das Einblenden behält Zeit und Reihenfolge; das Heben unter der Maus erst danach (.done) */
+@media (prefers-reduced-motion:no-preference){
+  .js .gallery figure.rv.in{transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+  .js .gallery figure.rv.in:nth-child(2){transition-delay:.07s}
+  .js .gallery figure.rv.in:nth-child(3){transition-delay:.14s}
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .js .gallery figure.rv.in.done{transition:transform .35s ease,box-shadow .35s ease;transition-delay:0s}
+  .js .quote.rv.in.done{transition:transform .3s ease;transition-delay:0s}
+}
+/* «Jetzt geöffnet»: der Punkt atmet über ein eigenes Licht (Deckkraft und Grösse), nicht über den Schatten */
+.fact .dot{position:relative}
+@media (prefers-reduced-motion:no-preference){
+  .fact .dot.is-open{animation:none}
+  .fact .dot.is-open::after{content:"";position:absolute;pointer-events:none;border-radius:50%;will-change:transform,opacity;animation:dot-breath 2.4s ease-in-out infinite}
+}
+
+.bk{--pglow:rgba(150,73,15,.25)}
+:root{--lb-line:rgba(42,28,20,.45);--hi-line:rgba(181,135,43,.6)}
+.room-pic{display:contents}
+.bk-listbtn{color:var(--espresso)}
+@media (hover:hover){.bk-listbtn:hover{border-color:var(--brick);color:var(--brick);background:rgba(126,31,44,.06)}}
+.hero-info{color:var(--mocha)}
+.hero-info a:hover{color:var(--brick)}
+@media (prefers-reduced-motion:no-preference){
+  .fact .dot.is-open::after{inset:-1px;box-shadow:0 0 0 2px rgba(126,31,44,.28)}
+}
+@keyframes dot-breath{0%{opacity:.9;transform:scale(1)}70%,100%{opacity:0;transform:scale(2.3)}}
+/* Zettel mit den Zeiten: von Hand geschrieben, dann «heute» dazu */
+.zeiten .hm{display:inline-block}
+@media (prefers-reduced-motion:no-preference){
+  .hw-wait .zeiten th,.hw-wait .zeiten td{clip-path:inset(-10px 100% -10px -10px)}
+  .hw-wait.hw-go .zeiten th{animation:hw .07s steps(6,end) both;animation-delay:calc(var(--r,0)*60ms)}
+  .hw-wait.hw-go .zeiten td{animation:hw .07s steps(6,end) both;animation-delay:calc(var(--r,0)*60ms + 70ms)}
+  .hw-wait .zeiten .hm{clip-path:inset(-10px 100% -10px -10px)}
+  .hw-wait.hw-ring .zeiten .hm{animation:hw .7s steps(12,end) both}
+}
+@keyframes hw{from{clip-path:inset(-10px 100% -10px -10px)}to{clip-path:inset(-10px -10px -10px -10px)}}
+/* Tasse mit Dampf neben der Überschrift des Zettels */
+.block.zeit .tasse{position:absolute;top:22px;right:18px;width:40px;height:35px;color:var(--mocha);opacity:.75;pointer-events:none}
+.steam .stm{transform-box:fill-box;transform-origin:50% 100%}
+@media (prefers-reduced-motion:no-preference){
+  .steam .stm{opacity:0;animation:steam 3.2s ease-out infinite;animation-play-state:paused}
+  .steam.on .stm{animation-play-state:running}
+  .steam .stm:nth-of-type(2){animation-delay:1.1s}
+  .steam .stm:nth-of-type(3){animation-delay:2.2s}
+}
+@keyframes steam{0%{opacity:0;transform:translateY(0) skewX(0)}12%{opacity:.6;transform:translateY(-1px) skewX(2deg)}55%{transform:translateY(-5px) skewX(4deg)}100%{opacity:0;transform:translateY(-10px) skewX(-4deg)}}
+/* Stempel «4,5»: wird beim ersten Erscheinen aufgesetzt, mit kurzem dunklerem Abdruck */
+.st-wrap{position:relative;display:inline-block;line-height:0;flex:none}
+.st-wrap::before{content:"";position:absolute;inset:9%;border-radius:50%;pointer-events:none;opacity:0}
+.st-wrap.done .stempel{transform:rotate(-8deg)}
+@media (prefers-reduced-motion:no-preference){
+  .st-wait .stempel{opacity:0;transform:scale(1.35) rotate(-16deg)}
+  .st-wait.st-go .stempel{animation:st-hit .38s cubic-bezier(.3,1.6,.5,1) both}
+  .st-wait.st-go::before{animation:st-ring .12s ease-out .16s both}
+}
+@keyframes st-hit{from{opacity:0;transform:scale(1.35) rotate(-16deg)}70%{opacity:1;transform:scale(.96) rotate(-8deg)}to{opacity:1;transform:scale(1) rotate(-8deg)}}
+@keyframes st-ring{0%{opacity:1;box-shadow:0 0 0 0 rgba(122,86,20,.5),inset 0 0 0 3px rgba(122,86,20,.28)}100%{opacity:0;box-shadow:0 0 0 14px rgba(122,86,20,0),inset 0 0 0 3px rgba(122,86,20,0)}}
+/* Zettel der Gäste: legen sich nacheinander hin (kein Schaukeln) */
+@media (prefers-reduced-motion:no-preference){
+  .gbuch .zettel.zl-wait{opacity:0}
+  .gbuch .zettel.zl-wait.zl-go:nth-child(odd){animation:zl-odd .52s cubic-bezier(.2,.9,.3,1.15) both}
+  .gbuch .zettel.zl-wait.zl-go:nth-child(even){animation:zl-even .52s cubic-bezier(.2,.9,.3,1.15) both}
+}
+@keyframes zl-odd{0%{opacity:0;transform:translateY(-18px) rotate(-6deg);box-shadow:0 0 0 rgba(42,28,20,0),0 0 0 rgba(42,28,20,0)}30%{opacity:1}100%{opacity:1;transform:rotate(-1.2deg);box-shadow:var(--sh-s)}}
+@keyframes zl-even{0%{opacity:0;transform:translateY(-18px) rotate(6deg);box-shadow:0 0 0 rgba(42,28,20,0),0 0 0 rgba(42,28,20,0)}30%{opacity:1}100%{opacity:1;transform:rotate(1.4deg);box-shadow:var(--sh-s)}}
+.bk-dv-body>.bk-dv-orn{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;overflow:hidden;pointer-events:none}
+.bk-dv-orn img{width:clamp(90px,34%,170px);height:auto;opacity:.22;filter:grayscale(.2)}
+.bk-dv-orn span{font-family:var(--display);font-weight:700;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;opacity:.45}
+@media (max-height:640px){.bk-dv-orn{display:none!important}}
 </style>
 <style id="vw-css">
 .vw-bar{position:relative;z-index:200;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:0;padding:8px 14px;
@@ -1582,6 +1775,11 @@ main > .parquet{display:none}
         <div class="facts">
           <a class="fact" href="#zeiten"><span class="dot" aria-hidden="true"></span><span id="heute">Jeden Tag geöffnet – alle Zeiten ansehen</span></a>
         </div>
+        <ul class="hero-info">
+          <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Kaffe+de+Keyff+Degersheimerstrasse+1+Flawil" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.500C5 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.500"/></svg>Degersheimerstrasse 1, 9230 Flawil</a></li>
+          <li>Lieferung via Just Eat ab 17 Uhr</li>
+          <li id="ab-preise"><span class="nw">Dürüm ab CHF <span data-ab="d">18.00</span> ·</span> <span class="nw">Pizza ab CHF <span data-ab="p">16.50</span> ·</span> <span class="nw">Menü mit Getränk ab CHF <span data-ab="m">27.50</span></span></li>
+        </ul>
 
         <div class="cta">
           <a class="btn btn-amber" href="tel:+41715544224">
@@ -1601,9 +1799,9 @@ main > .parquet{display:none}
         <img class="main" src="keyff_k1.jpg"
              alt="Foto aus dem Kaffe de Keyff: grilliertes Fleisch auf Fladenbrot, dazu Salat und Pommes frites"
              width="900" height="1125" referrerpolicy="no-referrer">
-        <img class="room" src="keyff_k5.jpg"
+        <picture class="room-pic"><source media="(min-width:900px)" srcset="keyff_k5.jpg"><img class="room" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="lazy"
              alt="Innenraum des Kaffe de Keyff: Theke mit Menütafeln, Holzwand im Fischgrätmuster, Pendelleuchten"
-             width="136" height="136" referrerpolicy="no-referrer">
+             width="136" height="136" referrerpolicy="no-referrer"></picture>
       </div>
     </div>
   </section>
@@ -1621,7 +1819,7 @@ main > .parquet{display:none}
 
       <!-- Das Buch (wird vom Skript eingeschaltet; ohne Skript steht darunter die ganze Karte als Liste) -->
       <div class="bk" id="buch" data-state="closed" hidden>
-        <div class="bk-lang bk-lang-top" role="group" aria-label="Sprache der Karte" data-ta="Sprache der Karte"><button type="button" data-lang="de" lang="de" aria-pressed="true" aria-label="Deutsch">DE</button><button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button></div>
+        <div class="bk-lang-wrap bk-lang-top"><span class="bk-lang-lbl" data-t="Karte auf Englisch" aria-hidden="true">Karte auf Englisch</span><div class="bk-lang" role="group" aria-label="Sprache der Karte" data-ta="Sprache der Karte"><button type="button" data-lang="de" lang="de" aria-pressed="true" aria-label="Deutsch">DE</button><button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button></div></div>
         <nav class="bk-tabs" id="bk-tabs" aria-label="Rubriken der Karte" data-ta="Rubriken der Karte"></nav>
         <div class="bk-stage">
           <div class="bk-book">
@@ -1646,7 +1844,7 @@ main > .parquet{display:none}
                   <span class="bk-cv-k" translate="no">Kaffe de Keyff</span>
                   <span class="bk-cv-t" data-t="Speisekarte">Speisekarte</span>
                   <span class="bk-cv-o" aria-hidden="true"><b></b></span>
-                  <span class="bk-cv-btn"><span data-t="Karte öffnen">Karte öffnen</span>
+                  <span class="bk-cv-btn"><span data-t="Speisekarte öffnen">Speisekarte öffnen</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.500C10 5 7 4.500 4 5v13c3-.5 6 0 8 1.500 2-1.500 5-2 8-1.500V5c-3-.5-6 0-8 1.500zM12 6.500v13"/></svg>
                   </span>
                 </span>
@@ -1661,13 +1859,14 @@ main > .parquet{display:none}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
           </button>
           <button type="button" class="bk-btn" id="bk-toc" data-t="Inhalt">Inhalt</button>
-          <div class="bk-lang bk-lang-bar" role="group" aria-label="Sprache der Karte" data-ta="Sprache der Karte"><button type="button" data-lang="de" lang="de" aria-pressed="true" aria-label="Deutsch">DE</button><button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button></div>
+          <div class="bk-lang-wrap bk-lang-bar"><span class="bk-lang-lbl" data-t="Karte auf Englisch" aria-hidden="true">Karte auf Englisch</span><div class="bk-lang" role="group" aria-label="Sprache der Karte" data-ta="Sprache der Karte"><button type="button" data-lang="de" lang="de" aria-pressed="true" aria-label="Deutsch">DE</button><button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button></div></div>
           <p class="bk-status" id="bk-status" aria-live="polite"></p>
-          <button type="button" class="bk-btn" id="bk-close" data-t="Karte schliessen">Karte schliessen</button>
+          <button type="button" class="bk-btn" id="bk-close" data-t="Speisekarte schliessen">Speisekarte schliessen</button>
           <button type="button" class="bk-btn bk-nav" id="bk-next" aria-label="Nächste Seite" data-ta="Nächste Seite">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
           </button>
         </div>
+        <div class="bk-listrow"><button type="button" class="bk-listbtn" id="bk-list" aria-expanded="false" aria-controls="karte-liste"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span data-t="Ganze Karte als Liste">Ganze Karte als Liste</span></button></div>
       </div>
 
       <!-- Die ganze Karte als Liste: sichtbar, solange das Buch nicht läuft (kein JavaScript) -->
@@ -2031,7 +2230,7 @@ main > .parquet{display:none}
   var EN = {
     c:{"Menüs": "Set menus", "Salate": "Salads", "Frittiertes": "Deep-fried", "Vegetarische Gerichte": "Vegetarian dishes", "Grillgerichte": "From the grill", "Tellergerichte": "Plated meals", "Fitnessteller": "Fitness plate", "Box-Gerichte": "Boxes", "Asiatische Gerichte": "Asian dishes", "Extrasaucen": "Extra sauces", "Alkoholfreie Getränke": "Soft drinks", "Alkoholische Getränke": "Alcoholic drinks"},
     d:{"Dürüm mit Pommes frites und einem Getränk nach Wahl": "Dürüm with chips and a drink of your choice", "Frittiertes Poulet Cordon Bleu. Serviert mit Zitrone und einer Beilage nach Wahl": "Deep-fried chicken cordon bleu. Served with lemon and a side of your choice", "Gefüllt mit Gemüse": "Filled with vegetables", "Gehackte Kichererbsen, Mais und Mehl": "Ground chickpeas, sweetcorn and flour", "Gurken, Feta, Tomaten und Oliven": "Cucumber, feta, tomatoes and olives", "Kebab mit Pommes frites und einem Getränk nach Wahl": "Kebab with chips and a drink of your choice", "Lammhackfleisch vom Grill nach hausgemachtem Rezept. Serviert mit einer Beilage nach Wahl": "Grilled minced lamb, made to the house recipe. Served with a side of your choice", "Nudeln mit Gemüse, Poulet und Sojasauce im Wok gebraten": "Noodles stir-fried in the wok with vegetables, chicken and soy sauce", "Pide nach Wahl mit Pommes frites und Getränk nach Wahl": "Pide of your choice with chips and a drink of your choice", "Pizza nach Wahl mit einem kleinen Salat und einem Getränk nach Wahl": "Pizza of your choice with a small salad and a drink of your choice", "Poulet mit Gemüse an einer feinen Currysauce": "Chicken with vegetables in a delicate curry sauce", "Poulet mit Gemüse an einer süss-sauren Sauce": "Chicken with vegetables in a sweet-and-sour sauce", "Reis mit Gemüse, Poulet und Sojasauce im Wok gebraten": "Rice stir-fried in the wok with vegetables, chicken and soy sauce", "Serviert mit Kräuterbutter und einer Beilage nach Wahl": "Served with herb butter and a side of your choice", "Serviert mit Pommes frites": "Served with chips", "Serviert mit Salat und einer Beilage nach Wahl": "Served with salad and a side of your choice", "Serviert mit einer Beilage nach Wahl": "Served with a side of your choice", "Serviert mit gegrilltem Gemüse und einer Beilage nach Wahl": "Served with grilled vegetables and a side of your choice", "Tomatensauce, Mozzarella, 4 verschiedene Käsesorten, Oregano": "Tomato sauce, mozzarella, four kinds of cheese, oregano", "Tomatensauce, Mozzarella, Champignons, Oregano": "Tomato sauce, mozzarella, mushrooms, oregano", "Tomatensauce, Mozzarella, Dönerfleisch, Champignons, Oregano": "Tomato sauce, mozzarella, döner kebab meat, mushrooms, oregano", "Tomatensauce, Mozzarella, Gorgonzola, Oregano": "Tomato sauce, mozzarella, gorgonzola, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Ananas, Oregano": "Tomato sauce, mozzarella, ham, pineapple, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Oregano": "Tomato sauce, mozzarella, ham, mushrooms, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Peperoni, Ei, Oregano": "Tomato sauce, mozzarella, ham, mushrooms, peppers, egg, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Oregano": "Tomato sauce, mozzarella, ham, oregano", "Tomatensauce, Mozzarella, Meeresfrüchte, Oregano": "Tomato sauce, mozzarella, seafood, oregano", "Tomatensauce, Mozzarella, Oregano": "Tomato sauce, mozzarella, oregano", "Tomatensauce, Mozzarella, Peperoni, Oregano": "Tomato sauce, mozzarella, peppers, oregano", "Tomatensauce, Mozzarella, Salami, Champignons, Zwiebeln, Oregano": "Tomato sauce, mozzarella, salami, mushrooms, onions, oregano", "Tomatensauce, Mozzarella, Salami, Oregano": "Tomato sauce, mozzarella, salami, oregano", "Tomatensauce, Mozzarella, Sardellen, Kapern, Oregano": "Tomato sauce, mozzarella, anchovies, capers, oregano", "Tomatensauce, Mozzarella, Spinat, Speck, Zwiebeln, Oregano": "Tomato sauce, mozzarella, spinach, bacon, onions, oregano", "Tomatensauce, Mozzarella, Zwiebeln, Knoblauch, Peperoncini, Oregano": "Tomato sauce, mozzarella, onions, garlic, chilli peppers, oregano", "Tomatensauce, Mozzarella, Zwiebeln, Thon, Kapern, Oregano": "Tomato sauce, mozzarella, onions, tuna, capers, oregano", "Tomatensauce, Mozzarella, gegrillte Pouletstreifen, Oliven, Oregano": "Tomato sauce, mozzarella, grilled chicken strips, olives, oregano", "Tomatensauce, Mozzarella, gegrilltes Lammgeschnetzeltes, Peperoncini, Knoblauch, Oregano": "Tomato sauce, mozzarella, grilled sliced lamb, chilli peppers, garlic, oregano", "Tomatensauce, Mozzarella, scharfe Peperoncini, Oregano": "Tomato sauce, mozzarella, hot chilli peppers, oregano", "Tomatensauce, Mozzarella, verschiedene Gemüsesorten, Oregano": "Tomato sauce, mozzarella, mixed vegetables, oregano", "Zubereitet mit Gemüse und Sauce nach Wahl": "Prepared with vegetables and a sauce of your choice", "Zubereitet mit Gemüse und einer Tomatensauce": "Prepared with vegetables and tomato sauce", "Zubereitet mit Lamm, Gemüse und einer Tomatensauce": "Prepared with lamb, vegetables and tomato sauce", "Zubereitet mit Poulet, Gemüse und einer Tomatensauce": "Prepared with chicken, vegetables and tomato sauce", "Zubereitet mit Rahm und Speck": "Prepared with cream and bacon", "Zubereitet mit scharfer Tomatensauce": "Prepared with spicy tomato sauce"},
-    u:{"Speisekarte": "Menu", "Karte öffnen": "Open the menu", "Karte schliessen": "Close the menu", "Inhalt": "Contents", "Zurück": "Back", "Weiter": "Next", "Seite": "Page", "Seiten": "Pages", "von": "of", "Fortsetzung": "continued", "Zurück zur Liste": "Back to the list", "Foto folgt": "Photo to follow", "Zutaten": "Ingredients", "Angaben folgen": "Details to follow", "Nährwerte": "Nutrition", "Energie": "Energy", "Fett": "Fat", "Kohlenhydrate": "Carbohydrates", "Eiweiss": "Protein", "Salz": "Salt", "folgt": "to follow", "Angaben folgen vom Betrieb": "Details to be provided by the restaurant", "Online bestellen": "Order online", "Alle Preise in Schweizer Franken (CHF).": "All prices in Swiss francs (CHF).", "Guten Appetit": "Enjoy your meal", "Vorherige Seite": "Previous page", "Nächste Seite": "Next page", "Seiten der Speisekarte": "Pages of the menu", "Speisekarte Kaffe de Keyff: Karte öffnen": "Kaffe de Keyff menu: open the menu", "Sprache der Karte": "Menu language", "Rubrik wählen oder weiterblättern. Ein Gericht antippen, dann klappen Foto, Zutaten und Preis auf.": "Choose a section or turn the pages. Tap a dish to see its photo, ingredients and price.", "Bestellen": "Order", "Kategorien": "sections", "Gerichte und Getränke": "dishes and drinks", "Teil": "part", "geht auf der nächsten Seite weiter": "continues on the next page", "Gericht antippen: Foto, Zutaten und Preis klappen auf.": "Tap a dish to see its photo, ingredients and price.", "In der Speisekarte blättern": "Turn the pages of the menu", "Schliessen": "Close", "Details": "Details", "weniger": "less", "Gericht antippen für Zutaten und Preis": "Tap a dish for ingredients and price", "Rubriken der Karte": "Sections of the menu", "Beliebt": "Popular"}
+    u:{"Speisekarte": "Menu", "Speisekarte öffnen": "Open the menu", "Speisekarte schliessen": "Close the menu", "Karte auf Englisch": "Menu in English", "Ganze Karte als Liste": "Full menu as a list", "Liste schliessen": "Close the list", "Inhalt": "Contents", "Zurück": "Back", "Weiter": "Next", "Seite": "Page", "Seiten": "Pages", "von": "of", "Fortsetzung": "continued", "Zurück zur Liste": "Back to the list", "Zutaten": "Ingredients", "Nährwerte": "Nutrition", "Energie": "Energy", "Fett": "Fat", "Kohlenhydrate": "Carbohydrates", "Eiweiss": "Protein", "Salz": "Salt", "folgt": "to follow", "Online bestellen": "Order online", "Alle Preise in Schweizer Franken (CHF).": "All prices in Swiss francs (CHF).", "Guten Appetit": "Enjoy your meal", "Vorherige Seite": "Previous page", "Nächste Seite": "Next page", "Seiten der Speisekarte": "Pages of the menu", "Speisekarte Kaffe de Keyff: Speisekarte öffnen": "Kaffe de Keyff menu: open the menu", "Sprache der Karte": "Menu language", "Rubrik wählen oder weiterblättern. Ein Gericht antippen, dann klappen Foto, Zutaten und Preis auf.": "Choose a section or turn the pages. Tap a dish to see its photo, ingredients and price.", "Bestellen": "Order", "Kategorien": "sections", "Gerichte und Getränke": "dishes and drinks", "Teil": "part", "geht auf der nächsten Seite weiter": "continues on the next page", "Gericht antippen: Zutaten und Preis klappen auf.": "Tap a dish to see its ingredients and price.", "In der Speisekarte blättern": "Turn the pages of the menu", "Schliessen": "Close", "Details": "Details", "weniger": "less", "Gericht antippen für Zutaten und Preis": "Tap a dish for ingredients and price", "Rubriken der Karte": "Sections of the menu", "Beliebt": "Popular"}
   };
   /* Sprache des Buchs: Deutsch (Standard) oder Englisch; Namen der Gerichte und Preise bleiben */
   var LKEY = 'keyff-karte-sprache', lang = 'de';
@@ -2052,6 +2251,13 @@ main > .parquet{display:none}
   try { if(window.localStorage.getItem(SKEY) === '1') seen = true; } catch(e){}
 
   var bk = document.getElementById('buch'), plain = document.getElementById('karte-liste');
+  /* Einstiegspreise oben auf der Seite: aus der Karte gerechnet (kleinster Preis) */
+  (function(){
+    var box = document.getElementById('ab-preise'); if(!box) return;
+    function low(f){ var m = Infinity; MENU.forEach(function(c){ c.d.forEach(function(d){ if(f(c, d)) m = Math.min(m, parseFloat(d[2])); }); }); return m < Infinity ? m.toFixed(2) : ''; }
+    var v = {d:low(function(c, d){ return /^Dürüm /.test(d[0]); }), p:low(function(c){ return c.s === 'pizza'; }), m:low(function(c){ return c.s === 'menues'; })};
+    Array.prototype.forEach.call(box.querySelectorAll('[data-ab]'), function(b){ if(v[b.getAttribute('data-ab')]) b.textContent = v[b.getAttribute('data-ab')]; });
+  })();
   if(!bk || !('querySelector' in document) || !window.matchMedia) return;
   try {
   var sec = document.getElementById('karte');
@@ -2168,7 +2374,7 @@ main > .parquet{display:none}
       h += '<li><a href="#karte-' + c.s + '" data-cat="' + i + '"><span class="n">' + esc(catT(c)) + (c.n ? ' <small>(' + esc(c.n) + ')</small>' : '') +
            '</span><span class="l" aria-hidden="true"></span><span class="p"><span class="sr">' + tr('Seite') + ' </span>' + (catPage[i]+1) + '</span></a></li>';
     }
-    return h + '</ol>' + (tip ? '<p class="bk-tip">' + tr('Gericht antippen: Foto, Zutaten und Preis klappen auf.') + '</p>' : '');
+    return h + '</ol>' + (tip ? '<p class="bk-tip">' + tr('Gericht antippen: Zutaten und Preis klappen auf.') + '</p>' : '');
   }
   /* Hinweis unter dem Titel einer Rubrik. show = diese Seite zeigt ihn; auf der zweiten Seite derselben Rubrik bleibt nur sein Platz,
      damit beide Seiten gleich eingeteilt sind */
@@ -2181,15 +2387,21 @@ main > .parquet{display:none}
       '</h3>' + hintHTML(true) + '<ul class="bk-list">' + rows + '</ul>' +
       (more ? '<p class="bk-more">' + esc(catT(c)) + ' ' + tr('geht auf der nächsten Seite weiter') + '</p>' : '');
   }
+  /* Zutaten: fehlt die Beschreibung, gibt es keinen Block «Zutaten». Die Stücke erscheinen beim Öffnen nacheinander. */
+  function zuHTML(x, tag){
+    if(!x) return '';
+    var parts = esc(descT(x)).split(', ');
+    return '<div class="bk-zu"><' + tag + '>' + tr('Zutaten') + '</' + tag + '><p>' + parts.map(function(p, i){
+      return '<span class="zi" style="--i:' + i + '">' + p + (i < parts.length - 1 ? ',' : '') + '</span>';
+    }).join(' ') + '</p></div>';
+  }
   function detailHTML(ci, j){
     var d = MENU[ci].d[j], price = 'CHF ' + d[2];
     return '<div class="bk-dv-top"><div class="bk-dv-ttl"><span class="bk-dv-cat">' + esc(catT(MENU[ci])) + '</span>' +
         '<h4 class="bk-dv-h" id="bk-dv-h" tabindex="-1"' + nl() + '>' + esc(d[0]) + '</h4></div>' +
         '<button type="button" class="bk-x">' + XICON + tr('Schliessen') + '</button></div>' +
-      '<div class="bk-dv-body"><div class="bk-zu"><h5>' + tr('Zutaten') + '</h5><p>' + (d[1] ? esc(descT(d[1])) : tr('Angaben folgen')) + '</p></div>' +
-        '<div class="bk-dv-mid"><div class="bk-dv-side"><figure class="bk-ph">' + ICON + '<figcaption>' + tr('Foto folgt') + '</figcaption></figure>' +
-          '<span class="bk-big">' + price + '</span></div>' +
-          '</div></div>' +
+      '<div class="bk-dv-body">' + zuHTML(d[1], 'h5') + '<div class="bk-dv-price"><span class="bk-big">' + price + '</span></div>' +
+        '<div class="bk-dv-orn" aria-hidden="true"><img src="keyff_k6.png" alt=""><span>' + tr('Guten Appetit') + '</span></div></div>' +
       '<div class="bk-dv-foot"><button type="button" class="bk-back">' + BACK + tr('Zurück zur Liste') + '</button>' +
         '<a class="bk-order" href="' + ORDER + '" target="_blank" rel="noopener">' + tr('Online bestellen') + '</a></div>';
   }
@@ -2201,12 +2413,11 @@ main > .parquet{display:none}
     if(wide) return '<li class="bk-dish"><button type="button" class="bk-row" id="b' + id + '" aria-expanded="false" data-c="' + ci + '" data-j="' + j + '">' + row + '</li>';
     return '<li class="bk-dish">' +
       '<button type="button" class="bk-row" id="b' + id + '" aria-expanded="false" aria-controls="p' + id + '" data-c="' + ci + '" data-j="' + j + '">' + row +
-      '<div class="bk-panel" id="p' + id + '" role="group" aria-labelledby="b' + id + '"><div class="bk-panel-in"><div class="bk-det">' +
+      '<div class="bk-panel" id="p' + id + '" role="group" aria-labelledby="b' + id + '"><div class="bk-panel-in"><div class="bk-det' + (d[1] ? '' : ' nozu') + '">' +
         '<button type="button" class="bk-x">' + XICON + tr('Schliessen') + '</button>' +
-        '<div class="bk-side"><figure class="bk-ph">' + ICON + '<figcaption>' + tr('Foto folgt') + '</figcaption></figure>' +
-          '<div class="bk-buy"><span class="bk-big">' + price + '</span><a class="bk-order" href="' + ORDER + '" target="_blank" rel="noopener">' + tr('Online bestellen') + '</a>' +
-            '<button type="button" class="bk-back">' + BACK + tr('Zurück zur Liste') + '</button></div></div>' +
-        '<div class="bk-zu"><h4>' + tr('Zutaten') + '</h4><p>' + (d[1] ? esc(descT(d[1])) : tr('Angaben folgen')) + '</p></div>' +
+        zuHTML(d[1], 'h4') +
+        '<div class="bk-buy"><span class="bk-big">' + price + '</span><a class="bk-order" href="' + ORDER + '" target="_blank" rel="noopener">' + tr('Online bestellen') + '</a></div>' +
+        '<button type="button" class="bk-back">' + BACK + tr('Zurück zur Liste') + '</button>' +
       '</div></div></div></li>';
   }
   function pageHTML(idx, pfx){
@@ -2269,6 +2480,7 @@ main > .parquet{display:none}
     tabs.innerHTML = MENU.map(function(c, i){
       return '<button type="button" class="bk-tab" data-cat="' + i + '" title="' + esc(catT(c) + (c.n ? ' (' + c.n + ')' : '')) + '">' + esc((lang === 'en' ? TABS_EN : TABS)[i] || catT(c)) + '</button>';
     }).join('');
+    lastTab = -2;
     markTab();
   }
   function tabCat(){
@@ -2278,9 +2490,15 @@ main > .parquet{display:none}
     if(q && q.k === 'cat') return q.c;
     return -1;
   }
+  var lastTab = -2;
+  function kick(el, cls, ms){ if(!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); setTimeout(function(){ el.classList.remove(cls); }, ms); }
   function markTab(){
     if(!tabs || !tabs.children.length) return;
     var a = tabCat(), x = -1;
+    if(a !== lastTab){
+      if(lastTab !== -2 && isOpen && !rm.matches){ kick(tabs.children[a], 'pull', 320); kick(tabs.children[lastTab], 'tuck', 220); }
+      lastTab = a;
+    }
     Array.prototype.forEach.call(tabs.children, function(t, i){
       if(i === a){ t.setAttribute('aria-current', 'true'); x = t.offsetLeft - (tabs.clientWidth - t.offsetWidth) / 2; }
       else t.removeAttribute('aria-current');
@@ -2312,6 +2530,7 @@ main > .parquet{display:none}
   }
   /* Das Buch ins Bild holen. Nur nach Öffnen, Blättern, Aufklappen und beim Start mit Adresse, nie beim Scrollen. */
   function fitBook(instant){
+    if(!isOpen) return;
     var r = bk.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight;
     var y = window.pageYOffset || document.documentElement.scrollTop, to = null, hh = 0, m = 6;
     if(wide){
@@ -2320,8 +2539,9 @@ main > .parquet{display:none}
       if(r.height > vh - hh - 2*m){ if(Math.abs(r.top - hh - m) > 2) to = y + r.top - hh - m; }
       else if(r.top < hh + m - 1) to = y + r.top - hh - m;
       else if(r.bottom > vh - m + 1) to = y + r.bottom - vh + m;
-    } else if(r.top < 60 || r.top > vh * .5){
-      to = y + r.top - 78;
+    } else {
+      hh = topBar ? topBar.getBoundingClientRect().height : 62;
+      if(r.top < hh - 2 || r.top > vh * .5) to = y + r.top - hh - 16;
     }
     if(to === null) return;
     to = Math.max(0, Math.round(to));
@@ -2456,11 +2676,23 @@ main > .parquet{display:none}
     el.className = cls; parent.appendChild(el);
     return el;
   }
+  /* Zeitkurven wie in CSS: cubic-bezier(x1,y1,x2,y2) */
+  function bez(x1, y1, x2, y2){
+    function f(t, a, b){ return 3*(1-t)*(1-t)*t*a + 3*(1-t)*t*t*b + t*t*t; }
+    return function(p){
+      if(p <= 0) return 0; if(p >= 1) return 1;
+      var lo = 0, hi = 1, t = p, i;
+      for(i = 0; i < 24; i++){ t = (lo + hi) / 2; if(f(t, x1, x2) < p) lo = t; else hi = t; }
+      return f(t, y1, y2);
+    };
+  }
+  var E_DONE = bez(.22,.8,.3,1), E_BACK = bez(.3,1.3,.5,1), E_LIFT = bez(0,0,.58,1);
   /* o: g (1 = Blatt liegt rechts vom Bund, -1 = links), hx (Bund), W (Seitenbreite), n (Streifen), dur,
-        front/back (Seiten als Vorlage; back fehlt = blankes Papier), under (Seite darunter), away/back2 (Telefon) */
+        front/back (Seiten als Vorlage; back fehlt = blankes Papier), under (Seite darunter), away/back2 (Telefon),
+        peek (Ecke hebt sich nur), hint (Ecke hebt sich zweimal, einmaliger Hinweis), drag (Blatt folgt Finger/Maus) */
   function startFlip(o, after){
     var n = o.n, w = o.W / n, g = o.g, i, st, f, b, pg, lt, strips = [], lf = [], lb = [];
-    var ang = [], edge = [], pv, sheet, shA, shB, sp;
+    var ang = [], edge = [], pv, sheet, shA, shB, sp, csh = null;
     leaf.textContent = '';
     if(o.under){ o.under.className = 'bk-page r bk-under'; leaf.appendChild(o.under); }
     shA = div('bk-sh', leaf); shA.style.left = (g > 0 ? o.hx : o.hx - o.W) + 'px'; shA.style.width = o.W + 'px'; shA.style.right = 'auto';
@@ -2492,6 +2724,12 @@ main > .parquet{display:none}
       }
       lt = document.createElement('i'); b.appendChild(lt); lb.push(lt);
       strips.push(st);
+    }
+    /* Ecke unter der Maus: ein weicher Schatten an der gehobenen Ecke */
+    if((o.peek || o.drag) && !o.phone){
+      csh = div('bk-csh' + (g < 0 ? ' l' : ''), leaf);
+      csh.style.left = (g > 0 ? o.hx + o.W - 150 : o.hx - o.W) + 'px';
+      csh.style.opacity = '0';
     }
     function draw(t, fadeTo){
       var x = 0, z = 0, xmin = 0, xmax = 0, zmax = 0, a, r, i, e0, e1, l0, l1, lift, soft, al, down = false;
@@ -2527,7 +2765,7 @@ main > .parquet{display:none}
         'linear-gradient(' + (g > 0 ? 270 : 90) + 'deg,rgba(40,20,6,' + (.36 * lift).toFixed(3) + ') 0,rgba(40,20,6,' + (.24 * lift).toFixed(3) + ') ' + (-xmin + z * .22).toFixed(1) + 'px,rgba(40,20,6,0) ' + (-xmin + z * .22 + soft).toFixed(1) + 'px)' : 'none';
       sp.style.opacity = (lift * al).toFixed(3);
     }
-    var t0 = 0, raf = 0, timer = 0, ended = false;
+    var raf = 0, timer = 0, ended = false, uNow = 0, an = null, dropping = false;
     function frame(u){
       if(o.phone){
         /* Telefon: das Blatt rollt nach links weg (oder kommt von dort zurück) und blendet dabei aus */
@@ -2535,81 +2773,192 @@ main > .parquet{display:none}
         pv.style.opacity = op.toFixed(3);
         draw(.66 * Math.pow(o.back2 ? 1 - u : u, 1.15), op);
       } else draw(u);
+      if(csh) csh.style.opacity = (c01(u / .04) * (1 - c01((u - .06) / .2))).toFixed(3);
     }
-    function end(){
+    /* unter null (Rückfedern beim Zurücklegen): die Kante hebt sich ein klein wenig, statt unter die Seite zu tauchen */
+    function show(u){ frame(u < 0 ? Math.min(-u, .02) : u); }
+    function end(cancel){
       if(ended) return;
-      ended = true;
+      ended = true; an = null;
       if(raf) cancelAnimationFrame(raf);
       clearTimeout(timer);
       flip = null;
       leaf.hidden = true; leaf.textContent = ''; leaf.style.clipPath = leaf.style.webkitClipPath = '';
-      after();
+      after(!!cancel);
     }
-    function tick(now){
-      if(ended) return;
-      if(!t0) t0 = now;
-      var u = (now - t0) / o.dur;
-      if(u >= 1){ end(); return; }
-      frame(u);
-      raf = requestAnimationFrame(tick);
+    function step(now){
+      raf = 0;
+      if(ended || !an) return;
+      if(an.t0 < 0) an.t0 = now;
+      var p = an.d > 0 ? c01((now - an.t0) / an.d) : 1;
+      uNow = an.a + (an.b - an.a) * (an.e ? an.e(p) : p);
+      if(p >= 1){
+        var fin = an.fin; uNow = an.b; an = null;
+        if(fin){ fin(); return; }
+      }
+      show(uNow);
+      if(an && !raf) raf = requestAnimationFrame(step);
+    }
+    /* das Blatt von seiner jetzigen Stellung nach b bringen (d ms, Kurve e), danach fin */
+    function to(b, d, e, fin){
+      an = {a:uNow, b:b, d:Math.max(0, d), e:e, fin:fin, t0:-1};
+      clearTimeout(timer);
+      /* falls der Browser keine Bilder mehr zeichnet (Fenster im Hintergrund): trotzdem sauber fertig werden */
+      timer = setTimeout(function(){ if(!an) return; var q = an.fin; uNow = an.b; an = null; if(q) q(); else show(uNow); }, an.d + 400);
+      if(!raf) raf = requestAnimationFrame(step);
+    }
+    function left(){
+      if(!an) return 0;
+      return an.t0 < 0 ? an.d : Math.max(0, an.d - (performance.now() - an.t0));
     }
     frame(0);
     leaf.hidden = false;
-    flip = {end:end};
-    raf = requestAnimationFrame(tick);
-    /* falls der Browser keine Bilder mehr zeichnet (Fenster im Hintergrund): trotzdem sauber fertig werden */
-    timer = setTimeout(end, o.dur + 400);
+    flip = {
+      peek: !!o.peek, hint: !!o.hint, dir: o.dir,
+      end: function(){ end(false); },
+      cancelNow: function(){ end(true); },
+      /* schneller zu Ende (Doppelklick): das Blatt läuft sichtbar fertig, in höchstens ms */
+      hurry: function(ms){ if(an && an.b === 1 && an.fin && left() > ms){ var q = an.fin; to(1, ms, null, q); } },
+      set: function(u){ an = null; dropping = false; if(raf){ cancelAnimationFrame(raf); raf = 0; } clearTimeout(timer); uNow = u < 0 ? 0 : u > 1 ? 1 : u; show(uNow); },
+      done: function(){ dropping = false; to(1, 260 + 120 * (1 - c01(uNow)), E_DONE, function(){ end(false); }); },
+      back: function(){ dropping = false; to(0, 220, E_BACK, function(){ end(true); }); },
+      turn: function(){ dropping = false; to(1, Math.max(220, o.dur * (1 - c01(uNow))), null, function(){ end(false); }); },
+      lift: function(){ dropping = false; to(.04, 240, E_LIFT, null); },
+      drop: function(){ if(dropping) return; dropping = true; to(0, 200, E_LIFT, function(){ end(true); }); },
+      dropping: function(){ return dropping; },
+      u: function(){ return uNow; }
+    };
+    if(o.hint){
+      /* einmaliger Hinweis: die Ecke hebt sich zweimal und legt sich wieder (zusammen 900 ms) */
+      to(.04, 225, eio, function(){ to(0, 225, eio, function(){ to(.04, 225, eio, function(){ to(0, 225, eio, function(){ end(true); }); }); }); });
+    } else if(o.peek) to(.04, 240, E_LIFT, null);
+    else if(!o.drag) to(1, o.dur, null, function(){ end(false); });
   }
-  function skipTurn(){ if(flip) flip.end(); }
-  function go(newPos, done){
-    if(busy) skipTurn();
+  function skipTurn(){ pend = null; if(flip){ if(flip.peek) flip.cancelNow(); else flip.end(); } }
+  /* Ruhe: eine gehobene Ecke legt sich sofort, bevor etwas anderes passiert */
+  function calm(){ if(flip && flip.peek) flip.cancelNow(); }
+  var pend = null, lastReq = 0, hT = 0, gen = 0;
+  function instantScroll(y){ try { window.scrollTo({top:y, left:0, behavior:'instant'}); } catch(e){ window.scrollTo(0, y); } }
+  function headH(){ return topBar ? topBar.getBoundingClientRect().height : 0; }
+  /* kurz und selbst gerollt (höchstens 300 ms), danach auf scrollend warten (oder 250 ms); erst dann geht es weiter */
+  function smoothTo(y, cb){
+    var y0 = window.pageYOffset || document.documentElement.scrollTop, once = false, t0 = 0, D, ft;
+    function fin(){ if(once) return; once = true; window.removeEventListener('scrollend', fin); clearTimeout(ft); if(cb) cb(); }
+    if(Math.abs(y - y0) < 2){ fin(); return; }
+    if(rm.matches){ instantScroll(y); fin(); return; }
+    D = Math.min(300, 160 + Math.abs(y - y0) * .12);
+    ft = setTimeout(function(){ instantScroll(y); fin(); }, D + 700);
+    function st(now){
+      if(once) return;
+      if(!t0) t0 = now;
+      var p = c01((now - t0) / D);
+      instantScroll(Math.round(y0 + (y - y0) * eio(p)));
+      if(p < 1){ requestAnimationFrame(st); return; }
+      window.addEventListener('scrollend', fin);
+      clearTimeout(ft); ft = setTimeout(fin, 250);
+    }
+    requestAnimationFrame(st);
+  }
+  /* Telefon: steht der Anfang der Seite nicht im Bild, zuerst dorthin rollen, dann blättern; nie beides zugleich */
+  function preScroll(cb){
+    if(wide){ cb(); return; }
+    var r = bk.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight, hh = headH();
+    if(r.top >= hh && r.top <= vh * .5){ cb(); return; }
+    smoothTo(Math.max(0, Math.round((window.pageYOffset || document.documentElement.scrollTop) + r.top - hh - 16)), cb);
+  }
+  /* Telefon: nach dem Blättern wechselt die Höhe weich von der alten zur neuen Seite (kein Sprung) */
+  function settleHeight(){
+    var h0 = spread.offsetHeight;
+    spread.style.minHeight = '';
+    var h1 = spread.offsetHeight;
+    if(rm.matches || Math.abs(h1 - h0) < 2) return;
+    spread.style.height = h0 + 'px'; void spread.offsetHeight;
+    spread.style.transition = 'height .32s cubic-bezier(.2,.7,.2,1)';
+    spread.style.height = h1 + 'px';
+    clearTimeout(hT);
+    hT = setTimeout(function(){ spread.style.transition = ''; spread.style.height = ''; }, 360);
+  }
+  function go(newPos, done, opt){
+    opt = opt || {};
     newPos = Math.max(0, Math.min(pages.length - 1, newPos));
+    if(flip && flip.peek && !opt.peek) flip.cancelNow();
+    var now = Date.now(), quick = now - lastReq < 1200;
+    if(!opt.peek && !opt.drag) lastReq = now;
+    if(busy){
+      if(opt.peek || opt.drag) return null;
+      /* es wird schon geblättert: der neue Wunsch wartet, das laufende Blatt läuft schneller (höchstens 200 ms) zu Ende */
+      pend = {pos:newPos, done:done};
+      if(flip) flip.hurry(200);
+      return null;
+    }
     var from = base(pos), to = base(newPos);
-    if(from === to || !isOpen){ pos = newPos; if(!isOpen || !done) paint(); if(done) done(); pulse(); return; }
-    if(busy) return;
-    var dir = to > from ? 1 : -1, W, H0, front, back, old, vh, top;
+    if(from === to || !isOpen){ pos = newPos; if(!isOpen || !done) paint(); if(done) done(); pulse(); return null; }
+    var dir = to > from ? 1 : -1, W, H0, front, back, old, vh, top, prev = pos, my = ++gen;
+    var dur = wide ? (quick ? 420 : 650) : (quick ? 420 : 520);
     /* Umblättern schliesst ein offenes Gericht. Lag der Fokus im Buch (im Gericht, auf einer Zeile), geht er auf den Titel der neuen Seite. */
     var hadFocus = spread.contains(document.activeElement);
-    function end(){
+    function end(cancel, painted){
+      bk.classList.remove('is-turning');
       busy = false;
-      if(hadFocus && !spread.contains(document.activeElement)) focusHead(base(pos));
-      if(done) done();
+      if(cancel){ if(!painted){ pos = prev; paint(); } }
+      else {
+        if(hadFocus && !spread.contains(document.activeElement)) focusHead(base(pos));
+        if(done) done();
+      }
       pulse();
+      var p = pend; pend = null;
+      if(p && isOpen) go(p.pos, p.done);
     }
     closeDetail(false);
-    if(rm.matches){ pos = newPos; paint(); fade(spread); fitBook(false); end(); return; }
-    busy = true;
+    busy = true; bk.classList.add('is-turning');
+    if(rm.matches){ preScroll(function(){ pos = newPos; paint(); fade(spread); end(false); }); return null; }
     if(wide){
-      fitBook(false);
       W = R.offsetWidth;
       if(dir > 0){
         front = sheetPage('r', pageHTML(from+1, 'x')); back = sheetPage('l', pageHTML(to, 'x'));
+        if(opt.drag) keepTouched();
         R.innerHTML = pageHTML(to+1, 'd');
       } else {
         front = sheetPage('l', pageHTML(from, 'x')); back = sheetPage('r', pageHTML(to+1, 'x'));
+        if(opt.drag) keepTouched();
         L.innerHTML = pageHTML(to, 'd');
       }
-      pos = newPos; sync();
-      startFlip({g:dir, hx:W, W:W, n:14, dur:800, front:front, back:back}, function(){
-        paint(); end();
+      /* gehobene Ecke: Seitenzahl und Register wechseln erst, wenn wirklich geblättert wird */
+      if(!opt.peek){ pos = newPos; sync(); }
+      startFlip({g:dir, hx:W, W:W, n:14, dur:dur, front:front, back:back, peek:opt.peek, hint:opt.hint, drag:opt.drag, dir:dir}, function(c){
+        if(!c){ pos = newPos; paint(); } end(c);
       });
-    } else {
-      /* Telefon, eine Seite: vorwärts rollt die alte Seite nach links weg, rückwärts legt sich die neue von links darüber */
+      return flip;
+    }
+    /* Telefon, eine Seite: vorwärts rollt die alte Seite nach links weg, rückwärts legt sich die neue von links darüber */
+    function phone(){
+      if(my !== gen) return;
+      clearTimeout(hT); spread.style.transition = ''; spread.style.height = '';
       W = R.offsetWidth; H0 = R.offsetHeight;
       old = phonePage();
+      if(opt.drag) keepTouched();
       pos = newPos; paint();
       R.classList.remove('in-open');
       if(R.offsetHeight < H0) spread.style.minHeight = H0 + 'px';
       if(dir > 0) front = old;
       else { front = phonePage(); R.classList.add('bk-wait'); }
       top = spread.getBoundingClientRect().top; vh = window.innerHeight || 700;
-      scrollToBook();
-      startFlip({g:1, hx:0, W:W, n:7, dur:520, front:front, back:null, under:dir > 0 ? null : old, phone:true, back2:dir < 0,
-                 persp:'1500px', origin:'60% ' + Math.round(Math.max(120, Math.min(H0, vh * .45 - Math.min(top, 78)))) + 'px'}, function(){
-        R.classList.remove('bk-wait'); spread.style.minHeight = '';
-        end();
+      startFlip({g:1, hx:0, W:W, n:7, dur:dur, front:front, back:null, under:dir > 0 ? null : old, phone:true, back2:dir < 0, drag:opt.drag, dir:dir,
+                 persp:'1500px', origin:'60% ' + Math.round(Math.max(120, Math.min(H0, vh * .45 - Math.min(top, 78)))) + 'px'}, function(c){
+        R.classList.remove('bk-wait');
+        if(c){ pos = prev; paint(); }
+        settleHeight();
+        end(c, true);
+        /* nach einem Wisch: liegt der Anfang der neuen Seite über dem Bild, danach (nicht während) kurz hinrollen */
+        if(!c && opt.drag && !pend && !busy){
+          var r = bk.getBoundingClientRect(), hh = headH();
+          if(r.top < hh - 40) smoothTo(Math.max(0, Math.round((window.pageYOffset || document.documentElement.scrollTop) + r.top - hh - 16)));
+        }
       });
     }
+    if(opt.drag){ phone(); return flip; }
+    preScroll(phone);
+    return null;
   }
   /* Abbild der Telefonseite für das Blatt: ohne Kennungen, zugeklappte Angaben weggelassen */
   function phonePage(){
@@ -2618,13 +2967,37 @@ main > .parquet{display:none}
     el.className = 'bk-page r';
     return dead(el);
   }
+  function turnDone(){ curFromPos(); writeHash(); }
+  /* Wischen: die berührte Seite muss im Dokument bleiben (unsichtbar), sonst kommen die weiteren Fingerbewegungen nicht mehr an */
+  var hold = null;
+  function keepTouched(){
+    if(!hold){ hold = document.createElement('div'); hold.hidden = true; hold.setAttribute('aria-hidden', 'true'); stage.appendChild(hold); setInert(hold, true); }
+    [L, R].forEach(function(p){ var f = document.createElement('div'); while(p.firstChild) f.appendChild(p.firstChild); hold.appendChild(dead(f)); });
+  }
+  function dropHeld(){ if(hold) hold.textContent = ''; }
   function turn(dir){
     if(!isOpen) return;
-    if(busy) skipTurn();
-    if(busy) return;
-    var target = wide ? base(pos) + 2*dir : pos + dir;
+    if(flip && flip.peek){
+      /* die Ecke ist schon gehoben: von dort aus weiterblättern */
+      if(flip.dir === dir && !flip.hint){ lastReq = Date.now(); flip.turn(); return; }
+      flip.cancelNow();
+    }
+    var from = busy && pend ? pend.pos : pos;
+    var target = wide ? base(from) + 2*dir : from + dir;
     if(target < 0 || target > pages.length - 1) return;
-    go(target, function(){ curFromPos(); writeHash(); });
+    go(target, turnDone);
+  }
+  /* Einmaliger Hinweis beim ersten Öffnen: Doppelseite hebt die Ecke zweimal, Telefon schiebt die Seite kurz an */
+  var HKEY = 'keyff-karte-blaettern-gezeigt', hinted = false;
+  try { if(window.localStorage.getItem(HKEY) === '1') hinted = true; } catch(e){}
+  function flipHint(){
+    if(hinted || rm.matches || !isOpen || busy || dv) return;
+    if(wide ? base(pos) + 2 > pages.length - 1 : pos >= pages.length - 1) return;
+    hinted = true;
+    try { window.localStorage.setItem(HKEY, '1'); } catch(e){}
+    if(wide){ go(base(pos) + 2, turnDone, {peek:true, hint:true}); return; }
+    R.classList.remove('bk-nudge'); void R.offsetWidth; R.classList.add('bk-nudge');
+    setTimeout(function(){ R.classList.remove('bk-nudge'); }, 700);
   }
   function headOf(idx){
     var el = (wide && idx % 2 === 0) ? L : R;
@@ -2684,7 +3057,7 @@ main > .parquet{display:none}
         Array.prototype.forEach.call(spread.querySelectorAll('.bk-spread > .bk-page .bk-dish.open .bk-row'), function(b){ setRow(b, false); });
         if(focus) focusHead(target);
       }
-      sync(); writeHash(); fitBook(false);
+      sync(); writeHash();
     });
   }
 
@@ -2712,12 +3085,13 @@ main > .parquet{display:none}
     if(then) then();
   }
   function closeBook(){
+    calm();
     if(!isOpen || busy) return;
     closeDetail(false);
     Array.prototype.forEach.call(spread.querySelectorAll('.bk-dish.open .bk-row'), function(b){ setRow(b, false); });
     pos = 0; cur = {c:-1, d:0};
     setState(false, false);
-    setTimeout(function(){ if(!isOpen) paint(); }, wide ? 500 : 0);
+    setTimeout(function(){ if(!isOpen) paint(); }, 500);
     writeHash();
     var t = bk.getBoundingClientRect().top;
     if(t < 0) window.scrollTo(0, (window.pageYOffset || document.documentElement.scrollTop) + t - 90);
@@ -2782,9 +3156,31 @@ main > .parquet{display:none}
     openBook(false, function(){
       fitBook(false);
       setTimeout(function(){ if(isOpen) focusHead(base(pos)); }, rm.matches ? 60 : 1150);
+      setTimeout(flipHint, 1200);
     });
   });
   bClose.addEventListener('click', closeBook);
+  /* Ganze Karte als Liste (dieselbe Liste wie ohne JavaScript): auf und zu, das Buch bleibt, wie es ist */
+  var bList = document.getElementById('bk-list');
+  function setList(on){
+    if(!plain || !bList) return;
+    plain.hidden = !on;
+    bList.setAttribute('aria-expanded', on ? 'true' : 'false');
+    var t = bList.querySelector('[data-t]'); t.setAttribute('data-t', on ? 'Liste schliessen' : 'Ganze Karte als Liste'); t.textContent = tr(t.getAttribute('data-t'));
+    if(on) Array.prototype.forEach.call(plain.querySelectorAll('details'), function(d){ d.open = true; });
+  }
+  if(bList && plain){
+    plain.setAttribute('role', 'region'); plain.setAttribute('aria-label', 'Ganze Karte als Liste');
+    var pc = document.createElement('div'); pc.className = 'pl-close-row';
+    pc.innerHTML = '<button type="button" class="bk-listbtn pl-close">Liste schliessen</button>';
+    plain.appendChild(pc);
+    bList.addEventListener('click', function(){ setList(plain.hidden); });
+    pc.firstChild.addEventListener('click', function(){
+      setList(false);
+      try { bList.scrollIntoView({block:'center', behavior:'instant'}); } catch(e){ bList.scrollIntoView(); }
+      try { bList.focus({preventScroll:true}); } catch(e){ bList.focus(); }
+    });
+  }
   if(tabs) tabs.addEventListener('click', function(e){
     var t = e.target.closest ? e.target.closest('.bk-tab') : null;
     if(!t || !isOpen) return;
@@ -2793,7 +3189,7 @@ main > .parquet{display:none}
   bPrev.addEventListener('click', function(){ turn(-1); });
   bNext.addEventListener('click', function(){ turn(1); });
   bToc.addEventListener('click', function(){
-    go(0, function(){ cur = {c:-1, d:0}; sync(); writeHash(); focusHead(0); fitBook(false); });
+    go(0, function(){ cur = {c:-1, d:0}; sync(); writeHash(); focusHead(0); });
   });
   spread.addEventListener('click', function(e){
     if(e.target.closest && e.target.closest('.bk-back,.bk-x')){ closeAnyDish(); return; }
@@ -2816,21 +3212,102 @@ main > .parquet{display:none}
   document.addEventListener('keydown', function(e){
     if(!isOpen || e.altKey || e.ctrlKey || e.metaKey) return;
     var ae = document.activeElement, inBook = !ae || ae === document.body || bk.contains(ae);
-    if(e.key === 'Escape' || e.key === 'Esc'){ if(inBook && !busy){ e.preventDefault(); if(!closeAnyDish()) closeBook(); } return; }
+    if(e.key === 'Escape' || e.key === 'Esc'){ calm(); if(inBook && !busy){ e.preventDefault(); if(!closeAnyDish()) closeBook(); } return; }
     if(!inBook) return;
     if(e.key === 'ArrowRight' || e.key === 'Right'){ e.preventDefault(); turn(1); }
     else if(e.key === 'ArrowLeft' || e.key === 'Left'){ e.preventDefault(); turn(-1); }
   });
-  var tx = 0, ty = 0, tOn = false;
-  spread.addEventListener('touchstart', function(e){
-    if(e.touches.length !== 1){ tOn = false; return; }
-    tx = e.touches[0].clientX; ty = e.touches[0].clientY; tOn = true;
+  /* Wischen (Telefon, Tablet): das Blatt folgt dem Finger; beim Loslassen fertig blättern oder zurücklegen.
+     Senkrechtes Rollen bleibt frei, solange die Bewegung nicht klar waagrecht ist. */
+  var tg = null, lastTouch = 0, md = null, hov = window.matchMedia('(hover:hover) and (pointer:fine)');
+  stage.addEventListener('touchstart', function(e){
+    lastTouch = Date.now();
+    if(!isOpen || e.touches.length !== 1){ tg = null; return; }
+    var t = e.touches[0];
+    tg = {x0:t.clientX, y0:t.clientY, x:t.clientX, lx:t.clientX, lt:e.timeStamp, v:0, mode:0, f:null};
   }, {passive:true});
-  spread.addEventListener('touchend', function(e){
-    if(!tOn) return; tOn = false;
-    var t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty;
+  stage.addEventListener('touchmove', function(e){
+    if(!tg) return;
+    if(e.touches.length !== 1){ if(tg.mode === 1 && flip === tg.f) flip.back(); tg = null; return; }
+    var t = e.touches[0], dx = t.clientX - tg.x0, dy = t.clientY - tg.y0;
+    if(tg.mode === 0){
+      if(Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+      tg.mode = 2;
+      if(Math.abs(dx) > Math.abs(dy) * 1.6 && !busy && !rm.matches){
+        var dir = dx < 0 ? 1 : -1, target = wide ? base(pos) + 2*dir : pos + dir;
+        if(target >= 0 && target <= pages.length - 1) tg.f = go(target, turnDone, {drag:true});
+        if(tg.f){ tg.mode = 1; tg.dir = dir; tg.x = t.clientX; tg.W = R.offsetWidth || 1; }
+      }
+    }
+    if(tg.mode !== 1) return;
+    if(e.cancelable) e.preventDefault();
+    var dt = e.timeStamp - tg.lt;
+    if(dt > 0) tg.v = .5 * tg.v + .5 * ((t.clientX - tg.lx) / dt);
+    tg.lx = t.clientX; tg.lt = e.timeStamp;
+    if(flip && flip === tg.f) flip.set(-tg.dir * (t.clientX - tg.x) / tg.W);
+  }, {passive:false});
+  function tEnd(e){
+    lastTouch = Date.now();
+    var q = tg; tg = null;
+    setTimeout(dropHeld, 0);
+    if(!q) return;
+    if(q.mode === 1){
+      if(!flip || flip !== q.f) return;
+      lastReq = Date.now();
+      /* Finger stand zuletzt still: kein Schwung */
+      if(e.timeStamp - q.lt > 120) q.v = 0;
+      if(e.type !== 'touchcancel' && (flip.u() > .35 || -q.dir * q.v > .5)) flip.done(); else flip.back();
+      return;
+    }
+    /* es wird gerade geblättert (oder «weniger Bewegung»): ein klarer Wisch blättert wie ein Klick */
+    var t = e.changedTouches && e.changedTouches[0]; if(!t || q.mode !== 2) return;
+    var dx = t.clientX - q.x0, dy = t.clientY - q.y0;
     if(Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.6) turn(dx < 0 ? 1 : -1);
-  }, {passive:true});
+  }
+  stage.addEventListener('touchend', tEnd, {passive:true});
+  stage.addEventListener('touchcancel', tEnd, {passive:true});
+
+  /* Doppelseite mit Maus: über der unteren Ecke (90 x 90 px) hebt sich das Blatt ein wenig; Klick blättert von dort, Ziehen nimmt es mit.
+     Links unten dasselbe zurück. Nie während eines Blätterns. */
+  function cornerAt(x, y){
+    if(!wide || !isOpen || dv || rm.matches || !hov.matches) return 0;
+    var b = base(pos), r = R.getBoundingClientRect(), l = L.getBoundingClientRect(), Z = 90;
+    if(b + 2 <= pages.length - 1 && x <= r.right && x >= r.right - Z && y <= r.bottom && y >= r.bottom - Z) return 1;
+    if(b > 0 && x >= l.left && x <= l.left + Z && y <= l.bottom && y >= l.bottom - Z) return -1;
+    return 0;
+  }
+  stage.addEventListener('mousemove', function(e){
+    if(md || Date.now() - lastTouch < 800) return;
+    var c = cornerAt(e.clientX, e.clientY), pk = flip && flip.peek && !flip.hint;
+    if(pk){ if(c !== flip.dir) flip.drop(); else if(flip.dropping()) flip.lift(); }
+    else if(c && !busy) go(base(pos) + 2*c, turnDone, {peek:true});
+    stage.style.cursor = (c && flip && flip.peek && !flip.hint) ? 'pointer' : '';
+  });
+  stage.addEventListener('mouseleave', function(){ if(!md && flip && flip.peek && !flip.hint) flip.drop(); stage.style.cursor = ''; });
+  stage.addEventListener('mousedown', function(e){
+    if(e.button !== 0 || !flip || !flip.peek || flip.hint || Date.now() - lastTouch < 800) return;
+    e.preventDefault();
+    md = {x:e.clientX, lx:e.clientX, lt:e.timeStamp, v:0, moved:false, W:R.offsetWidth || 1, f:flip, dir:flip.dir};
+    window.addEventListener('mousemove', mdMove); window.addEventListener('mouseup', mdUp);
+  });
+  function mdMove(e){
+    if(!md) return;
+    var dx = e.clientX - md.x;
+    if(Math.abs(dx) > 4) md.moved = true;
+    if(!md.moved || !flip || flip !== md.f) return;
+    var dt = e.timeStamp - md.lt;
+    if(dt > 0) md.v = .5 * md.v + .5 * ((e.clientX - md.lx) / dt);
+    md.lx = e.clientX; md.lt = e.timeStamp;
+    flip.set(.04 + Math.max(0, -md.dir * dx) / md.W);
+  }
+  function mdUp(){
+    window.removeEventListener('mousemove', mdMove); window.removeEventListener('mouseup', mdUp);
+    var m = md; md = null;
+    if(!m || !flip || flip !== m.f) return;
+    lastReq = Date.now();
+    if(!m.moved){ flip.turn(); return; }
+    if(flip.u() > .35 || -m.dir * m.v > .5) flip.done(); else flip.back();
+  }
   /* Neu einteilen (Fenstergrösse, Schrift geladen): gleiche Stelle, gleiches Gericht */
   var lastBox = '';
   function relayout(force){
@@ -2854,10 +3331,20 @@ main > .parquet{display:none}
     pulse();
   }
   function onMq(){
-    skipTurn(); wide = mq.matches; busy = false; leaf.hidden = true;
+    skipTurn(); gen++; wide = mq.matches; busy = false; leaf.hidden = true; bk.classList.remove('is-turning');
     if(!wide && M){ M.innerHTML = ''; }
     relayout(true);
+    refit();
   }
+  /* nach Drehen oder Wechsel Telefon/Doppelseite: steht das offene Buch (auch nur teilweise) im Bild, wird es sauber hingestellt */
+  function refit(){
+    if(!isOpen) return;
+    var r = bk.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight;
+    if(r.bottom <= 0 || r.top >= vh) return;
+    fitBook(true);
+    setTimeout(function(){ if(isOpen && !busy) fitBook(true); }, 350);
+  }
+  window.addEventListener('orientationchange', function(){ setTimeout(function(){ if(!busy) refit(); }, 300); });
   if(mq.addEventListener) mq.addEventListener('change', onMq); else if(mq.addListener) mq.addListener(onMq);
   var rz = 0;
   window.addEventListener('resize', function(){
@@ -2903,7 +3390,7 @@ main > .parquet{display:none}
   applyHash(true);
   } catch(err){
     bk.hidden = true;
-    if(plain) plain.hidden = false;
+    if(plain){ plain.hidden = false; var pcr = plain.querySelector('.pl-close-row'); if(pcr) pcr.parentNode.removeChild(pcr); }
   }
 })();
 </script>
@@ -2938,7 +3425,7 @@ main > .parquet{display:none}
           <figure class="zettel"><blockquote>«Sehr netter Bediener, und das Essen ist immer top.»</blockquote><cite>Nico</cite></figure>
         </div>
         <div class="wertung">
-          <svg class="stempel" viewBox="0 0 120 120" role="img" aria-label="Stempel: 4,5 von 5"><use href="#st"/></svg>
+          <span class="st-wrap"><svg class="stempel" viewBox="0 0 120 120" role="img" aria-label="Stempel: 4,5 von 5"><use href="#st"/></svg></span>
           <p>197 Bewertungen auf Google</p>
           <p class="je">Just Eat: 4,9 von 5 (360+ Bewertungen)</p>
           <a href="https://www.google.com/maps/search/?api=1&amp;query=Kaffe+de+Keyff+Degersheimerstrasse+1+Flawil" target="_blank" rel="noopener">Alle Bewertungen auf Google</a>
@@ -2953,16 +3440,17 @@ main > .parquet{display:none}
       <div class="unten">
         <section class="block zeit" id="zeiten" aria-labelledby="h-zeit">
           <h2 id="h-zeit">Öffnungszeiten</h2>
+          <svg class="tasse steam" viewBox="0 0 64 56" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 24h34v8c0 10-7 17-17 17S10 42 10 32z"/><path d="M44 28c7-1 10 3 8 8s-7 6-10 5"/><path d="M6 52h44"/></g><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="stm" d="M20 8c-3 4 3 6 0 11"/><path class="stm" d="M28 5c-3 4 3 7 0 12"/><path class="stm" d="M36 8c-3 4 3 6 0 11"/></g></svg>
           <table class="zeiten">
             <caption class="sr">Öffnungszeiten Kaffe de Keyff</caption>
             <tbody>
-              <tr data-day="1"><th scope="row"><span class="tg">Montag</span></th><td>10:30–23:00</td></tr>
-              <tr data-day="2"><th scope="row"><span class="tg">Dienstag</span></th><td>08:00–23:00</td></tr>
-              <tr data-day="3"><th scope="row"><span class="tg">Mittwoch</span></th><td>08:00–23:00</td></tr>
-              <tr data-day="4"><th scope="row"><span class="tg">Donnerstag</span></th><td>08:00–23:00</td></tr>
-              <tr data-day="5"><th scope="row"><span class="tg">Freitag</span></th><td>08:00–24:00</td></tr>
-              <tr data-day="6"><th scope="row"><span class="tg">Samstag</span></th><td>08:00–24:00</td></tr>
-              <tr data-day="0"><th scope="row"><span class="tg">Sonntag</span></th><td>08:00–23:00</td></tr>
+              <tr data-day="1"><th scope="row"><span class="tg">Montag</span></th><td>10.30–23.00</td></tr>
+              <tr data-day="2"><th scope="row"><span class="tg">Dienstag</span></th><td>08.00–23.00</td></tr>
+              <tr data-day="3"><th scope="row"><span class="tg">Mittwoch</span></th><td>08.00–23.00</td></tr>
+              <tr data-day="4"><th scope="row"><span class="tg">Donnerstag</span></th><td>08.00–23.00</td></tr>
+              <tr data-day="5"><th scope="row"><span class="tg">Freitag</span></th><td>08.00–24.00</td></tr>
+              <tr data-day="6"><th scope="row"><span class="tg">Samstag</span></th><td>08.00–24.00</td></tr>
+              <tr data-day="0"><th scope="row"><span class="tg">Sonntag</span></th><td>08.00–23.00</td></tr>
             </tbody>
           </table>
         </section>
@@ -3022,8 +3510,8 @@ main > .parquet{display:none}
   line.innerHTML = 'Heute, ' + name + ': <strong>' + time + ' Uhr</strong>';
   // Status nur aus den Zeiten der Tabelle berechnet
   function span(r){
-    var m = r && r.querySelector('td').textContent.match(/(\d\d):(\d\d)\D+(\d\d):(\d\d)/);
-    return m ? {a:+m[1]*60 + +m[2], b:+m[3]*60 + +m[4], from:m[1]+':'+m[2], to:m[3]+':'+m[4]} : null;
+    var m = r && r.querySelector('td').textContent.match(/(\d\d)[:.](\d\d)\D+(\d\d)[:.](\d\d)/);
+    return m ? {a:+m[1]*60 + +m[2], b:+m[3]*60 + +m[4], from:m[1]+'.'+m[2], to:m[3]+'.'+m[4]} : null;
   }
   var t = span(row); if(!t) return;
   var min = zh.min;
@@ -3042,13 +3530,14 @@ main > .parquet{display:none}
 })();
 (function(){
   if(!('IntersectionObserver' in window)) return;
-  var els = document.querySelectorAll('.sec-head,.gallery figure,.gb-kopf,.gb-wrap,.unten');
+  var els = document.querySelectorAll('.sec-head,.gallery figure,.gb-kopf,.unten');
   document.documentElement.classList.add('js');
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
-      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      if(e.isIntersecting){ show(e.target); io.unobserve(e.target); }
     });
   }, {threshold:.12});
+  function show(el){ if(el.classList.contains('in')) return; el.classList.add('in'); setTimeout(function(){ el.classList.add('done'); }, 820); }
   Array.prototype.forEach.call(els, function(el){ el.classList.add('rv'); io.observe(el); });
   // Sicherheitsnetz: nichts bleibt unsichtbar, falls der Observer nicht meldet
   function check(){
@@ -3056,7 +3545,7 @@ main > .parquet{display:none}
     Array.prototype.forEach.call(els, function(el){
       if(el.classList.contains('in')) return;
       var r = el.getBoundingClientRect();
-      if(r.top < h * .95 && r.bottom > 0){ el.classList.add('in'); io.unobserve(el); }
+      if(r.top < h * .95 && r.bottom > 0){ show(el); io.unobserve(el); }
     });
   }
   window.addEventListener('scroll', check, {passive:true});
@@ -3072,6 +3561,7 @@ main > .parquet{display:none}
   var rows = slip.querySelectorAll('.zeiten tbody tr'); if(!rows.length) return;
   var cur = null;
   function show(r){
+    if(r && slip.classList.contains('hw-wait')) return;
     if(cur === r) return;
     if(cur) cur.classList.remove('is-hover');
     cur = r;
@@ -3083,6 +3573,90 @@ main > .parquet{display:none}
   });
   slip.addEventListener('mouseleave', function(){ show(null); });
   document.addEventListener('click', function(e){ if(!slip.contains(e.target)) show(null); });
+})();
+</script>
+<script>
+/* Bewegung beim ersten Erscheinen (21.11): Zeiten werden geschrieben, Dampf über der Tasse, Stempel und Zettel (hell).
+   Jede Bewegung läuft genau einmal und immer zu Ende, auch beim schnellen Scrollen; Hover erst danach. «Weniger Bewegung»: alles sofort da. */
+(function(){
+  var rmq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion:reduce)') : null;
+  var rm = !!(rmq && rmq.matches), hasIO = 'IntersectionObserver' in window;
+  var still = rm || !hasIO;
+  function once(el, fn, delay){
+    if(!el) return;
+    var fired = false, io = null;
+    function fire(){
+      if(fired) return; fired = true;
+      if(io) io.disconnect();
+      window.removeEventListener('scroll', chk); window.removeEventListener('resize', chk); window.removeEventListener('load', chk);
+      setTimeout(fn, delay || 0);
+    }
+    /* Sicherheitsnetz: im Bild oder schon darüber hinaus gescrollt = abspielen */
+    function chk(){
+      var r = el.getBoundingClientRect(), h = window.innerHeight || document.documentElement.clientHeight;
+      if(r.bottom <= 0 || (r.top < h * .92 && r.bottom > 0)) fire();
+    }
+    io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) fire(); }); }, {threshold:.2});
+    io.observe(el);
+    window.addEventListener('scroll', chk, {passive:true}); window.addEventListener('resize', chk); window.addEventListener('load', chk);
+    setTimeout(chk, 1300);
+  }
+  /* Öffnungszeiten von Hand: Zeile um Zeile von links nach rechts, danach wird heute markiert */
+  function ringPaths(box){ return box.querySelectorAll('.chalk-today path'); }
+  function hideRing(box){
+    Array.prototype.forEach.call(ringPaths(box), function(p){ var l = p.getTotalLength ? p.getTotalLength() : 0; if(!l) return; p.style.transition = 'none'; p.style.strokeDasharray = l; p.style.strokeDashoffset = l; });
+  }
+  function drawRing(box){
+    Array.prototype.forEach.call(ringPaths(box), function(p){
+      var l = p.getTotalLength ? p.getTotalLength() : 0; if(!l) return;
+      p.style.transition = 'none'; p.style.strokeDasharray = l; p.style.strokeDashoffset = l; p.getBoundingClientRect();
+      p.style.transition = 'stroke-dashoffset .7s cubic-bezier(.45,.05,.3,1)'; p.style.strokeDashoffset = '0';
+    });
+  }
+  function hand(box){
+    if(!box) return;
+    var rows = box.querySelectorAll('tbody tr');
+    Array.prototype.forEach.call(rows, function(r, i){ r.style.setProperty('--r', i); });
+    if(still){ box.classList.add('hw-done'); return; }
+    box.classList.add('hw-wait');
+    hideRing(box);
+    box.hwHide = function(){ if(box.classList.contains('hw-wait') && !box.classList.contains('hw-ring')) hideRing(box); };
+    once(box, function(){
+      box.classList.add('hw-go');
+      setTimeout(function(){
+        box.classList.add('hw-ring'); drawRing(box);
+        setTimeout(function(){
+          box.classList.remove('hw-wait', 'hw-go', 'hw-ring'); box.classList.add('hw-done');
+          Array.prototype.forEach.call(ringPaths(box), function(p){ p.style.transition = ''; p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; });
+        }, 760);
+      }, (rows.length - 1) * 60 + 150);
+    }, 220);
+  }
+  hand(document.querySelector('.board') || document.querySelector('.block.zeit'));
+  /* Dampf über der Tasse: läuft nur, solange die Tasse im Bild ist */
+  Array.prototype.forEach.call(document.querySelectorAll('.steam'), function(s){
+    if(still){ return; }
+    new IntersectionObserver(function(es){ es.forEach(function(e){ s.classList.toggle('on', e.isIntersecting); }); }).observe(s);
+  });
+  /* Hell: der Stempel wird aufgesetzt */
+  var sw = document.querySelector('.st-wrap');
+  if(sw && !still){
+    sw.classList.add('st-wait');
+    once(sw, function(){ sw.classList.add('st-go'); setTimeout(function(){ sw.classList.remove('st-wait', 'st-go'); sw.classList.add('done'); }, 460); }, 120);
+  } else if(sw) sw.classList.add('done');
+  /* Hell: die Zettel legen sich einer nach dem anderen hin (schräg von oben auf ihren Winkel), Hover erst danach */
+  var last = 0, k = 0;
+  Array.prototype.forEach.call(document.querySelectorAll('.gbuch .zettel'), function(z){
+    if(still) return;
+    z.classList.add('zl-wait');
+    once(z, function(){
+      var now = Date.now(); k = now - last < 400 ? k + 1 : 0; last = now;
+      setTimeout(function(){
+        z.classList.add('zl-go');
+        setTimeout(function(){ z.classList.remove('zl-wait', 'zl-go'); }, 560);
+      }, k * 90);
+    }, 0);
+  });
 })();
 </script>
 </body>
