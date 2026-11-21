@@ -178,7 +178,7 @@ a.fact:hover{color:var(--gold)}
 
 .hero-photo{position:relative;order:-1;margin:0 -20px}
 .hero-photo .main{
-  width:100%;height:340px;height:clamp(280px,46svh,420px);object-fit:cover;object-position:50% 66%;
+  width:100%;height:340px;height:clamp(230px,34svh,420px);object-fit:cover;object-position:50% 66%;
   background:var(--panel-2);color:var(--muted);font-size:.85rem;
   filter:brightness(.94) contrast(1.05) saturate(1.12) sepia(.08);
 }
@@ -1681,6 +1681,7 @@ main > .parquet{display:none}
 .bk-dv-orn img{width:clamp(90px,34%,170px);height:auto;opacity:.22;filter:grayscale(.2)}
 .bk-dv-orn span{font-family:var(--display);font-weight:700;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;opacity:.45}
 @media (max-height:640px){.bk-dv-orn{display:none!important}}
+@media (max-width:699px){#ab-preise{display:none}.hero-text{display:flex;flex-direction:column;align-items:stretch}.hero-text>.cta{order:1}.hero-text>.hero-info{order:2;margin:14px 0 0}.hero-text>.hero-info~*:not(.cta){order:3}}
 </style>
 <style id="vw-css">
 .vw-bar{position:relative;z-index:200;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:0;padding:8px 14px;
@@ -1696,6 +1697,7 @@ main > .parquet{display:none}
 .vw-a:focus-visible{outline:3px solid #b5372a;outline-offset:-3px}
 .vw-n{flex:1 1 260px;max-width:520px;font-size:13px;color:#4a443d}
 @media (max-width:560px){.vw-n{flex-basis:100%}}
+@media (max-width:699px){.vw-n{display:none}.vw-bar{padding:5px 10px;gap:6px 12px}.vw-a{min-height:36px;padding:4px 16px}}
 </style>
 </head>
 <body>
