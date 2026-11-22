@@ -1881,6 +1881,13 @@ html{-webkit-tap-highlight-color:transparent}
 :focus:not(:focus-visible){outline:none!important}
 [tabindex="-1"]:focus{outline:none!important}
 a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid #7E1F2C!important;outline-offset:3px;border-radius:6px}
+/* 23.11 Julia: erster Bildschirm auf breiten Monitoren – Foto und Kreis näher an den Text und grösser, kein leeres Feld links vom Foto */
+@media (min-width:900px) and (min-height:501px){
+  .hero .wrap{grid-template-columns:auto minmax(0,1fr);gap:calc(84*var(--u))}
+  .hero-photo{justify-self:center;width:100%;max-width:calc(620*var(--u));margin:0}
+  .hero-photo .main{aspect-ratio:1/1}
+  .hero-photo .room{left:calc(-44*var(--u));bottom:calc(-22*var(--u));width:calc(176*var(--u));height:calc(176*var(--u))}
+}
 </style>
 <style id="vw-css">
 .vw-bar{position:relative;z-index:200;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 16px;margin:0;padding:8px 14px;
