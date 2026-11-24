@@ -3974,10 +3974,15 @@ body{background:transparent!important}
   var pb=[]; Object.keys(P).forEach(function(k){var e=document.querySelector(k);if(e)pb.push({e:e,img:e.style.backgroundImage,u:P[k]});});
   function set(f){
     pb.forEach(function(o){var e=o.e;
-      if(f==='D'){var cur=getComputedStyle(e).backgroundImage;o.img=o.img||'';e.dataset.fwBase=e.dataset.fwBase||(cur==='none'?'':cur);
-        e.style.backgroundImage=(e.dataset.fwBase?e.dataset.fwBase+', ':'')+VE+', url('+o.u+')';e.style.backgroundSize='';e.style.backgroundPosition='';e.style.backgroundRepeat='no-repeat';
-        e.style.backgroundSize=(e.dataset.fwBase?e.dataset.fwBase.split(/,(?![^(]*\))(?=\s*(?:radial|linear))/).map(function(){return 'auto';}).join(', ')+', ':'')+'100% 100%, cover';
-        e.style.backgroundPosition=(e.dataset.fwBase?e.dataset.fwBase.split(/,(?![^(]*\))(?=\s*(?:radial|linear))/).map(function(){return '0 0';}).join(', ')+', ':'')+'0 0, center';}
+      if(f==='D'){
+        if(e.dataset.fwBase===undefined){var cur=getComputedStyle(e).backgroundImage;
+          var parts=cur==='none'?[]:cur.split(/,(?![^(]*\))(?=\s*(?:radial|linear|conic|url|repeating|none))/).map(function(x){return x.trim();}).filter(function(x){return x&&x!=='none';});
+          e.dataset.fwBase=parts.join(', ');e.dataset.fwN=String(parts.length);}
+        var n=+e.dataset.fwN, rep=function(v){var r=[];for(var i=0;i<n;i++)r.push(v);return r;};
+        e.style.backgroundImage=(n?e.dataset.fwBase+', ':'')+VE+', url('+o.u+')';
+        e.style.backgroundSize=rep('auto').concat(['100% 100%','cover']).join(', ');
+        e.style.backgroundPosition=rep('0 0').concat(['0 0','center']).join(', ');
+        e.style.backgroundRepeat=rep('no-repeat').concat(['no-repeat','no-repeat']).join(', ');}
       else if(e.dataset.fwBase!==undefined){e.style.backgroundImage=e.dataset.fwBase||'none';e.style.backgroundSize='';e.style.backgroundPosition='';e.style.backgroundRepeat='';}});
     root.style.backgroundImage=f==='D'?'none':'url('+F[f]+')';
     bs.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-f')===f));});
