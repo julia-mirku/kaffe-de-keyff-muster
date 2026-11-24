@@ -1977,7 +1977,7 @@ body{background:transparent!important}
       <span class="plate"><img src="../keyff_k6.png" alt="Logo Kaffe de Keyff" width="62" height="44" referrerpolicy="no-referrer"></span>
       <b translate="no">Kaffe de Keyff</b>
     </a>
-    <div class="fw" role="group" aria-label="Hintergrund wählen"><span>Hintergrund:</span><button type="button" data-f="A">A</button><button type="button" data-f="B">B</button><button type="button" data-f="C">C</button></div>
+    <div class="fw" role="group" aria-label="Hintergrund wählen"><span>Hintergrund:</span><button type="button" data-f="A">A</button><button type="button" data-f="B">B</button><button type="button" data-f="C">C</button><button type="button" data-f="D">D</button></div>
     <a class="btn btn-amber" href="tel:+41715544224" aria-label="Anrufen: 071 554 42 24">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
       <span class="word">Anrufen</span><span class="num">071 554 42 24</span>
@@ -3968,13 +3968,23 @@ body{background:transparent!important}
     var L=c.backgroundImage.split(/,(?![^(]*\))(?=\s*(?:radial|linear|conic|url|repeating))/);
     var keep=L.filter(function(l){l=l.trim();return !(/^linear-gradient/.test(l)&&!/rgba\([^)]*,\s*0?\.\d+\)|transparent/.test(l));});
     if(keep.length!==L.length){e.style.backgroundImage=keep.length?keep.join(', '):'none';}});
+  /* D (Julia, 24.11: «фотки … на фон прозрачно»): ihre echten Fotos, je Block eins, unter einem Cremeschleier, Ränder weich in Creme */
+  var P={'.hero':'fon_foto_raum.jpg','#karte':'fon_foto_pide.jpg','#stimmen':'fon_foto_doener.jpg','.sec.besuch':'fon_foto_theke.jpg'};
+  var CR='243,235,221', VE='linear-gradient(180deg,rgb('+CR+') 0%,rgba('+CR+',.84) 14%,rgba('+CR+',.84) 86%,rgb('+CR+') 100%)';
+  var pb=[]; Object.keys(P).forEach(function(k){var e=document.querySelector(k);if(e)pb.push({e:e,img:e.style.backgroundImage,u:P[k]});});
   function set(f){
-    root.style.backgroundImage='url('+F[f]+')';
+    pb.forEach(function(o){var e=o.e;
+      if(f==='D'){var cur=getComputedStyle(e).backgroundImage;o.img=o.img||'';e.dataset.fwBase=e.dataset.fwBase||(cur==='none'?'':cur);
+        e.style.backgroundImage=(e.dataset.fwBase?e.dataset.fwBase+', ':'')+VE+', url('+o.u+')';e.style.backgroundSize='';e.style.backgroundPosition='';e.style.backgroundRepeat='no-repeat';
+        e.style.backgroundSize=(e.dataset.fwBase?e.dataset.fwBase.split(/,(?![^(]*\))(?=\s*(?:radial|linear))/).map(function(){return 'auto';}).join(', ')+', ':'')+'100% 100%, cover';
+        e.style.backgroundPosition=(e.dataset.fwBase?e.dataset.fwBase.split(/,(?![^(]*\))(?=\s*(?:radial|linear))/).map(function(){return '0 0';}).join(', ')+', ':'')+'0 0, center';}
+      else if(e.dataset.fwBase!==undefined){e.style.backgroundImage=e.dataset.fwBase||'none';e.style.backgroundSize='';e.style.backgroundPosition='';e.style.backgroundRepeat='';}});
+    root.style.backgroundImage=f==='D'?'none':'url('+F[f]+')';
     bs.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-f')===f));});
     try{history.replaceState(null,'','#'+f);}catch(e){}
   }
   bs.forEach(function(b){b.addEventListener('click',function(){set(b.getAttribute('data-f'));});});
-  var h=(location.hash||'').slice(1).toUpperCase(); set(/^[ABC]$/.test(h)?h:'A');
+  var h=(location.hash||'').slice(1).toUpperCase(); set(/^[ABCD]$/.test(h)?h:'A');
 })();</script>
 </body>
 </html>
