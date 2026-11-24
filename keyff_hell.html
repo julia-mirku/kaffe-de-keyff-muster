@@ -3030,9 +3030,9 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
       /* schneller zu Ende (Doppelklick): das Blatt läuft sichtbar fertig, in höchstens ms */
       hurry: function(ms){ if(an && an.b === 1 && an.fin && left() > ms){ var q = an.fin; to(1, ms, null, q); } },
       set: function(u){ an = null; dropping = false; if(raf){ cancelAnimationFrame(raf); raf = 0; } clearTimeout(timer); uNow = u < 0 ? 0 : u > 1 ? 1 : u; show(uNow); },
-      done: function(){ dropping = false; to(1, 260 + 120 * (1 - c01(uNow)), E_DONE, function(){ end(false); }); },
+      done: function(){ dropping = false; flip.peek = false; to(1, 260 + 120 * (1 - c01(uNow)), E_DONE, function(){ end(false); }); },
       back: function(){ dropping = false; to(0, 220, E_BACK, function(){ end(true); }); },
-      turn: function(){ dropping = false; to(1, Math.max(220, o.dur * (1 - c01(uNow))), null, function(){ end(false); }); },
+      turn: function(){ dropping = false; flip.peek = false; /* 25.11: blättert jetzt wirklich – weitere Klicks warten in der Schlange */ to(1, Math.max(220, o.dur * (1 - c01(uNow))), null, function(){ end(false); }); },
       lift: function(){ dropping = false; to(.04, 240, E_LIFT, null); },
       drop: function(){ if(dropping) return; dropping = true; to(0, 200, E_LIFT, function(){ end(true); }); },
       dropping: function(){ return dropping; },
@@ -3138,6 +3138,7 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
       startFlip({g:dir, hx:W, W:W, n:14, dur:dur, front:front, back:back, peek:opt.peek, hint:opt.hint, drag:opt.drag, dir:dir}, function(c){
         if(!c){ pos = newPos; paint(); } end(c);
       });
+      if(flip) flip.target = newPos;   /* 25.11: Ziel des laufenden Blatts, für Klicks in der Warteschlange */
       return flip;
     }
     /* Telefon, eine Seite: vorwärts rollt die alte Seite nach links weg, rückwärts legt sich die neue von links darüber */
@@ -3192,7 +3193,7 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
       if(flip.dir === dir && !flip.hint){ lastReq = Date.now(); flip.turn(); return; }
       flip.cancelNow();
     }
-    var from = busy && pend ? pend.pos : pos;
+    var from = busy && pend ? pend.pos : (busy && flip && !flip.peek && flip.target != null ? flip.target : pos);
     var target = wide ? base(from) + 2*dir : from + dir;
     if(target < 0 || target > pages.length - 1) return;
     go(target, turnDone);
@@ -3495,7 +3496,13 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
   });
   stage.addEventListener('mouseleave', function(){ if(!md && flip && flip.peek && !flip.hint) flip.drop(); stage.style.cursor = ''; });
   stage.addEventListener('mousedown', function(e){
-    if(e.button !== 0 || !flip || !flip.peek || flip.hint || Date.now() - lastTouch < 800) return;
+    if(e.button !== 0 || Date.now() - lastTouch < 800) return;
+    /* 25.11 (Julia): Klick auf die Ecke blättert immer – auch ohne Mausbewegung davor und während ein Blatt noch läuft (dann in der Warteschlange) */
+    if(!flip || !flip.peek || flip.hint){
+      var c = cornerAt(e.clientX, e.clientY);
+      if(c){ e.preventDefault(); lastReq = Date.now(); turn(c); }
+      return;
+    }
     e.preventDefault();
     md = {x:e.clientX, lx:e.clientX, lt:e.timeStamp, v:0, moved:false, W:R.offsetWidth || 1, f:flip, dir:flip.dir};
     window.addEventListener('mousemove', mdMove); window.addEventListener('mouseup', mdUp);
