@@ -2000,13 +2000,12 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
 /* 25.11: Leiste auf dem Computer schlanker, damit der erste Bildschirm samt Knöpfen in 1470×659 passt */
 @media (min-width:700px){.vw-bar{padding:3px 14px;border-width:1.5px}.vw-a{min-height:32px;padding:3px 16px;font-size:14px}.vw-n{font-size:12.5px}}
 </style>
-<style id="fw-css">
-/* Julia №127: Blöcke näher zusammen (≤~100 px Computer, ≤~70 px Telefon), keine Farbstreifen zwischen Blöcken; «Was Gäste sagen» unverändert, nur Abstand */
+<style id="sand-css">
+/* Julia №127: Blöcke näher, keine Farbkanten; «Was Gäste sagen» unverändert, nur Abstand */
 #karte{padding-top:22px!important;padding-bottom:36px!important}
 #fotos{padding-top:40px!important}
 .foot .parquet,main > .parquet{display:none!important}
 .sec.besuch{padding-bottom:44px!important}
-/* keine Kanten: Lichtverläufe, die an Blockgrenzen abgeschnitten wurden, weg; Lampenlicht oben bleibt; Halo hinter dem Foto läuft weich aus */
 #karte,#fotos{background-image:none!important}
 .hero{background-image:radial-gradient(58% 48% at 80% 0%,rgba(233,199,122,.42),rgba(0,0,0,0) 70%),radial-gradient(40% 30% at 78% 6%,rgba(255,236,196,.55),rgba(0,0,0,0) 70%)!important;overflow:visible!important;overflow-x:clip!important}
 @media (max-width:699px){
@@ -2015,27 +2014,32 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
   #stimmen{padding-top:34px!important;padding-bottom:34px!important}
   .sec.besuch{padding-bottom:20px!important}
 }
-html{background-color:#F3EBDD;background-repeat:repeat-y;background-position:center top;background-size:max(100%,1100px) auto;background-attachment:scroll}
+/* Julia 25.11: nur Sand (Toms Düne), läuft mit der Seite */
+html{background:#F3EBDD url(fon_sand_hell.jpg) center top/max(100%,1100px) auto repeat-y scroll}
 body{background:transparent!important}
-.fw{display:flex;align-items:center;gap:6px;margin:0 auto 0 12px;font:700 13px/1 var(--body);color:#2A1C14;white-space:nowrap}
-.fw span{margin-right:2px;letter-spacing:.02em}
-.fw button{min-width:34px;height:34px;padding:0 10px;border-radius:999px;border:1.5px solid rgba(126,31,44,.35);background:#fffdf8;color:#2A1C14;font:800 13px/1 var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.fw button[aria-pressed=true]{background:#7E1F2C;border-color:#7E1F2C;color:#fff}
-.fw button:focus:not(:focus-visible){outline:none}.fw button:focus-visible{outline:2px solid #7E1F2C;outline-offset:2px}
-@media (hover:hover){.fw button:hover{border-color:#7E1F2C}}
-@media (max-width:440px){.fw span{display:none}}
-@media (max-width:620px){
-  .top .wrap{flex-wrap:wrap;height:auto;min-height:62px;row-gap:0;padding-bottom:6px}
-  .fw{order:3;width:100%;justify-content:center;margin:0;padding-top:2px}
-  .fw button{height:30px;min-width:40px}
-}
+/* Leiste: längerer Text bricht sauber um */
+.vw-n{text-wrap:balance}
+@media (max-width:699px){.vw-n{display:block!important;flex:1 1 100%;max-width:none;font-size:11.5px;line-height:1.3;text-align:center;margin:0}}
 </style>
-<style>.fw .fwl{display:inline-flex;align-items:center;height:34px;padding:0 11px;border-radius:999px;border:1.5px solid rgba(126,31,44,.35);background:#fffdf8;color:#2A1C14;font:800 13px/1 var(--body);text-decoration:none;white-space:nowrap}.fw .fwl[aria-current]{background:#7E1F2C;border-color:#7E1F2C;color:#fff}@media (max-width:620px){.fw .fwl{height:30px;padding:0 9px;font-size:12px}}</style></head>
+<style id="buch-bordeaux-css">
+/* Julia 25.11: Buchdeckel bordeaux (Leder, Goldprägung) – nur Deckel und Rücken, Seiten unverändert */
+.bk-front,.bk-board{background:radial-gradient(120% 70% at 50% 0%,rgba(255,235,200,.10),rgba(0,0,0,0) 60%),radial-gradient(140% 100% at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.32) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='turbulence' baseFrequency='.045' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .95  0 0 0 0 .85  0 0 0 .9 -.32'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='.35'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.4 .78'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.55'/%3E%3C/svg%3E"),linear-gradient(165deg,#8E2A36 0%,#74202B 50%,#561520 100%)!important}
+.bk-front{box-shadow:inset 0 1px 0 rgba(255,220,170,.18),inset 0 0 0 1px rgba(0,0,0,.35),inset 0 -40px 70px -30px rgba(0,0,0,.35),1px 2px 0 #3E0F17,2px 3px 0 #3E0F17!important}
+.bk-spineband{background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,.15) 40%,rgba(255,225,180,.16) 72%,rgba(0,0,0,.30) 92%,rgba(0,0,0,0))!important}
+.bk-herr{opacity:.55;filter:brightness(1.4)}
+.bk-frame{border-color:rgba(226,184,104,.85)!important;box-shadow:inset 0 0 0 1px rgba(226,184,104,.35),0 0 0 1px rgba(0,0,0,.18)!important}
+.bk-cv-k{color:#E2BE78!important;text-shadow:0 -1px 0 rgba(0,0,0,.45)}
+.bk-cv-t{background:linear-gradient(180deg,#F6DDA0 0%,#D9A94E 55%,#A9762A 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;filter:drop-shadow(0 -1px 0 rgba(0,0,0,.5)) drop-shadow(0 1px 0 rgba(255,225,170,.18))!important}
+.bk-cv .bk-plate img{filter:invert(1) sepia(1) saturate(1.6) hue-rotate(-8deg) brightness(.95) drop-shadow(0 -1px 0 rgba(0,0,0,.45))!important;mix-blend-mode:normal!important}
+.bk-cv-btn,.bk[data-state="closed"] .bk-cover:hover .bk-cv-btn{background:linear-gradient(180deg,#F1CF86,#D29C3E)!important;color:#2A1608!important;box-shadow:0 10px 22px -10px rgba(0,0,0,.8)!important}
+.bk-cv-btn svg{color:#2A1608}
+</style>
+<style>.fw{display:flex;align-items:center;gap:6px;margin:0 auto 0 12px;font:700 13px/1 var(--body);color:#2A1C14;white-space:nowrap}.fw span{margin-right:2px}.fw .fwl{display:inline-flex;align-items:center;height:34px;padding:0 11px;border-radius:999px;border:1.5px solid rgba(126,31,44,.35);background:#fffdf8;color:#2A1C14;font:800 13px/1 var(--body);text-decoration:none;white-space:nowrap}.fw .fwl[aria-current]{background:#7E1F2C;border-color:#7E1F2C;color:#fff}@media (max-width:440px){.fw span{display:none}}@media (max-width:620px){.top .wrap{flex-wrap:wrap;height:auto;min-height:62px;row-gap:0;padding-bottom:6px}.fw{order:3;width:100%;justify-content:center;margin:0;padding-top:2px}.fw .fwl{height:30px;padding:0 9px;font-size:12px}}</style></head>
 <body>
 <div class="vw-bar" role="region" aria-label="Variante wählen, nur im Entwurf sichtbar" lang="de">
 <span class="vw-l">Variante wählen</span>
-<span class="vw-b"><a class="vw-a" href="sand-b.html" aria-current="true">Hell</a><a class="vw-a" href="sand-b-dunkel.html">Dunkel</a></span>
-<span class="vw-n">Diese Leiste sehen nur Sie im Entwurf. Auf der fertigen Website erscheint sie nicht.</span>
+<span class="vw-b"><a class="vw-a" href="sand-b-dunkel.html">Dunkel</a><a class="vw-a" href="sand-b.html" aria-current="true">Hell</a></span>
+<span class="vw-n">Zwei Varianten zur Wahl: Sie können eine wählen oder beide behalten – am Preis ändert das nichts.</span>
 </div>
 
 <div class="ribbon">Entwurf – nur zur Ansicht</div>
@@ -2080,7 +2084,7 @@ body{background:transparent!important}
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#start" aria-label="Kaffe de Keyff – zum Seitenanfang">
-      <span class="plate"><img src="../keyff_k6.png" alt="Logo Kaffe de Keyff" width="62" height="44" referrerpolicy="no-referrer"></span>
+      <span class="plate"><img src="keyff_k6.png" alt="Logo Kaffe de Keyff" width="62" height="44" referrerpolicy="no-referrer"></span>
       <b translate="no">Kaffe de Keyff</b>
     </a>
     <div class="fw" role="group" aria-label="Sand-Variante"><span>Sand:</span><a href="sand-a.html" class="fwl">A · Wind</a><a href="sand-b.html" class="fwl" aria-current="page">B · Maus bläst</a><a href="sand-c.html" class="fwl">C · Sonne</a></div>
@@ -2130,10 +2134,10 @@ body{background:transparent!important}
 
       <div class="hero-photo">
         <span class="halo" aria-hidden="true"></span>
-        <img class="main" src="../keyff_k1.jpg"
+        <img class="main" src="keyff_k1.jpg"
              alt="Foto aus dem Kaffe de Keyff: grilliertes Fleisch auf Fladenbrot, dazu Salat und Pommes frites"
              width="900" height="1125" referrerpolicy="no-referrer">
-        <picture class="room-pic"><source media="(min-width:900px)" srcset="../keyff_k5.jpg"><img class="room" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="lazy"
+        <picture class="room-pic"><source media="(min-width:900px)" srcset="keyff_k5.jpg"><img class="room" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="lazy"
              alt="Innenraum des Kaffe de Keyff: Theke mit Menütafeln, Holzwand im Fischgrätmuster, Pendelleuchten"
              width="136" height="136" referrerpolicy="no-referrer"></picture>
       </div>
@@ -2174,7 +2178,7 @@ body{background:transparent!important}
                 <span class="bk-spineband" aria-hidden="true"></span>
                 <span class="bk-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
                 <span class="bk-cv">
-                  <span class="plate bk-plate"><img src="../keyff_k6.png" alt="" width="176" height="122" referrerpolicy="no-referrer"></span>
+                  <span class="plate bk-plate"><img src="keyff_k6.png" alt="" width="176" height="122" referrerpolicy="no-referrer"></span>
                   <span class="bk-cv-k" translate="no">Kaffe de Keyff</span>
                   <span class="bk-cv-t" data-t="Speisekarte">Speisekarte</span>
                   <span class="bk-cv-o" aria-hidden="true"><b></b></span>
@@ -2735,7 +2739,7 @@ body{background:transparent!important}
         '<h4 class="bk-dv-h" id="bk-dv-h" tabindex="-1"' + nl() + '>' + esc(d[0]) + '</h4></div>' +
         '<button type="button" class="bk-x">' + XICON + tr('Schliessen') + '</button></div>' +
       '<div class="bk-dv-body">' + zuHTML(d[1], 'h5') + '<div class="bk-dv-price"><span class="bk-big">' + price + '</span></div>' +
-        '<div class="bk-dv-orn" aria-hidden="true"><img src="../keyff_k6.png" alt=""><span>' + tr('Guten Appetit') + '</span></div></div>' +
+        '<div class="bk-dv-orn" aria-hidden="true"><img src="keyff_k6.png" alt=""><span>' + tr('Guten Appetit') + '</span></div></div>' +
       '<div class="bk-dv-foot"><button type="button" class="bk-back">' + BACK + tr('Zurück zur Liste') + '</button>' +
         '<a class="bk-order" href="' + ORDER + '" target="_blank" rel="noopener">' + tr('Online bestellen') + '</a></div>';
   }
@@ -3744,9 +3748,9 @@ body{background:transparent!important}
         <h2 id="h-fotos">Ein Blick <em>hinein</em></h2>
       </div>
       <div class="gallery">
-        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="../keyff_k2.jpg"></figure>
-        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="../keyff_k4.jpg"></figure>
-        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="../keyff_k3.jpg"></figure>
+        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="keyff_k2.jpg"></figure>
+        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="keyff_k4.jpg"></figure>
+        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="keyff_k3.jpg"></figure>
       </div>
     </div>
   </section>
@@ -3812,7 +3816,7 @@ body{background:transparent!important}
 <footer class="foot">
   <div class="parquet" aria-hidden="true"></div>
   <div class="wrap">
-    <span class="plate plate-lg"><img src="../keyff_k6.png" alt="Kaffe de Keyff" width="124" height="86" loading="lazy" referrerpolicy="no-referrer"></span>
+    <span class="plate plate-lg"><img src="keyff_k6.png" alt="Kaffe de Keyff" width="124" height="86" loading="lazy" referrerpolicy="no-referrer"></span>
     <nav aria-label="Rechtliches">
       <a href="#">Impressum</a>
       <a href="#">Datenschutz</a>
@@ -4108,31 +4112,13 @@ body{background:transparent!important}
   });
 })();</script>
 <script>(function(){
-  /* Hintergrund liegt auf <html> und läuft mit der Seite; Blöcke darüber durchsichtig, damit nichts an Blockgrenzen abbricht. */
+  /* Sand liegt auf <html>; Blöcke darüber durchsichtig, damit nichts an Blockgrenzen abbricht (deckende Farbe/linear-gradient weg, Lichtverläufe bleiben) */
   var SEL='main > section, main > div:not(.parquet), main > section > .wrap, footer.foot';
-  var DARK=false, F=DARK?{'marmor':'fon_marmor_dunkel.jpg','holz':'fon_holz_dunkel.jpg','sand':'fon_sand_dunkel.jpg'}:{'marmor':'fon_marmor_hell.jpg','holz':'fon_holz_hell.jpg','sand':'fon_sand_hell.jpg'};
-  /* Leiste «Hell/Dunkel» oben führt zur anderen Fon-Wahl-Seite, gewählter Hintergrund bleibt */
-  [].forEach.call(document.querySelectorAll('.vw-bar a'),function(a){a.addEventListener('click',function(ev){var h=location.hash||'';if(h){ev.preventDefault();location.href=a.getAttribute('href')+h;}});});
-  var root=document.documentElement, els=[].slice.call(document.querySelectorAll(SEL));
-  var bs=[].slice.call(document.querySelectorAll('.fw button'));
-  /* deckende Flächen weg (Farbe + undurchsichtige linear-gradient-Schicht), durchsichtige Lichtverläufe bleiben */
-  els.forEach(function(e){var c=getComputedStyle(e);e.style.backgroundColor='transparent';
+  [].slice.call(document.querySelectorAll(SEL)).forEach(function(e){var c=getComputedStyle(e);e.style.backgroundColor='transparent';
     if(c.backgroundImage==='none')return;
     var L=c.backgroundImage.split(/,(?![^(]*\))(?=\s*(?:radial|linear|conic|url|repeating))/);
     var keep=L.filter(function(l){l=l.trim();return !(/^linear-gradient/.test(l)&&!/rgba\([^)]*,\s*0?\.\d+\)|transparent/.test(l));});
     if(keep.length!==L.length){e.style.backgroundImage=keep.length?keep.join(', '):'none';}});
-  function set(f){
-    if(true){ /* alle drei: ein durchgehendes Band, läuft mit der Seite */ /* Julia: Holz hell = gleiche helle Farbe wie Marmor, nur Holzmaserung, keine Bretter */ root.style.backgroundImage='url('+F[f]+')';root.style.backgroundSize='';root.style.backgroundRepeat='';}
-    else{ /* Holz: Kachel läuft mit der Seite; dunkel: leichter dunkler Schleier, damit der helle Text liest */
-      var veil=f==='holz-dunkel'?'rgba(20,13,8,.38)':'rgba(0,0,0,0)';
-      root.style.backgroundImage='linear-gradient('+veil+','+veil+'), url('+F[f]+')';
-      root.style.backgroundSize='auto, 820px auto';root.style.backgroundRepeat='repeat, repeat';}
-    bs.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-f')===f));});
-    try{history.replaceState(null,'','#'+f);}catch(e){}
-  }
-  bs.forEach(function(b){b.addEventListener('click',function(){set(b.getAttribute('data-f'));});});
-  var h=(location.hash||'').slice(1).toLowerCase();
-  set('sand');history.replaceState(null,'',location.pathname);
 })();</script>
 <script>(function(){ /* B Maus bläst: wo die Maus/der Finger vorbeigeht, fliegen Körner in Bewegungsrichtung und setzen sich wieder */
 
