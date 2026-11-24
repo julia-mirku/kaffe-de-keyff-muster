@@ -4041,11 +4041,23 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
     while((n = w.nextNode())){ if(n.parentNode && /SCRIPT|STYLE/.test(n.parentNode.nodeName)) continue; var t = n.nodeValue, o = t; re.forEach(function(r){ t = t.replace(r[0], r[1]); }); if(t !== o) n.nodeValue = t; }
   })();
   /* Heute: Zeile auf der Tafel + Statuszeile */
-  var day = new Date().getDay(), row = D.querySelector('.p-hours tr[data-day="' + day + '"]');
+  /* Zürcher Zeit, wie in der Hauptfassung */
+  var zp = {}; try{ new Intl.DateTimeFormat('en-GB', {timeZone:'Europe/Zurich', weekday:'short', hour:'2-digit', minute:'2-digit', hour12:false}).formatToParts(new Date()).forEach(function(x){ zp[x.type] = x.value; }); }catch(e){}
+  var WD = {Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6}, day = zp.weekday in WD ? WD[zp.weekday] : new Date().getDay();
+  var zmin = zp.hour ? (+zp.hour % 24) * 60 + +zp.minute : new Date().getHours() * 60 + new Date().getMinutes();
+  var row = D.querySelector('.p-hours tr[data-day="' + day + '"]');
+  function span(r){ var m = r && r.querySelector('td').textContent.match(/(\d\d)[:.](\d\d)\D+(\d\d)[:.](\d\d)/); return m ? {a:+m[1]*60 + +m[2], b:+m[3]*60 + +m[4], from:m[1]+'.'+m[2], to:m[3]+'.'+m[4]} : null; }
+  (function(){ var line = D.getElementById('heute'), t = span(row); if(!line || !t) return; var dot = line.parentNode.querySelector('.dot');
+    if(zmin >= t.a && zmin < t.b){ line.innerHTML = 'Jetzt geöffnet · heute bis <strong>' + t.to + ' Uhr</strong>'; if(dot) dot.classList.add('is-open'); }
+    else if(zmin < t.a){ line.innerHTML = 'Heute ab <strong>' + t.from + ' Uhr</strong> geöffnet'; if(dot) dot.classList.add('is-closed'); }
+    else { var n = span(D.querySelector('.p-hours tr[data-day="' + ((day + 1) % 7) + '"]')); if(n) line.innerHTML = 'Morgen ab <strong>' + n.from + ' Uhr</strong> geöffnet'; if(dot) dot.classList.add('is-closed'); }
+  })();
   if(row){
     row.classList.add('today');
     var th = row.querySelector('th'); th.insertAdjacentHTML('beforeend', '<small>heute</small><svg class="p-ring" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><path d="M6 15 C 8 3, 88 1, 95 12 C 99 22, 70 29, 40 28 C 14 27, 2 22, 7 12"/></svg>');
-    var td = row.querySelector('td').textContent.split('–')[1], st = D.getElementById('p-today'); if(st && td) st.textContent = 'Heute bis ' + td;
+    var st = D.getElementById('p-today'), tt = span(row);
+    if(st && tt){ if(zmin >= tt.a && zmin < tt.b) st.textContent = 'Jetzt geöffnet, heute bis ' + tt.to; else if(zmin < tt.a) st.textContent = 'Heute ab ' + tt.from + ' geöffnet';
+      else { var nn = span(D.querySelector('.p-hours tr[data-day="' + ((day + 1) % 7) + '"]')); if(nn) st.textContent = 'Morgen ab ' + nn.from + ' geöffnet'; } }
   }
   /* 4 Auftakt + goldene Bogenlinie */
   var hp = D.querySelector('.hero-photo'), img = hp && hp.querySelector('.main');
