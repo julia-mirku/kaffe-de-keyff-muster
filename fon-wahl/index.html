@@ -1908,7 +1908,10 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
 .bk[data-state="closed"] .bk-inner{visibility:hidden;transition:visibility 0s .5s}
 </style>
 <style id="fw-css">
-/* Fon-Wahl (Julia №106): Jetzt / A Jute / B Kraftpapier / C Putz – in der Kopfleiste, deckt nichts */
+/* Fon-Wahl (Julia №106; №119 nur Marmor A/B/C) */
+html{background-color:#F3EBDD;background-repeat:repeat-y;background-position:center top;background-size:max(100%,1100px) auto;background-attachment:scroll}
+body{background:transparent!important}
+/* alt:: Jetzt / A Jute / B Kraftpapier / C Putz – in der Kopfleiste, deckt nichts */
 .fw{display:flex;align-items:center;gap:6px;margin:0 auto 0 12px;font:700 13px/1 var(--body);color:var(--espresso,#2A1C14);white-space:nowrap}
 .fw span{margin-right:2px;letter-spacing:.02em}
 .fw button{min-width:34px;height:34px;padding:0 10px;border-radius:999px;border:1.5px solid rgba(126,31,44,.35);background:#fffdf8;color:#2A1C14;font:800 13px/1 var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -1974,7 +1977,7 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
       <span class="plate"><img src="../keyff_k6.png" alt="Logo Kaffe de Keyff" width="62" height="44" referrerpolicy="no-referrer"></span>
       <b translate="no">Kaffe de Keyff</b>
     </a>
-    <div class="fw" role="group" aria-label="Hintergrund wählen"><span>Hintergrund:</span><button type="button" data-f="jetzt">Jetzt</button><button type="button" data-f="A">A</button><button type="button" data-f="B">B</button><button type="button" data-f="C">C</button><button type="button" data-f="D">D</button></div>
+    <div class="fw" role="group" aria-label="Hintergrund wählen"><span>Hintergrund:</span><button type="button" data-f="A">A</button><button type="button" data-f="B">B</button><button type="button" data-f="C">C</button></div>
     <a class="btn btn-amber" href="tel:+41715544224" aria-label="Anrufen: 071 554 42 24">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
       <span class="word">Anrufen</span><span class="num">071 554 42 24</span>
@@ -3954,22 +3957,24 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
 })();
 </script>
 <script>(function(){
-  var SEL='body, section.hero, #karte, #fotos, #stimmen, #zeiten, #ort, footer.foot', F={A:['fon_a_jute.png'],B:['fon_b_kraft.png'],C:['fon_c_putz.png'],D:['fon_d_marmor_adern.png','fon_d_marmor_wolken.png','fon_d_marmor_korn.png']};  // D: drei Kacheln 1031/787/509 px – kein sichtbares Raster
-  var els=[].slice.call(document.querySelectorAll(SEL)).map(function(e){var c=getComputedStyle(e);return {e:e,bi:c.backgroundImage,br:c.backgroundRepeat,bs:c.backgroundSize,bp:c.backgroundPosition,ba:c.backgroundAttachment};});
+  /* Julia №119: nur drei Marmor von Tom. Ein durchgehendes Band (Original + Spiegelung, keine Naht), läuft mit der Seite;
+     Blöcke darüber durchsichtig, damit der Stein an Blockgrenzen nicht abbricht. Verläufe der Blöcke (Lampenlicht) bleiben. */
+  var SEL='main > section, main > div:not(.parquet), main > section > .wrap, footer.foot', F={A:'fon_marmor_a.jpg',B:'fon_marmor_b.jpg',C:'fon_marmor_c.jpg'};
+  var root=document.documentElement, els=[].slice.call(document.querySelectorAll(SEL));
   var bs=[].slice.call(document.querySelectorAll('.fw button'));
+  /* deckende Flächen weg (Farbe + undurchsichtige linear-gradient-Schicht), durchsichtige Lichtverläufe bleiben */
+  els.forEach(function(e){var c=getComputedStyle(e);e.style.backgroundColor='transparent';
+    if(c.backgroundImage==='none')return;
+    var L=c.backgroundImage.split(/,(?![^(]*\))(?=\s*(?:radial|linear|conic|url|repeating))/);
+    var keep=L.filter(function(l){l=l.trim();return !(/^linear-gradient/.test(l)&&!/rgba\([^)]*,\s*0?\.\d+\)|transparent/.test(l));});
+    if(keep.length!==L.length){e.style.backgroundImage=keep.length?keep.join(', '):'none';}});
   function set(f){
-    els.forEach(function(o){var e=o.e,none=o.bi==='none';
-      if(f==='jetzt'){e.style.backgroundImage='';e.style.backgroundRepeat='';e.style.backgroundSize='';e.style.backgroundPosition='';e.style.backgroundAttachment='';return;}
-      var L=F[f],k=function(v){return L.map(function(){return v;}).join(', ');};
-      e.style.backgroundImage=L.map(function(u){return 'url('+u+')';}).join(', ')+(none?'':', '+o.bi);
-      e.style.backgroundRepeat=k('repeat')+(none?'':', '+o.br);e.style.backgroundSize=k('auto')+(none?'':', '+o.bs);
-      e.style.backgroundPosition=k('0px 0px')+(none?'':', '+o.bp);e.style.backgroundAttachment=k('scroll')+(none?'':', '+o.ba);});
+    root.style.backgroundImage='url('+F[f]+')';
     bs.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-f')===f));});
     try{history.replaceState(null,'','#'+f);}catch(e){}
   }
   bs.forEach(function(b){b.addEventListener('click',function(){set(b.getAttribute('data-f'));});});
-  var h=(location.hash||'').slice(1); h=/^[abcd]$/i.test(h)?h.toUpperCase():(h==='jetzt'?'jetzt':'A');
-  set(h);
+  var h=(location.hash||'').slice(1).toUpperCase(); set(/^[ABC]$/.test(h)?h:'A');
 })();</script>
 </body>
 </html>
