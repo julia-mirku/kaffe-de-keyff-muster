@@ -1687,12 +1687,46 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
 /* 25.11: Leiste auf dem Computer schlanker, damit der erste Bildschirm samt Knöpfen in 1470×659 passt */
 @media (min-width:700px){.vw-bar{padding:3px 14px;border-width:1.5px}.vw-a{min-height:32px;padding:3px 16px;font-size:14px}.vw-n{font-size:12.5px}}
 </style>
+<style id="sand-css">
+/* Julia №127: Blöcke näher, keine Farbkanten; «Was Gäste sagen» unverändert, nur Abstand */
+#karte{padding-top:22px!important;padding-bottom:36px!important}
+#fotos{padding-top:40px!important}
+.foot .parquet,main > .parquet{display:none!important}
+.sec.besuch{padding-bottom:44px!important}
+#karte,#fotos{background-image:none!important}
+.hero{background-image:radial-gradient(58% 48% at 80% 0%,rgba(233,199,122,.42),rgba(0,0,0,0) 70%),radial-gradient(40% 30% at 78% 6%,rgba(255,236,196,.55),rgba(0,0,0,0) 70%)!important;overflow:visible!important;overflow-x:clip!important}
+@media (max-width:699px){
+  #karte{padding-top:10px!important;padding-bottom:30px!important}
+  #fotos{padding-top:30px!important}
+  #stimmen{padding-top:34px!important;padding-bottom:34px!important}
+  .sec.besuch{padding-bottom:20px!important}
+}
+/* Julia 25.11: nur Sand (Toms Düne), läuft mit der Seite */
+html{background:#1E140E url(fon_sand_dunkel.jpg) center top/max(100%,1100px) auto repeat-y scroll}
+body{background:transparent!important}
+/* Leiste: längerer Text bricht sauber um */
+.vw-n{text-wrap:balance}
+@media (max-width:699px){.vw-n{display:block!important;flex:1 1 100%;max-width:none;font-size:11.5px;line-height:1.3;text-align:center;margin:0}}
+</style>
+<style id="buch-bordeaux-css">
+/* Julia 25.11: Buchdeckel bordeaux (Leder, Goldprägung) – nur Deckel und Rücken, Seiten unverändert */
+.bk-front,.bk-board{background:radial-gradient(120% 70% at 50% 0%,rgba(255,235,200,.10),rgba(0,0,0,0) 60%),radial-gradient(140% 100% at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.32) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='turbulence' baseFrequency='.045' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .95  0 0 0 0 .85  0 0 0 .9 -.32'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='.35'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.4 .78'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.55'/%3E%3C/svg%3E"),linear-gradient(165deg,#8E2A36 0%,#74202B 50%,#561520 100%)!important}
+.bk-front{box-shadow:inset 0 1px 0 rgba(255,220,170,.18),inset 0 0 0 1px rgba(0,0,0,.35),inset 0 -40px 70px -30px rgba(0,0,0,.35),1px 2px 0 #3E0F17,2px 3px 0 #3E0F17!important}
+.bk-spineband{background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,.15) 40%,rgba(255,225,180,.16) 72%,rgba(0,0,0,.30) 92%,rgba(0,0,0,0))!important}
+.bk-herr{opacity:.55;filter:brightness(1.4)}
+.bk-frame{border-color:rgba(226,184,104,.85)!important;box-shadow:inset 0 0 0 1px rgba(226,184,104,.35),0 0 0 1px rgba(0,0,0,.18)!important}
+.bk-cv-k{color:#E2BE78!important;text-shadow:0 -1px 0 rgba(0,0,0,.45)}
+.bk-cv-t{background:linear-gradient(180deg,#F6DDA0 0%,#D9A94E 55%,#A9762A 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;filter:drop-shadow(0 -1px 0 rgba(0,0,0,.5)) drop-shadow(0 1px 0 rgba(255,225,170,.18))!important}
+.bk-cv .bk-plate img{filter:invert(1) sepia(1) saturate(1.6) hue-rotate(-8deg) brightness(.95) drop-shadow(0 -1px 0 rgba(0,0,0,.45))!important;mix-blend-mode:normal!important}
+.bk-cv-btn,.bk[data-state="closed"] .bk-cover:hover .bk-cv-btn{background:linear-gradient(180deg,#F1CF86,#D29C3E)!important;color:#2A1608!important;box-shadow:0 10px 22px -10px rgba(0,0,0,.8)!important}
+.bk-cv-btn svg{color:#2A1608}
+</style>
 </head>
 <body>
 <div class="vw-bar" role="region" aria-label="Variante wählen, nur im Entwurf sichtbar" lang="de">
 <span class="vw-l">Variante wählen</span>
-<span class="vw-b"><a class="vw-a" href="keyff_hell.html">Hell</a><a class="vw-a" href="keyff_dunkel.html" aria-current="true">Dunkel</a></span>
-<span class="vw-n">Diese Leiste sehen nur Sie im Entwurf. Auf der fertigen Website erscheint sie nicht.</span>
+<span class="vw-b"><a class="vw-a" href="keyff_dunkel.html" aria-current="true">Dunkel</a><a class="vw-a" href="keyff_hell.html">Hell</a></span>
+<span class="vw-n">Zwei Varianten zur Wahl: Sie können eine wählen oder beide behalten – am Preis ändert das nichts.</span>
 </div>
 
 <div class="ribbon">Entwurf – nur zur Ansicht</div>
@@ -3819,6 +3853,15 @@ a:focus-visible,button:focus-visible,[role=button]:focus-visible,[tabindex]:focu
     var m = h.match(/^([\s\S]*?)\s*CHF\s*(<span data-ab="\w+">[^<]*<\/span>)\s*$/);
     if(m){ n.innerHTML = '<small>' + m[1].trim() + '</small><b>CHF&nbsp;' + m[2] + '</b>'; n.classList.add('pt'); }
   });
+})();</script>
+<script>(function(){
+  /* Sand liegt auf <html>; Blöcke darüber durchsichtig, damit nichts an Blockgrenzen abbricht (deckende Farbe/linear-gradient weg, Lichtverläufe bleiben) */
+  var SEL='main > section, main > div:not(.parquet), main > section > .wrap, footer.foot';
+  [].slice.call(document.querySelectorAll(SEL)).forEach(function(e){var c=getComputedStyle(e);e.style.backgroundColor='transparent';
+    if(c.backgroundImage==='none')return;
+    var L=c.backgroundImage.split(/,(?![^(]*\))(?=\s*(?:radial|linear|conic|url|repeating))/);
+    var keep=L.filter(function(l){l=l.trim();return !(/^linear-gradient/.test(l)&&!/rgba\([^)]*,\s*0?\.\d+\)|transparent/.test(l));});
+    if(keep.length!==L.length){e.style.backgroundImage=keep.length?keep.join(', '):'none';}});
 })();</script>
 </body>
 </html>
