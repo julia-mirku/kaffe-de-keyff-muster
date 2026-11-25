@@ -2032,7 +2032,24 @@ body{background:transparent!important}
   #karte .menu-foot{display:none!important}
   #buch.bk{--bkh:clamp(320px,calc(100svh - 284px),760px)!important}
   #karte{scroll-margin-top:63px}
+  /* Julia 25.11 «открытую на компе книжку – она меньше чем была»: offenes Buch wieder so gross wie vor dem 25.11 (527 px bei 659) */
+  #buch.bk[data-state="open"]{--bkh:clamp(380px,calc(100svh - 132px),760px)!important}
 }
+/* Julia 25.11 «full menu внизу надо убрать»: Knopf «Ganze Karte als Liste» weg */
+.bk-listrow{display:none!important}
+/* Julia 25.11 «полосы и точки неоч, полосы убрать бы»: in der Karte keine Trennlinien zwischen Gerichten und keine Punktlinien */
+.bk-dish{border-bottom:0!important}
+.bk-toc .l,.bk-row .l{border-bottom:0!important}
+.bk-toc li{border-bottom:0!important}
+/* Julia 25.11 «книжка когда увеличивается при открытии, надо это плавнее сделать»: Buchgrösse gleitet statt zu springen */
+@property --bkh{syntax:"<length>";inherits:true;initial-value:520px}
+@media (min-width:700px) and (prefers-reduced-motion:no-preference){#buch.bk{transition:--bkh 1s cubic-bezier(.4,.08,.2,1)}}
+/* Julia 25.11 «надо чтобы книжка закрывалась красиво»: beim Zuklappen keine gespiegelte Deckelschrift (Safari) – Vorderseite erst sichtbar, wenn der Deckel über 90° ist; Rückseite = Vorsatzpapier */
+.bk[data-state="open"] .bk-front{opacity:0;transition:opacity 0s linear .45s}
+.bk[data-state="closed"] .bk-front{opacity:1;transition:opacity .12s linear .2s}
+.bk[data-state="open"] .bk-inner{visibility:visible}
+@media (max-width:699px) and (prefers-reduced-motion:no-preference){.bk[data-state="closed"] .bk-book{animation:bkzu .55s cubic-bezier(.3,.7,.2,1) both}}
+@keyframes bkzu{from{opacity:0;transform:translateY(14px) rotateX(13deg) rotateY(-6deg) rotateZ(-1.5deg)}}
 /* kleineres Buch auf niedrigen Bildschirmen: Deckel-Inhalt luftig, Zierlinie berührt die Taste nicht */
 @media (min-width:700px) and (max-height:820px){
   .bk-cv .bk-plate{width:150px!important;height:104px!important}
@@ -2062,174 +2079,82 @@ body{background:transparent!important}
 .bk-cv-btn svg{color:inherit}
 .bk[data-state="closed"] .bk-cover:hover .bk-cv-btn{background-image:linear-gradient(180deg,#ffd28a,#eeae48)!important;color:rgb(20,14,10)!important}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Castoro:ital@0;1&display=swap" rel="stylesheet">
-<style id="premium-css">
-/* ===== PREMIUM Kaffe de Keyff (25.11) ===== */
-:root{--p-serif:"Castoro",Georgia,"Times New Roman",serif;--p-brass:#9A7535;--p-brass-d:#8C6A35;--p-champ:#E6CF9F;
-  --p-ink:#2A1C14;--p-mut:#5A473B;--p-acc:#8A6A2E;--p-line:rgba(154,117,53,.45);--p-panel:rgba(255,251,244,.72);--p-paper:#F6EEDC}
-html{hyphens:manual}
-p,li,blockquote{text-wrap:pretty}
-h1,h2,h3{text-wrap:balance}
-/* 4 Antiqua mit Kursiv */
-h1,h2,.p-h3{font-family:var(--p-serif)!important;font-weight:400!important;letter-spacing:-.012em!important}
-h1 span{display:block}
-h1 .glow{font-style:italic!important;background:none!important;-webkit-text-fill-color:var(--p-acc)!important;color:var(--p-acc)!important;text-shadow:none!important;filter:none!important;animation:none!important}
-h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;background:none!important;-webkit-text-fill-color:var(--p-acc)!important}
-/* Kapitel I–V statt Plaketten (Prüfer 2, Idee 2) */
-.eyebrow,.kicker{font-family:var(--p-serif)!important;font-weight:400!important;text-transform:none!important;font-variant:small-caps;letter-spacing:.2em!important;color:var(--p-brass)!important;font-size:1rem!important}
-.eyebrow::before,.kicker::before{width:7px!important;height:7px!important;flex:none!important;background:var(--p-brass)!important;transform:rotate(45deg);border-radius:0!important}
-@media (min-width:1300px){
-  .sec-head,.hero-text{position:relative}
-  .sec-head > .kicker,.hero-text > .eyebrow{position:absolute;right:calc(100% + 20px);top:.7em;margin:0!important;white-space:nowrap;justify-content:flex-end;letter-spacing:.1em!important;font-size:.88rem!important}
-  .p-visit #ort .p-h3{margin-top:0}
-}
-/* 13 Kopf als Schild */
-.top .brand b{font-family:var(--p-serif)!important;font-weight:400!important;font-variant:small-caps;letter-spacing:.16em!important;font-size:1.18rem!important}
-.top .brand .plate img{width:70px!important;height:auto!important}
-.top .btn-amber{background:transparent!important;border:1px solid var(--p-brass)!important;color:var(--p-ink)!important;box-shadow:none!important}
-/* 1 Messing statt Orange; nur eine gefüllte Taste je Bildschirm */
-.btn-amber,.btn-cream,.btn-ghost{background:transparent!important;color:var(--p-ink)!important;border:1px solid var(--p-brass)!important;box-shadow:none!important;font-family:var(--body)!important;font-weight:600!important;letter-spacing:.02em}
-.hero .cta .btn:first-child{background:linear-gradient(180deg,#E8CF95,#C8A15E 60%,#B08A48)!important;color:#1B120B!important;border-color:transparent!important}
-@media (hover:hover){.btn-amber:hover,.btn-cream:hover,.btn-ghost:hover{background:rgba(200,161,94,.12)!important}
-  .hero .cta .btn:first-child:hover{filter:brightness(1.05)}}
-.dot,.facts .dot{background:var(--p-brass)!important;box-shadow:0 0 0 4px rgba(200,161,94,.18)!important}
-.facts .fact{border-color:var(--p-line)!important;background:transparent!important}
-/* 2 Preise: eine Zeile Antiqua, ohne Rahmen */
-#ab-preise{font-family:var(--p-serif);font-size:1.06rem;color:var(--p-mut);letter-spacing:.01em}
-#ab-preise .pt,#ab-preise .nw{border:0!important;background:none!important;padding:0!important;box-shadow:none!important;color:inherit!important;font:inherit!important}
-#ab-preise b{font-weight:400;color:var(--p-ink)}
-#ab-preise .p-sep{display:inline-block;width:6px;height:6px;margin:0 .75em;vertical-align:.22em;background:var(--p-brass);transform:rotate(45deg)}
-#ab-preise{display:flex;flex-wrap:wrap;align-items:baseline;row-gap:4px}
-/* 9 Э1: ohne runden Einsatz, warmer Schein der Lampen auf dem Bogen */
-.hero-photo .room,.hero-photo .room-pic,.room-pic{display:none!important}
-.hero-photo .halo{background:radial-gradient(60% 36% at 50% 0%,rgba(255,214,150,.42),rgba(255,190,120,.10) 55%,rgba(0,0,0,0) 75%)!important;opacity:1!important;inset:-14% -18% auto!important;height:70%!important;filter:blur(6px)}
-.hero-photo .main{box-shadow:0 30px 70px -34px rgba(0,0,0,.55),0 0 0 1px rgba(200,161,94,.55)!important}
-.p-arch{position:absolute;pointer-events:none;overflow:visible;z-index:3}
-.p-arch path{fill:none;stroke:var(--p-brass);stroke-width:1.2;opacity:.85}
-/* 4 Auftakt (nur beim ersten Laden, ohne «Bewegung reduzieren») */
-.p-intro .hero-photo .main{clip-path:inset(100% 0 0 0 round 999px 999px 16px 16px)}
-.p-intro .hero-text > *{opacity:0}
-.p-intro .p-arch path{stroke-dasharray:1;stroke-dashoffset:1}
-.p-go .hero-photo .main{clip-path:inset(0 0 0 0 round 999px 999px 16px 16px);transition:clip-path .5s cubic-bezier(.3,.7,.2,1) .7s}
-.p-go .p-arch path{stroke-dashoffset:0;transition:stroke-dashoffset .7s cubic-bezier(.4,0,.2,1)}
-.p-go .hero-text > *{opacity:1;transition:opacity .45s ease 1.1s}
-/* 12 Raute zwischen den Blöcken */
-.parquet{display:none!important}
-.p-div{display:flex;justify-content:center;padding:6px 0}
-.p-div i{width:9px;height:9px;transform:rotate(45deg);border:1px solid var(--p-brass);background:transparent}
-/* ===== Э2 Buch ===== */
-/* 5 Prägung, Naht, Lesebändchen; 6 Ecke hebt sich */
-.bk-cv .bk-plate img{filter:invert(1) sepia(1) saturate(1.3) hue-rotate(-12deg) brightness(.92) drop-shadow(0 -1px 0 rgba(0,0,0,.6)) drop-shadow(0 1px 0 rgba(255,232,190,.22))!important}
-.bk-cv-t{background-image:linear-gradient(180deg,#F5E6C0 0%,#D8B676 50%,#9E7838 100%)!important;filter:drop-shadow(0 -1px 0 rgba(0,0,0,.55)) drop-shadow(0 1px 0 rgba(255,232,190,.18))!important}
-.bk-cv-k{color:var(--p-champ)!important}
-.bk-cv-btn,.bk[data-state="closed"] .bk-cover:hover .bk-cv-btn{background-image:linear-gradient(180deg,#E8CF95,#C8A15E 60%,#B08A48)!important;color:#1B120B!important}
-.bk-frame{border-color:rgba(214,186,128,.85)!important}
-.bk-spineband::after{content:"";position:absolute;top:10px;bottom:10px;right:7px;border-right:1px dashed rgba(230,207,159,.55)}
-.bk-front::after{content:"";position:absolute;right:0;bottom:0;width:0;height:0;z-index:4;background:linear-gradient(315deg,rgba(0,0,0,0) 49%,#F3E8D2 50%,#DCCBA8 100%);box-shadow:-3px -3px 6px -2px rgba(0,0,0,.4);transition:width .35s ease,height .35s ease;border-top-left-radius:2px}
-@media (hover:hover){.bk[data-state="closed"] .bk-front:hover::after{width:30px;height:30px}}
-.bk[data-state="closed"] .bk-front.p-lift::after{width:30px;height:30px}
-.bk-book::after{content:"";position:absolute;left:72%;bottom:-30px;width:14px;height:44px;z-index:1;background:linear-gradient(90deg,#3E2416,#6B4426 45%,#4A2C18);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%);box-shadow:0 6px 8px -4px rgba(0,0,0,.6);transition:opacity .3s}
-.bk[data-state="open"] .bk-book::after{opacity:0}
-/* 6 Register: Leder mit Goldschrift, Goldschnitt, Initiale */
-.bk-tab,.bk-tab:nth-child(even){background:linear-gradient(180deg,#4A2E1D,#2E1C12)!important;color:var(--p-champ)!important;font-family:var(--p-serif)!important;box-shadow:inset 0 1px 0 rgba(230,207,159,.25)!important}
-.bk-tab[aria-current="true"]{background:linear-gradient(180deg,#7A5131,#5A3A22)!important;color:#F7E9C8!important;box-shadow:inset 0 2px 0 var(--p-brass)!important}
-.bk-edge.r{background:linear-gradient(rgba(255,240,210,.25),rgba(60,35,10,.2)),repeating-linear-gradient(90deg,#EAD39A 0 1.4px,#B08A48 1.4px 2.3px)!important}
-.bk-edge.b{background:linear-gradient(90deg,rgba(40,22,8,.45),rgba(40,22,8,.1) 40px,rgba(40,22,8,.1)),repeating-linear-gradient(#EAD39A 0 1.4px,#B08A48 1.4px 2.3px)!important}
-.bk-h{font-family:var(--p-serif)!important;font-weight:400!important}
-.bk-h::first-letter{font-size:1.9em;line-height:.8;color:#8C6A35;font-style:italic;padding-right:.04em}
-/* 11 ein Goldglanz beim Erscheinen */
-.p-shine{position:relative}
-.bk-cv-t.p-shine{background-image:linear-gradient(110deg,rgba(255,255,255,0) 38%,rgba(255,250,235,.85) 50%,rgba(255,255,255,0) 62%),linear-gradient(180deg,#F5E6C0 0%,#D8B676 50%,#9E7838 100%)!important;background-size:300% 100%,100% 100%!important;background-repeat:no-repeat!important;animation:p-shine .9s ease-out 1 both}
-@keyframes p-shine{from{background-position:110% 0,0 0}to{background-position:-10% 0,0 0}}
-.p-brass.p-shine::after,.p-bye.p-shine::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,rgba(255,255,255,0) 38%,rgba(255,250,235,.55) 50%,rgba(255,255,255,0) 62%);background-size:300% 100%;animation:p-shine2 .9s ease-out 1 both;mix-blend-mode:soft-light}
-@keyframes p-shine2{from{background-position:110% 0}to{background-position:-10% 0}}
-/* ===== Э3 Gerichte + ein grosses Foto im Passepartout ===== */
-.p-dishes .sec-head{margin-bottom:18px}
-.p-dl{display:grid;grid-template-columns:1fr;gap:18px}
-.p-names{list-style:none;margin:0;padding:0;display:none}
-.p-names button{all:unset;cursor:pointer;display:flex;align-items:baseline;gap:18px;padding:10px 0;font-family:var(--p-serif);font-size:clamp(1.6rem,2.6vw,2.4rem);line-height:1.1;color:var(--p-mut);transition:color .3s}
-.p-names button[aria-pressed="true"],.p-names button:hover,.p-names button:focus-visible{color:var(--p-ink)}
-.p-names button[aria-pressed="true"]{font-style:italic}
-.p-names .p-no{font-size:.42em;letter-spacing:.2em;color:var(--p-brass);min-width:2.6em;font-style:normal}
-.p-names li+li{border-top:1px solid var(--p-line)}
-.p-frames{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:6px;scrollbar-width:none}
-.p-frames::-webkit-scrollbar{display:none}
-.p-frame{flex:0 0 82%;scroll-snap-align:center;margin:0;background:var(--p-paper);padding:10px;box-shadow:0 22px 44px -26px rgba(0,0,0,.6)}
-.p-frame img{display:block;width:100%;aspect-ratio:4/5;height:auto;object-fit:cover;outline:1px solid rgba(176,138,72,.75);outline-offset:-5px}
-.p-frame figcaption{font-family:var(--p-serif);font-style:italic;color:#4A3424;text-align:center;padding:8px 0 2px;font-size:1.02rem}
-@media (min-width:900px){
-  .p-dl{grid-template-columns:1fr auto;gap:56px;align-items:center}
-  .p-names{display:block;max-width:520px}
-  .p-frames{display:block;position:relative;overflow:visible;width:calc((100svh - 63px - 150px)*.8 + 20px);max-width:420px;aspect-ratio:auto}
-  .p-frame{position:absolute;inset:0 0 auto 0;opacity:0;transition:opacity .4s ease;pointer-events:none}
-  .p-frame.on{position:relative;opacity:1;pointer-events:auto}
-  .p-frame figcaption{display:none}
-}
-/* ===== Э4 Zitat wie im Magazin ===== */
-.p-voices .wrap{max-width:980px}
-.p-rating{font-family:var(--p-serif);font-variant:small-caps;letter-spacing:.14em;color:var(--p-mut);display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:4px 0 22px;font-size:1rem}
-.p-rating i{width:6px;height:6px;background:var(--p-brass);transform:rotate(45deg)}
-.p-q{position:relative;min-height:9.5em}
-.p-quote{position:absolute;inset:0 auto auto 0;margin:0;opacity:0;transition:opacity .6s ease;pointer-events:none}
-.p-quote.on{position:relative;opacity:1;pointer-events:auto}
-.p-quote p{position:relative;margin:0;font-family:var(--p-serif);font-style:italic;font-size:clamp(1.45rem,2.6vw,2.15rem);line-height:1.3;color:var(--p-ink);max-width:30ch}
-.p-quote p::before{content:"«";position:absolute;right:100%;margin-right:.12em;color:var(--p-brass)}
-.p-quote p::after{content:"»";color:var(--p-brass)}
-.p-quote footer{margin-top:14px;font-family:var(--p-serif);font-variant:small-caps;letter-spacing:.2em;color:var(--p-brass);font-size:1.05rem}
-.p-quote footer::before{content:"— "}
-.p-qnav{display:flex;align-items:center;gap:14px;margin:18px 0 14px}
-.p-qb{all:unset;cursor:pointer;width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--p-line);border-radius:50%;color:var(--p-ink);font-size:1.05rem}
-.p-qb:focus-visible{outline:2px solid var(--p-brass);outline-offset:2px}
-.p-dots{display:flex;gap:8px}.p-dots i{width:6px;height:6px;transform:rotate(45deg);border:1px solid var(--p-brass)}.p-dots i.on{background:var(--p-brass)}
-.p-arrow{display:inline-flex;gap:8px;align-items:center;font-family:var(--p-serif);font-size:1.08rem;color:var(--p-ink);text-decoration:none;border-bottom:1px solid var(--p-brass);padding-bottom:2px}
-.p-arrow span{transition:transform .25s}.p-arrow:hover span{transform:translateX(4px)}
-/* ===== Э5 nur Schiefer und Messing ===== */
-.p-visit .wrap{display:grid;gap:34px}
-@media (min-width:900px){.p-visit .wrap{grid-template-columns:1.05fr 1fr;align-items:start;gap:64px}}
-.p-slate{position:relative;padding:26px 28px 22px;border-radius:3px;background:radial-gradient(60% 40% at 30% 20%,rgba(255,255,255,.06),transparent 70%),linear-gradient(160deg,#2C3134,#1E2225 60%,#191C1E);box-shadow:0 0 0 2px #B08A48,0 0 0 3px rgba(0,0,0,.35),0 24px 50px -28px rgba(0,0,0,.7)}
-.p-hours{width:100%;border-collapse:collapse;font-family:"Kalam","Caveat",cursive;color:#EDE9E1;font-size:1.12rem;font-variant-numeric:tabular-nums}
-.p-hours th{text-align:left;font-weight:400;padding:6px 0;position:relative;width:1%;white-space:nowrap}
-.p-hours td{text-align:right;padding:6px 0;white-space:nowrap}
-.p-hours tr+tr th,.p-hours tr+tr td{border-top:1px dashed rgba(237,233,225,.18)}
-.p-hours tr.today th,.p-hours tr.today td{color:#F2D99C}
-.p-hours tr.today th .p-ring{position:absolute;left:-12px;top:-2px;width:calc(100% + 24px);height:calc(100% + 4px);pointer-events:none;overflow:visible}
-.p-hours tr.today th .p-ring path{fill:none;stroke:#F3EFE6;stroke-width:1.6;stroke-linecap:round;opacity:.8}
-.p-hours small{font-size:.8em;color:#F2D99C;margin-left:.4em}
-.p-visit #ort .p-h3{font-size:clamp(1.8rem,3vw,2.6rem);line-height:1.05;margin:0 0 18px;color:var(--p-ink)}
-@media (min-width:900px){.p-visit #ort{padding-top:62px}}
-.p-brass{position:relative;overflow:hidden;padding:26px 30px;border-radius:6px;color:#2B1A0A;background:linear-gradient(112deg,rgba(255,250,230,0) 28%,rgba(255,250,230,.35) 44%,rgba(255,250,230,0) 58%),repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,rgba(0,0,0,.03) 1px 3px),linear-gradient(180deg,#E4C98C,#C9A464 55%,#AE8A4C);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(0,0,0,.25),0 16px 34px -20px rgba(0,0,0,.7)}
-.p-brass address{font-style:normal;font-family:var(--p-serif);font-size:1.16rem;line-height:1.45;text-align:center}
-.p-brass .p-nm{display:block;font-variant:small-caps;letter-spacing:.2em;font-size:.95rem;margin-bottom:4px}
-.p-screw{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#F5E3B5,#8C6A35);box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
-.p-screw:nth-child(1){left:10px;top:10px}.p-screw:nth-child(2){right:10px;top:10px}.p-screw:nth-child(3){left:10px;bottom:10px}.p-screw:nth-child(4){right:10px;bottom:10px}
-.p-status{margin:18px 0 4px;font-family:var(--p-serif);color:var(--p-ink);font-size:1.05rem}
-.p-status span{color:var(--p-acc);font-style:italic}
-.p-res{margin:0 0 16px;color:var(--p-mut)}
-.p-res a{color:var(--p-ink);text-decoration-color:var(--p-brass)}
-/* 11 Abschiedszeile */
-.p-bye{position:relative;font-family:var(--p-serif);font-style:italic;font-size:clamp(1.3rem,2.2vw,1.7rem);color:var(--p-ink);text-align:center;margin:0 0 14px}
-.foot .wrap{flex-direction:column}
-/* 7 ohne «17 Kategorien …» */
-#karte .sec-head > p:not(.kicker){display:none!important}
-/* ===== Telefon wie App (Prüfer 2, Idee 3) ===== */
-.p-dock{display:none}
-@media (max-width:699px){
-  .hero-photo .main{width:80%!important;margin:0 auto!important;display:block;aspect-ratio:4/5!important;height:auto!important;border-radius:999px 999px 14px 14px!important;max-height:52svh;object-fit:cover}
-  .hero-photo{margin:6px auto 0!important;width:100%!important;display:flex;justify-content:center}
-  .hero-photo::after{display:none!important}
-  .hero-text{margin-top:16px!important}
-  body{padding-bottom:calc(66px + env(safe-area-inset-bottom))}
-  .p-dock{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;justify-content:space-around;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(250,244,233,.97);border-top:1px solid var(--p-line);transform:translateY(110%);transition:transform .35s ease}
-  .p-dock.show{transform:none}
-  .p-dock a{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--p-ink);text-decoration:none;font-size:.78rem;letter-spacing:.06em;min-width:72px;min-height:44px;justify-content:center}
-  .p-dock svg{width:20px;height:20px;fill:none;stroke:var(--p-brass);stroke-width:1.6;stroke-linejoin:round}
-  #karte-liste:not([hidden]){position:fixed;left:0;right:0;bottom:0;z-index:90;max-height:86svh;overflow:auto;margin:0!important;border-radius:18px 18px 0 0!important;padding:26px 16px 24px!important;box-shadow:0 0 0 100vmax rgba(0,0,0,.45);overscroll-behavior:contain}
-  #karte-liste:not([hidden])::before{content:"";position:sticky;top:-18px;display:block;width:44px;height:4px;border-radius:2px;margin:-14px auto 12px;background:var(--p-brass)}
-  #karte-liste .pl-cat summary{position:sticky;top:-26px;z-index:1;background:inherit}
-  .p-names{display:none}
-  .p-quote p::before{position:static;margin:0 .08em 0 0}
-}
+<style id="ph-css">
+.bk-dv-ph{margin:14px 0 0;flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.bk-dv-ph img{display:block;width:100%;flex:none;height:clamp(140px,30vh,250px);object-fit:cover;border-radius:10px;box-shadow:0 10px 24px -14px rgba(40,20,5,.55)}
+.bk-det>.bk-ph-m{grid-column:1/-1;grid-row:auto;margin:2px 0 0;width:100%}.bk-ph-m img{height:auto;aspect-ratio:4/3;max-height:none}
+.bk-dv-ph figcaption{margin-top:6px;font-size:.72rem;opacity:.55;letter-spacing:.02em}
 </style>
+<style id="gaeste-neu-css">
+/* Vorschlag 25.11: «Was Gäste sagen» (Hell) – ruhige Karten statt schräger Zettel, ein grosses Zitat, Messing statt Linienpapier */
+#stimmen.gaeste{background:radial-gradient(60% 70% at 50% 0%,rgba(255,236,200,.55),rgba(255,236,200,0) 70%) !important}
+#stimmen .gb-kopf h2{font:italic 600 40px/1.1 var(--serif) !important;letter-spacing:.005em}
+#stimmen .gb-kopf h2::after{content:"";display:block;width:64px;height:2px;margin:12px auto 0;background:linear-gradient(90deg,#B08A4A00,#B08A4A,#B08A4A00)}
+#stimmen .gb-wrap{grid-template-columns:minmax(0,1fr) 230px !important;gap:34px !important;margin-top:26px !important;align-items:stretch !important}
+#stimmen .gbuch{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:16px !important;align-items:stretch !important}
+#stimmen .zettel{transform:none !important;margin:0 !important;animation:none !important;opacity:1 !important;
+  background:#FFFBF3 !important;background-image:none !important;border:1px solid rgba(176,138,74,.28);border-top:2px solid #B08A4A;border-radius:14px !important;
+  padding:22px 22px 18px !important;box-shadow:0 18px 34px -24px rgba(60,38,14,.55),0 1px 0 rgba(255,255,255,.9) inset !important;display:flex;flex-direction:column;position:relative}
+#stimmen .zettel blockquote{font:400 17px/1.45 var(--serif) !important;color:var(--espresso);margin:14px 0 0 !important;flex:1}
+#stimmen .zettel cite{font:600 13px/1 var(--serif) !important;font-style:normal !important;letter-spacing:.14em;text-transform:uppercase;color:#8A6A36 !important;text-align:left !important;margin-top:14px;display:flex !important;align-items:center;gap:10px}
+#stimmen .zettel cite::before{content:"";width:22px;height:1.5px;background:#B08A4A}
+#stimmen .gbuch .zettel:nth-child(2){grid-column:1/-1;order:-1;padding:26px 30px 22px !important}
+#stimmen .gbuch .zettel:nth-child(2) blockquote{font:italic 500 25px/1.38 var(--serif) !important;margin-top:18px !important}
+#stimmen .gbuch .zettel:hover{transform:translateY(-4px) !important;box-shadow:0 24px 40px -24px rgba(60,38,14,.6) !important}
+#stimmen .wertung{justify-content:center;gap:12px !important;padding:22px 18px;border-radius:16px;background:linear-gradient(180deg,#FFFBF3,#F7EEDC);border:1px solid rgba(176,138,74,.3)}
+#stimmen .wertung p{font-size:15px;margin:0}
+@media (max-width:899px){#stimmen .gb-wrap{grid-template-columns:1fr !important}#stimmen .gbuch{grid-template-columns:1fr !important}#stimmen .gbuch .zettel:nth-child(2) blockquote{font-size:21px !important}}
+</style>
+<style id="premium2-css">
+/* Römische Kapitel */
+.p2-num{font-family:"Newsreader",Georgia,serif;font-style:italic;color:#C9A464;margin-right:.45em;letter-spacing:.04em}
+/* Messing-Glanz über «Keyff» */
+@keyframes p2sheen{0%{background-position:120% 0}100%{background-position:-60% 0}}
+html body.ix1 .hero h1 .glow{background:linear-gradient(100deg,#C9A464 0%,#C9A464 38%,#FFF1D2 48%,#E9CC8E 52%,#C9A464 62%,#C9A464 100%) 120% 0/260% 100% no-repeat!important;
+  -webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important;animation:p2sheen 2.6s cubic-bezier(.4,.1,.2,1) .9s both}
+html body.ix1 .hero h1:hover .glow{animation:p2sheen 1.6s cubic-bezier(.4,.1,.2,1) both}
+@media (prefers-reduced-motion:reduce){html body.ix1 .hero h1 .glow{animation:none;background-position:0 0!important}}
+/* Fallblatt-Anzeige für die Zeiten */
+.p2-flap{display:inline-flex;gap:2px;justify-content:flex-end;font-family:"DM Mono","SFMono-Regular",Menlo,monospace;font-variant-numeric:tabular-nums}
+.p2-flap .fl{position:relative;display:inline-block;min-width:.72em;padding:.06em .08em;border-radius:3px;text-align:center;line-height:1.15;
+  background:linear-gradient(180deg,#2a2018 0 49%,#1a130d 51% 100%);color:#F3E4C2;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 1px 2px rgba(0,0,0,.5)}
+.p2-flap .fl::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.65)}
+.p2-flap .fl.sep{background:none;box-shadow:none;min-width:.4em;color:#C9A464}
+.p2-flap .fl.sep::after{display:none}
+@keyframes p2flip{0%{transform:perspective(300px) rotateX(-92deg);opacity:.2}60%{transform:perspective(300px) rotateX(12deg);opacity:1}100%{transform:none}}
+.p2-go .p2-flap .fl{animation:p2flip .42s cubic-bezier(.3,.7,.3,1.2) both;animation-delay:calc(var(--i)*38ms + var(--r)*90ms)}
+@media (prefers-reduced-motion:reduce){.p2-go .p2-flap .fl{animation:none}}
+/* Dunkel: dünne Tafel, Ziffern als Fallblatt */
+.board{padding:4px!important;border-radius:6px!important}
+.hours td{font-size:1.1rem!important}
+/* Hell: helle Fallblätter auf Papier */
+.zeiten .p2-flap .fl{background:linear-gradient(180deg,#FFFDF7 0 49%,#F1E8D6 51% 100%);color:#3a2a1a;box-shadow:inset 0 0 0 1px rgba(150,110,60,.25),0 1px 2px rgba(60,40,20,.18)}
+.zeiten .p2-flap .fl::after{background:rgba(120,90,50,.35)}
+.zeiten .p2-flap .fl.sep{background:none;box-shadow:none;color:#9c7a45}
+/* Adresskarte dreht sich (2D-Drehung um die Mitte, Seiten werden in der Mitte getauscht – kein Spiegeln in Safari) */
+.p2-flip{cursor:pointer}
+.p2-flip-in{transition:transform .32s cubic-bezier(.5,0,.5,1)}
+.p2-flip.turn .p2-flip-in{transform:perspective(900px) rotateY(90deg)}
+.p2-flip:not(.on) .p2-flip-back{display:none!important}
+.p2-flip.on .p2-flip-back{display:flex}
+.p2-flip.on .p2-flip-in>.brass:not(.p2-flip-back){display:none}
+.p2-flip-back.brass{display:flex;flex-direction:column;justify-content:center;gap:10px;text-align:left}
+.p2-flip-back b{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.25rem}
+.p2-flip-back a{color:inherit;font-weight:700;text-underline-offset:4px}
+.p2-hint{display:block;margin-top:8px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;opacity:.6}
+/* Siegel im Fuss */
+.foot .plate-lg{position:relative;display:inline-grid;place-items:center;width:176px;height:176px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,236,190,.35),rgba(201,164,100,.12) 45%,rgba(0,0,0,0) 70%);
+  box-shadow:inset 0 0 0 2px rgba(201,164,100,.55),inset 0 0 0 9px rgba(201,164,100,.08),inset 0 0 0 10px rgba(201,164,100,.4),0 10px 26px -12px rgba(0,0,0,.6)}
+.foot .plate-lg img{width:96px!important;height:auto!important}
+.foot .plate-lg svg.p2-ring{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.foot .plate-lg svg.p2-ring text{font:600 9.5px/1 "Newsreader",Georgia,serif;letter-spacing:.32em;fill:#C9A464}
+@media (prefers-reduced-motion:no-preference){.foot .plate-lg svg.p2-ring{animation:p2rot 60s linear infinite}}
+@keyframes p2rot{to{transform:rotate(360deg)}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<style id="premium2-hell">/* Premium Hell: kein Rot (Julia 25.11) – Akzente in dunklem Messing */
+:root{--gold:#7A5A26;--amber:#7A5A26;--ember:#7A5A26;--brick:#7A5A26;--brick-dark:#5E441B}</style>
 </head>
 <body>
 <div class="vw-bar" role="region" aria-label="Variante wählen, nur im Entwurf sichtbar" lang="de">
@@ -2329,15 +2254,17 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
 
       <div class="hero-photo">
         <span class="halo" aria-hidden="true"></span>
-        <img class="main" src="keyff_p1.jpg"
+        <img class="main" src="../keyff_k1.jpg"
              alt="Foto aus dem Kaffe de Keyff: grilliertes Fleisch auf Fladenbrot, dazu Salat und Pommes frites"
              width="900" height="1125" referrerpolicy="no-referrer">
-        
+        <picture class="room-pic"><source media="(min-width:900px)" srcset="../keyff_k5.jpg"><img class="room" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="lazy"
+             alt="Innenraum des Kaffe de Keyff: Theke mit Menütafeln, Holzwand im Fischgrätmuster, Pendelleuchten"
+             width="136" height="136" referrerpolicy="no-referrer"></picture>
       </div>
     </div>
   </section>
 
-  <div class="p-div" aria-hidden="true"><i></i></div>
+  <div class="parquet" aria-hidden="true"></div>
 
   <!-- KARTE -->
   <section class="sec menu" id="karte" aria-labelledby="h-karte">
@@ -2761,7 +2688,7 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
   var EN = {
     c:{"Menüs": "Set menus", "Salate": "Salads", "Frittiertes": "Deep-fried", "Vegetarische Gerichte": "Vegetarian dishes", "Grillgerichte": "From the grill", "Tellergerichte": "Plated meals", "Fitnessteller": "Fitness plate", "Box-Gerichte": "Boxes", "Asiatische Gerichte": "Asian dishes", "Extrasaucen": "Extra sauces", "Alkoholfreie Getränke": "Soft drinks", "Alkoholische Getränke": "Alcoholic drinks"},
     d:{"Dürüm mit Pommes frites und einem Getränk nach Wahl": "Dürüm with chips and a drink of your choice", "Frittiertes Poulet Cordon Bleu. Serviert mit Zitrone und einer Beilage nach Wahl": "Deep-fried chicken cordon bleu. Served with lemon and a side of your choice", "Gefüllt mit Gemüse": "Filled with vegetables", "Gehackte Kichererbsen, Mais und Mehl": "Ground chickpeas, sweetcorn and flour", "Gurken, Feta, Tomaten und Oliven": "Cucumber, feta, tomatoes and olives", "Kebab mit Pommes frites und einem Getränk nach Wahl": "Kebab with chips and a drink of your choice", "Lammhackfleisch vom Grill nach hausgemachtem Rezept. Serviert mit einer Beilage nach Wahl": "Grilled minced lamb, made to the house recipe. Served with a side of your choice", "Nudeln mit Gemüse, Poulet und Sojasauce im Wok gebraten": "Noodles stir-fried in the wok with vegetables, chicken and soy sauce", "Pide nach Wahl mit Pommes frites und Getränk nach Wahl": "Pide of your choice with chips and a drink of your choice", "Pizza nach Wahl mit einem kleinen Salat und einem Getränk nach Wahl": "Pizza of your choice with a small salad and a drink of your choice", "Poulet mit Gemüse an einer feinen Currysauce": "Chicken with vegetables in a delicate curry sauce", "Poulet mit Gemüse an einer süss-sauren Sauce": "Chicken with vegetables in a sweet-and-sour sauce", "Reis mit Gemüse, Poulet und Sojasauce im Wok gebraten": "Rice stir-fried in the wok with vegetables, chicken and soy sauce", "Serviert mit Kräuterbutter und einer Beilage nach Wahl": "Served with herb butter and a side of your choice", "Serviert mit Pommes frites": "Served with chips", "Serviert mit Salat und einer Beilage nach Wahl": "Served with salad and a side of your choice", "Serviert mit einer Beilage nach Wahl": "Served with a side of your choice", "Serviert mit gegrilltem Gemüse und einer Beilage nach Wahl": "Served with grilled vegetables and a side of your choice", "Tomatensauce, Mozzarella, 4 verschiedene Käsesorten, Oregano": "Tomato sauce, mozzarella, four kinds of cheese, oregano", "Tomatensauce, Mozzarella, Champignons, Oregano": "Tomato sauce, mozzarella, mushrooms, oregano", "Tomatensauce, Mozzarella, Dönerfleisch, Champignons, Oregano": "Tomato sauce, mozzarella, döner kebab meat, mushrooms, oregano", "Tomatensauce, Mozzarella, Gorgonzola, Oregano": "Tomato sauce, mozzarella, gorgonzola, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Ananas, Oregano": "Tomato sauce, mozzarella, ham, pineapple, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Oregano": "Tomato sauce, mozzarella, ham, mushrooms, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Champignons, Peperoni, Ei, Oregano": "Tomato sauce, mozzarella, ham, mushrooms, peppers, egg, oregano", "Tomatensauce, Mozzarella, Hinterschinken, Oregano": "Tomato sauce, mozzarella, ham, oregano", "Tomatensauce, Mozzarella, Meeresfrüchte, Oregano": "Tomato sauce, mozzarella, seafood, oregano", "Tomatensauce, Mozzarella, Oregano": "Tomato sauce, mozzarella, oregano", "Tomatensauce, Mozzarella, Peperoni, Oregano": "Tomato sauce, mozzarella, peppers, oregano", "Tomatensauce, Mozzarella, Salami, Champignons, Zwiebeln, Oregano": "Tomato sauce, mozzarella, salami, mushrooms, onions, oregano", "Tomatensauce, Mozzarella, Salami, Oregano": "Tomato sauce, mozzarella, salami, oregano", "Tomatensauce, Mozzarella, Sardellen, Kapern, Oregano": "Tomato sauce, mozzarella, anchovies, capers, oregano", "Tomatensauce, Mozzarella, Spinat, Speck, Zwiebeln, Oregano": "Tomato sauce, mozzarella, spinach, bacon, onions, oregano", "Tomatensauce, Mozzarella, Zwiebeln, Knoblauch, Peperoncini, Oregano": "Tomato sauce, mozzarella, onions, garlic, chilli peppers, oregano", "Tomatensauce, Mozzarella, Zwiebeln, Thon, Kapern, Oregano": "Tomato sauce, mozzarella, onions, tuna, capers, oregano", "Tomatensauce, Mozzarella, gegrillte Pouletstreifen, Oliven, Oregano": "Tomato sauce, mozzarella, grilled chicken strips, olives, oregano", "Tomatensauce, Mozzarella, gegrilltes Lammgeschnetzeltes, Peperoncini, Knoblauch, Oregano": "Tomato sauce, mozzarella, grilled sliced lamb, chilli peppers, garlic, oregano", "Tomatensauce, Mozzarella, scharfe Peperoncini, Oregano": "Tomato sauce, mozzarella, hot chilli peppers, oregano", "Tomatensauce, Mozzarella, verschiedene Gemüsesorten, Oregano": "Tomato sauce, mozzarella, mixed vegetables, oregano", "Zubereitet mit Gemüse und Sauce nach Wahl": "Prepared with vegetables and a sauce of your choice", "Zubereitet mit Gemüse und einer Tomatensauce": "Prepared with vegetables and tomato sauce", "Zubereitet mit Lamm, Gemüse und einer Tomatensauce": "Prepared with lamb, vegetables and tomato sauce", "Zubereitet mit Poulet, Gemüse und einer Tomatensauce": "Prepared with chicken, vegetables and tomato sauce", "Zubereitet mit Rahm und Speck": "Prepared with cream and bacon", "Zubereitet mit scharfer Tomatensauce": "Prepared with spicy tomato sauce"},
-    u:{"Speisekarte": "Menu", "Speisekarte öffnen": "Open the menu", "Speisekarte schliessen": "Close the menu", "Karte auf Englisch": "Menu in English", "Ganze Karte als Liste": "Full menu as a list", "Liste schliessen": "Close the list", "Inhalt": "Contents", "Zurück": "Back", "Weiter": "Next", "Seite": "Page", "Seiten": "Pages", "von": "of", "Fortsetzung": "continued", "Zurück zur Liste": "Back to the list", "Zutaten": "Ingredients", "Nährwerte": "Nutrition", "Energie": "Energy", "Fett": "Fat", "Kohlenhydrate": "Carbohydrates", "Eiweiss": "Protein", "Salz": "Salt", "folgt": "to follow", "Online bestellen": "Order online", "Alle Preise in Schweizer Franken (CHF).": "All prices in Swiss francs (CHF).", "Guten Appetit": "Enjoy your meal", "Vorherige Seite": "Previous page", "Nächste Seite": "Next page", "Seiten der Speisekarte": "Pages of the menu", "Speisekarte Kaffe de Keyff: Speisekarte öffnen": "Kaffe de Keyff menu: open the menu", "Sprache der Karte": "Menu language", "Rubrik wählen oder weiterblättern. Ein Gericht antippen, dann klappen Foto, Zutaten und Preis auf.": "Choose a section or turn the pages. Tap a dish to see its photo, ingredients and price.", "Bestellen": "Order", "Kategorien": "sections", "Gerichte und Getränke": "dishes and drinks", "Teil": "part", "geht auf der nächsten Seite weiter": "continues on the next page", "Gericht antippen: Zutaten und Preis klappen auf.": "Tap a dish to see its ingredients and price.", "In der Speisekarte blättern": "Turn the pages of the menu", "Schliessen": "Close", "Details": "Details", "weniger": "less", "Gericht antippen für Zutaten und Preis": "Tap a dish for ingredients and price", "Rubriken der Karte": "Sections of the menu", "Beliebt": "Popular"}
+    u:{"Speisekarte": "Menu", "Speisekarte öffnen": "Open the menu", "Speisekarte schliessen": "Close the menu", "Karte auf Englisch": "Menu in English", "Ganze Karte als Liste": "Full menu as a list", "Liste schliessen": "Close the list", "Inhalt": "Contents", "Zurück": "Back", "Weiter": "Next", "Seite": "Page", "Seiten": "Pages", "von": "of", "Fortsetzung": "continued", "Zurück zur Liste": "Back to the list", "Zutaten": "Ingredients", "Nährwerte": "Nutrition", "Energie": "Energy", "Fett": "Fat", "Kohlenhydrate": "Carbohydrates", "Eiweiss": "Protein", "Salz": "Salt", "folgt": "to follow", "Online bestellen": "Order online", "Alle Preise in Schweizer Franken (CHF).": "All prices in Swiss francs (CHF).", "Foto eines Gastes": "Photo by a guest", "Guten Appetit": "Enjoy your meal", "Vorherige Seite": "Previous page", "Nächste Seite": "Next page", "Seiten der Speisekarte": "Pages of the menu", "Speisekarte Kaffe de Keyff: Speisekarte öffnen": "Kaffe de Keyff menu: open the menu", "Sprache der Karte": "Menu language", "Rubrik wählen oder weiterblättern. Ein Gericht antippen, dann klappen Foto, Zutaten und Preis auf.": "Choose a section or turn the pages. Tap a dish to see its photo, ingredients and price.", "Bestellen": "Order", "Kategorien": "sections", "Gerichte und Getränke": "dishes and drinks", "Teil": "part", "geht auf der nächsten Seite weiter": "continues on the next page", "Gericht antippen: Zutaten und Preis klappen auf.": "Tap a dish to see its ingredients and price.", "In der Speisekarte blättern": "Turn the pages of the menu", "Schliessen": "Close", "Details": "Details", "weniger": "less", "Gericht antippen für Zutaten und Preis": "Tap a dish for ingredients and price", "Rubriken der Karte": "Sections of the menu", "Beliebt": "Popular"}
   };
   /* Sprache des Buchs: Deutsch (Standard) oder Englisch; Namen der Gerichte und Preise bleiben */
   var LKEY = 'keyff-karte-sprache', lang = 'de';
@@ -2926,13 +2853,14 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
       return '<span class="zi" style="--i:' + i + '">' + p + (i < parts.length - 1 ? ',' : '') + '</span>';
     }).join(' ') + '</p></div>';
   }
+  var PH = {"Pizza Kebab": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9TNEN3mn2tNhlQ6jw-lTob1mvhITsYajHOwgColXgQuDTswRL-tuXlNPMWepdGMc6xlLT4BIX8DvJ6oMyTBBw9UqGB_E0F1pGGkw_aRa6UmWpEeunN60t3Zl0zm1yNM0JIFGUp2Igkbgu8=w900-h675-k-no", "Pide Sucuk": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9S6aZdMhbv9ncJ3rQwTqnyTXfz4Vbu56HiG_lV2ZWrugJgaTGFThMm6xFga9qYkElgUAq-i9VdqH2dBrM1n8MDfpAxdL4DEBI1qLsjTpfdTmMmQdxwrz3EMLz-0YzCGOTnoPpb_7Q=w900-h675-k-no", "Gemischter Salat (gross)": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9RvXE_NnTKQNgknH-DlRv5o77Jl9yRh0ac1YuZNCETbj6WgQWvcBHW3wftCR1I4HWZfwvWCqS_it3vWGBO9XpjTyxqJsvNVi7I0oUDDmuAyE6EJaEQfkldy3H19OHR98Rs2SF_qvQ=w900-h675-k-no"};
   function detailHTML(ci, j){
     var d = MENU[ci].d[j], price = 'CHF ' + d[2];
     return '<div class="bk-dv-top"><div class="bk-dv-ttl"><span class="bk-dv-cat">' + esc(catT(MENU[ci])) + '</span>' +
         '<h4 class="bk-dv-h" id="bk-dv-h" tabindex="-1"' + nl() + '>' + esc(d[0]) + '</h4></div>' +
         '<button type="button" class="bk-x">' + XICON + tr('Schliessen') + '</button></div>' +
       '<div class="bk-dv-body">' + zuHTML(d[1], 'h5') + '<div class="bk-dv-price"><span class="bk-big">' + price + '</span></div>' +
-        '<div class="bk-dv-orn" aria-hidden="true"><img src="keyff_k6.png" alt=""><span>' + tr('Guten Appetit') + '</span></div></div>' +
+        (PH[d[0]] ? '<figure class="bk-dv-ph"><img src="' + PH[d[0]] + '" alt="' + esc(d[0]) + '" loading="lazy"><figcaption>' + tr('Foto eines Gastes') + '</figcaption></figure>' : '') + '<div class="bk-dv-orn" aria-hidden="true"><img src="keyff_k6.png" alt=""><span>' + tr('Guten Appetit') + '</span></div></div>' +
       '<div class="bk-dv-foot"><button type="button" class="bk-back">' + BACK + tr('Zurück zur Liste') + '</button>' +
         '<a class="bk-order" href="' + ORDER + '" target="_blank" rel="noopener">' + tr('Online bestellen') + '</a></div>';
   }
@@ -2946,7 +2874,7 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
       '<button type="button" class="bk-row" id="b' + id + '" aria-expanded="false" aria-controls="p' + id + '" data-c="' + ci + '" data-j="' + j + '">' + row +
       '<div class="bk-panel" id="p' + id + '" role="group" aria-labelledby="b' + id + '"><div class="bk-panel-in"><div class="bk-det' + (d[1] ? '' : ' nozu') + '">' +
         '<button type="button" class="bk-x">' + XICON + tr('Schliessen') + '</button>' +
-        zuHTML(d[1], 'h4') +
+        zuHTML(d[1], 'h4') + (PH[d[0]] ? '<figure class="bk-dv-ph bk-ph-m"><img src="' + PH[d[0]] + '" alt="' + esc(d[0]) + '" loading="lazy"><figcaption>' + tr('Foto eines Gastes') + '</figcaption></figure>' : '') +
         '<div class="bk-buy"><span class="bk-big">' + price + '</span><a class="bk-order" href="' + ORDER + '" target="_blank" rel="noopener">' + tr('Online bestellen') + '</a></div>' +
         '<button type="button" class="bk-back">' + BACK + tr('Zurück zur Liste') + '</button>' +
       '</div></div></div></li>';
@@ -3933,88 +3861,74 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
 })();
 </script>
 
-  <div class="p-div" aria-hidden="true"><i></i></div>
-
-  <!-- FOTOS (Premium: Gerichte-Liste + ein grosses Foto im Passepartout) -->
-  <section class="sec p-dishes" id="fotos" aria-labelledby="h-fotos">
+  <!-- FOTOS -->
+  <section class="sec" id="fotos" aria-labelledby="h-fotos">
     <div class="wrap">
       <div class="sec-head">
-        <p class="kicker">III · Aus der Küche</p>
+        <p class="kicker">Fotos</p>
         <h2 id="h-fotos">Ein Blick <em>hinein</em></h2>
       </div>
-      <div class="p-dl">
-        <ol class="p-names" aria-label="Gerichte">
-          <li><button type="button" data-i="0" aria-pressed="true"><span class="p-no">I</span>Kebab im Brot</button></li>
-          <li><button type="button" data-i="1" aria-pressed="false"><span class="p-no">II</span>Pide</button></li>
-          <li><button type="button" data-i="2" aria-pressed="false"><span class="p-no">III</span>Hamburger mit Pommes</button></li>
-        </ol>
-        <div class="p-frames">
-          <figure class="p-frame on"><img src="keyff_p2.jpg" width="900" height="1125" alt="Kebab im Brot aus dem Kaffe de Keyff" loading="lazy" referrerpolicy="no-referrer"><figcaption>Kebab im Brot</figcaption></figure>
-          <figure class="p-frame"><img src="keyff_p3.jpg" width="900" height="1125" alt="Pide aus dem Kaffe de Keyff" loading="lazy" referrerpolicy="no-referrer"><figcaption>Pide</figcaption></figure>
-          <figure class="p-frame"><img src="keyff_p4.jpg" width="900" height="1125" alt="Hamburger mit Pommes frites aus dem Kaffe de Keyff" loading="lazy" referrerpolicy="no-referrer"><figcaption>Hamburger mit Pommes</figcaption></figure>
+      <div class="gallery">
+        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="../keyff_k2.jpg"></figure>
+        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="../keyff_k4.jpg"></figure>
+        <figure><img loading="lazy" referrerpolicy="no-referrer" width="900" height="1125" alt="Foto aus dem Kaffe de Keyff" src="../keyff_k3.jpg"></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- GÄSTEBUCH -->
+  <section class="sec gaeste" id="stimmen" aria-labelledby="h-gb">
+    <div class="wrap">
+      <div class="gb-kopf">
+        <h2 id="h-gb">Was Gäste sagen</h2>
+      </div>
+      <div class="gb-wrap">
+        <div class="gbuch">
+          <figure class="zettel"><blockquote>«Top Essen, Top Service, sehr freundliches Personal.»</blockquote><cite>Marcel</cite></figure>
+          <figure class="zettel"><blockquote>«Essen immer frisch, immer warm. Service freundlich, aufmerksam. Cooler Laden, gemütliches Ambiente. Immer wieder gerne»</blockquote><cite>Christian</cite></figure>
+          <figure class="zettel"><blockquote>«Sehr gutes Essen, vor allem das Lammfleisch. Sehr freundliches Personal.»</blockquote><cite>Bruno</cite></figure>
+          <figure class="zettel"><blockquote>«Sehr netter Bediener, und das Essen ist immer top.»</blockquote><cite>Nico</cite></figure>
+        </div>
+        <div class="wertung">
+          <span class="st-wrap"><svg class="stempel" viewBox="0 0 120 120" role="img" aria-label="Stempel: 4,5 von 5"><use href="#st"/></svg></span>
+          <p>197 Bewertungen auf Google</p>
+          <p class="je">Just Eat: 4,9 von 5 (360+ Bewertungen)</p>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Kaffe+de+Keyff+Degersheimerstrasse+1+Flawil" target="_blank" rel="noopener">Alle Bewertungen ansehen</a>
         </div>
       </div>
     </div>
   </section>
-  <div class="p-div" aria-hidden="true"><i></i></div>
 
-  <!-- BEWERTUNGEN (Premium: Zitat wie im Magazin) -->
-  <section class="sec p-voices" id="stimmen" aria-labelledby="h-stimmen">
+  <!-- ZEITEN + ORT: zwei Zettel -->
+  <div class="sec besuch">
     <div class="wrap">
-      <div class="sec-head">
-        <p class="kicker">IV · Gäste</p>
-        <h2 id="h-stimmen">Was Gäste <em>schreiben</em></h2>
-      </div>
-      <p class="p-rating"><span>4,5 von 5 · 197 Bewertungen auf Google</span><i aria-hidden="true"></i><span>4,9 von 5 · 360+ auf Just&nbsp;Eat</span></p>
-      <div class="p-q" id="p-q" aria-live="polite">
-        <blockquote class="p-quote on"><p>Essen immer frisch, immer warm. Service freundlich, aufmerksam. Cooler Laden, gemütliches Ambiente. Immer wieder gerne</p><footer>Christian</footer></blockquote>
-        <blockquote class="p-quote" aria-hidden="true"><p>Top Essen, Top Service, sehr freundliches Personal.</p><footer>Marcel</footer></blockquote>
-        <blockquote class="p-quote" aria-hidden="true"><p>Sehr gutes Essen, vor allem das Lammfleisch. Sehr freundliches Personal.</p><footer>Bruno</footer></blockquote>
-        <blockquote class="p-quote" aria-hidden="true"><p>Sehr netter Bediener, und das Essen ist immer top.</p><footer>Nico</footer></blockquote>
-      </div>
-      <div class="p-qnav">
-        <button type="button" class="p-qb" id="p-qprev" aria-label="Vorheriges Zitat">←</button>
-        <span class="p-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></span>
-        <button type="button" class="p-qb" id="p-qnext" aria-label="Nächstes Zitat">→</button>
-      </div>
-      <a class="p-arrow" href="https://www.google.com/maps/search/?api=1&amp;query=Kaffe+de+Keyff+Degersheimerstrasse+1+Flawil" target="_blank" rel="noopener">Alle Bewertungen ansehen <span aria-hidden="true">→</span></a>
-    </div>
-  </section>
-  <div class="p-div" aria-hidden="true"><i></i></div>
-
-  <!-- ZEITEN + ORT (Premium: nur Schiefer und Messing) -->
-  <div class="sec p-visit">
-    <div class="wrap">
-      <section id="zeiten" aria-labelledby="h-zeiten">
-        <div class="sec-head">
-          <p class="kicker">V · Besuch</p>
-          <h2 id="h-zeiten">Jeden Tag <em>geöffnet</em></h2>
-        </div>
-        <div class="p-slate">
-          <table class="p-hours">
+      <div class="unten">
+        <section class="block zeit" id="zeiten" aria-labelledby="h-zeit">
+          <h2 id="h-zeit">Öffnungszeiten</h2>
+          <svg class="tasse steam" viewBox="0 0 64 56" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 24h34v8c0 10-7 17-17 17S10 42 10 32z"/><path d="M44 28c7-1 10 3 8 8s-7 6-10 5"/><path d="M6 52h44"/></g><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path class="stm" d="M20 8c-3 4 3 6 0 11"/><path class="stm" d="M28 5c-3 4 3 7 0 12"/><path class="stm" d="M36 8c-3 4 3 6 0 11"/></g></svg>
+          <table class="zeiten">
             <caption class="sr">Öffnungszeiten Kaffe de Keyff</caption>
             <tbody>
-              <tr data-day="1"><th scope="row">Montag</th><td>10.30–23.00</td></tr>
-              <tr data-day="2"><th scope="row">Dienstag</th><td>08.00–23.00</td></tr>
-              <tr data-day="3"><th scope="row">Mittwoch</th><td>08.00–23.00</td></tr>
-              <tr data-day="4"><th scope="row">Donnerstag</th><td>08.00–23.00</td></tr>
-              <tr data-day="5"><th scope="row">Freitag</th><td>08.00–24.00</td></tr>
-              <tr data-day="6"><th scope="row">Samstag</th><td>08.00–24.00</td></tr>
-              <tr data-day="0"><th scope="row">Sonntag</th><td>08.00–23.00</td></tr>
+              <tr data-day="1"><th scope="row"><span class="tg">Montag</span></th><td>10.30–23.00</td></tr>
+              <tr data-day="2"><th scope="row"><span class="tg">Dienstag</span></th><td>08.00–23.00</td></tr>
+              <tr data-day="3"><th scope="row"><span class="tg">Mittwoch</span></th><td>08.00–23.00</td></tr>
+              <tr data-day="4"><th scope="row"><span class="tg">Donnerstag</span></th><td>08.00–23.00</td></tr>
+              <tr data-day="5"><th scope="row"><span class="tg">Freitag</span></th><td>08.00–24.00</td></tr>
+              <tr data-day="6"><th scope="row"><span class="tg">Samstag</span></th><td>08.00–24.00</td></tr>
+              <tr data-day="0"><th scope="row"><span class="tg">Sonntag</span></th><td>08.00–23.00</td></tr>
             </tbody>
           </table>
-        </div>
-      </section>
-      <section id="ort" aria-labelledby="h-ort">
-        <h2 id="h-ort" class="p-h3">Der Weg <em>zu uns</em></h2>
-        <div class="p-brass">
-          <i class="p-screw" aria-hidden="true"></i><i class="p-screw" aria-hidden="true"></i><i class="p-screw" aria-hidden="true"></i><i class="p-screw" aria-hidden="true"></i>
-          <address><span class="p-nm">Kaffe de Keyff</span>Degersheimerstrasse&nbsp;1<br>9230&nbsp;Flawil</address>
-        </div>
-        <p class="p-status"><span id="p-today">Jeden Tag geöffnet</span> · ca. 6&nbsp;Min. zu Fuss vom Bahnhof Flawil</p>
-        <p class="p-res">Tisch reservieren: <a href="tel:+41715544224">071&nbsp;554&nbsp;42&nbsp;24</a></p>
-        <a class="p-arrow" href="https://www.google.com/maps/search/?api=1&amp;query=Kaffe+de+Keyff+Degersheimerstrasse+1+Flawil" target="_blank" rel="noopener">Route planen <span aria-hidden="true">→</span></a>
-      </section>
+        </section>
+        <section class="block ort" id="ort" aria-labelledby="h-ort">
+          <h2 id="h-ort">So finden Sie uns</h2>
+          <address>Kaffe de Keyff<br>Degersheimerstrasse 1<br>9230 Flawil</address>
+          <p class="res">Tisch reservieren unter</p>
+          <a class="tel" href="tel:+41715544224">071 554 42 24</a>
+          <div class="reihe">
+            <a class="btn btn-amber" href="https://www.google.com/maps/search/?api=1&amp;query=Kaffe+de+Keyff+Degersheimerstrasse+1+Flawil" target="_blank" rel="noopener">Route planen</a>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -4023,7 +3937,6 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
 <footer class="foot">
   <div class="parquet" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="p-bye">Afiyet olsun — bis bald im Keyff.</p>
     <span class="plate plate-lg"><img src="keyff_k6.png" alt="Kaffe de Keyff" width="124" height="86" loading="lazy" referrerpolicy="no-referrer"></span>
     <nav aria-label="Rechtliches">
       <a href="#">Impressum</a>
@@ -4031,11 +3944,6 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
     </nav>
   </div>
 </footer>
-<nav class="p-dock" id="p-dock" aria-label="Schnellzugriff">
-  <a href="tel:+41715544224"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>Anrufen</a>
-  <a href="#karte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h7a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4zM20 5h-7a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h7z"/></svg>Karte</a>
-  <a href="https://www.google.com/maps/search/?api=1&amp;query=Kaffe+de+Keyff+Degersheimerstrasse+1+Flawil" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Route</a>
-</nav>
 
 
 <script>
@@ -4325,6 +4233,18 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
   });
 })();</script>
 <script>(function(){
+  /* 25.11: Buch wächst weich (--bkh 1 s) – danach ganz ins Bild holen wie fitBook (Kopfleiste + 6 px) */
+  var bk=document.getElementById('buch'); if(!bk) return;
+  bk.addEventListener('transitionend',function(e){
+    if(e.target!==bk||e.propertyName!=='--bkh'||bk.dataset.state!=='open'||innerWidth<900) return;
+    var t=document.querySelector('.top'),hh=t?t.getBoundingClientRect().height:0,m=6,vh=innerHeight,r=bk.getBoundingClientRect(),y=window.pageYOffset,to=null;
+    if(r.height>vh-hh-2*m){ if(Math.abs(r.top-hh-m)>2) to=y+r.top-hh-m; }
+    else if(r.top<hh+m-1) to=y+r.top-hh-m;
+    else if(r.bottom>vh-m+1) to=y+r.bottom-vh+m;
+    if(to!==null) window.scrollTo({top:to,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  });
+})();</script>
+<script>(function(){
   /* Sand liegt auf <html>; Blöcke darüber durchsichtig, damit nichts an Blockgrenzen abbricht (deckende Farbe/linear-gradient weg, Lichtverläufe bleiben) */
   var SEL='main > section, main > div:not(.parquet), main > section > .wrap, footer.foot';
   [].slice.call(document.querySelectorAll(SEL)).forEach(function(e){var c=getComputedStyle(e);e.style.backgroundColor='transparent';
@@ -4334,92 +4254,33 @@ h2 em,.p-h3 em{font-style:italic!important;color:var(--p-acc)!important;backgrou
     if(keep.length!==L.length){e.style.backgroundImage=keep.length?keep.join(', '):'none';}});
 })();</script>
 <script>(function(){
-  var RM = matchMedia('(prefers-reduced-motion: reduce)').matches, D = document;
-  /* 2 Kapitel I–V */
-  var K = {'.hero .eyebrow':'I · Willkommen', '#karte .kicker':'II · Die Karte'};
-  Object.keys(K).forEach(function(s){ var e = D.querySelector(s); if(e) e.textContent = K[s]; });
-  /* 2 Preise in einer Zeile: aus den Werten der Karte (data-ab), «18.00» → «18.–» */
-  var ab = D.getElementById('ab-preise');
-  if(ab){
-    function v(k){ var e = ab.querySelector('[data-ab="' + k + '"]'); var t = e ? e.textContent.trim() : ''; return t.replace(/\.00$/, '.–'); }
-    var d = v('d'), p = v('p'), m = v('m');
-    if(d && p && m) ab.innerHTML = '<span>Dürüm · ab&nbsp;<b>' + d + '</b></span><i class="p-sep" aria-hidden="true"></i><span>Pizza · ab&nbsp;<b>' + p + '</b></span><i class="p-sep" aria-hidden="true"></i><span>Menü mit Getränk · ab&nbsp;<b>' + m + '</b></span>';
-  }
-  /* 9 Typografie: geschützte Leerzeichen */
-  (function(){
-    var w = D.createTreeWalker(D.body, NodeFilter.SHOW_TEXT, null), n, re = [[/CHF (\d)/g,'CHF $1'],[/9230 Flawil/g,'9230 Flawil'],[/071 554 42 24/g,'071 554 42 24']];
-    while((n = w.nextNode())){ if(n.parentNode && /SCRIPT|STYLE/.test(n.parentNode.nodeName)) continue; var t = n.nodeValue, o = t; re.forEach(function(r){ t = t.replace(r[0], r[1]); }); if(t !== o) n.nodeValue = t; }
-  })();
-  /* Heute: Zeile auf der Tafel + Statuszeile */
-  /* Zürcher Zeit, wie in der Hauptfassung */
-  var zp = {}; try{ new Intl.DateTimeFormat('en-GB', {timeZone:'Europe/Zurich', weekday:'short', hour:'2-digit', minute:'2-digit', hour12:false}).formatToParts(new Date()).forEach(function(x){ zp[x.type] = x.value; }); }catch(e){}
-  var WD = {Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6}, day = zp.weekday in WD ? WD[zp.weekday] : new Date().getDay();
-  var zmin = zp.hour ? (+zp.hour % 24) * 60 + +zp.minute : new Date().getHours() * 60 + new Date().getMinutes();
-  var row = D.querySelector('.p-hours tr[data-day="' + day + '"]');
-  function span(r){ var m = r && r.querySelector('td').textContent.match(/(\d\d)[:.](\d\d)\D+(\d\d)[:.](\d\d)/); return m ? {a:+m[1]*60 + +m[2], b:+m[3]*60 + +m[4], from:m[1]+'.'+m[2], to:m[3]+'.'+m[4]} : null; }
-  (function(){ var line = D.getElementById('heute'), t = span(row); if(!line || !t) return; var dot = line.parentNode.querySelector('.dot');
-    if(zmin >= t.a && zmin < t.b){ line.innerHTML = 'Jetzt geöffnet · heute bis <strong>' + t.to + ' Uhr</strong>'; if(dot) dot.classList.add('is-open'); }
-    else if(zmin < t.a){ line.innerHTML = 'Heute ab <strong>' + t.from + ' Uhr</strong> geöffnet'; if(dot) dot.classList.add('is-closed'); }
-    else { var n = span(D.querySelector('.p-hours tr[data-day="' + ((day + 1) % 7) + '"]')); if(n) line.innerHTML = 'Morgen ab <strong>' + n.from + ' Uhr</strong> geöffnet'; if(dot) dot.classList.add('is-closed'); }
-  })();
-  if(row){
-    row.classList.add('today');
-    var th = row.querySelector('th'); th.insertAdjacentHTML('beforeend', '<small>heute</small><svg class="p-ring" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true"><path d="M6 15 C 8 3, 88 1, 95 12 C 99 22, 70 29, 40 28 C 14 27, 2 22, 7 12"/></svg>');
-    var st = D.getElementById('p-today'), tt = span(row);
-    if(st && tt){ if(zmin >= tt.a && zmin < tt.b) st.textContent = 'Jetzt geöffnet, heute bis ' + tt.to; else if(zmin < tt.a) st.textContent = 'Heute ab ' + tt.from + ' geöffnet';
-      else { var nn = span(D.querySelector('.p-hours tr[data-day="' + ((day + 1) % 7) + '"]')); if(nn) st.textContent = 'Morgen ab ' + nn.from + ' geöffnet'; } }
-  }
-  /* 4 Auftakt + goldene Bogenlinie */
-  var hp = D.querySelector('.hero-photo'), img = hp && hp.querySelector('.main');
-  function arch(){
-    if(!img || !hp) return; var o = hp.querySelector('.p-arch'); if(o) o.remove();
-    var r = img.getBoundingClientRect(), b = hp.getBoundingClientRect(), w = r.width, h = r.height, rr = Math.min(w / 2, h);
-    if(w < 20) return; var g = 8;
-    var svg = D.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'p-arch'); svg.setAttribute('aria-hidden', 'true');
-    svg.setAttribute('width', w + 2 * g); svg.setAttribute('height', h + g); svg.style.left = (r.left - b.left - g) + 'px'; svg.style.top = (r.top - b.top - g) + 'px';
-    var W = w + g, H = h + g, R = rr + g;
-    svg.innerHTML = '<path pathLength="1" d="M' + 0 + ' ' + H + ' L0 ' + R + ' A' + R + ' ' + R + ' 0 0 1 ' + (W + g) + ' ' + R + ' L' + (W + g) + ' ' + H + '"/>';
-    hp.appendChild(svg);
-  }
-  var first = false; try{ first = !sessionStorage.getItem('p-intro'); sessionStorage.setItem('p-intro', '1'); }catch(e){}
-  if(first && !RM && D.querySelector('.hero')){ D.documentElement.classList.add('p-intro'); }
-  function go(){ arch(); requestAnimationFrame(function(){ requestAnimationFrame(function(){ D.documentElement.classList.add('p-go'); setTimeout(function(){ D.documentElement.classList.remove('p-intro'); }, 1700); }); }); }
-  if(img && !img.complete) img.addEventListener('load', go, {once:true}); else go();
-  addEventListener('resize', arch);
-  /* 10 Übergang Э1 → Э2 */
-  var hero = D.querySelector('.hero'), buch = D.getElementById('buch'), tick = false;
-  function tr(){ tick = false; if(RM || !hero) return;
-    var hb = hero.getBoundingClientRect(), p = Math.min(1, Math.max(0, -hb.top / Math.max(1, hb.height)));
-    if(img){ img.style.transform = 'scale(' + (1 - .04 * p).toFixed(4) + ')'; img.style.filter = 'brightness(' + (1 - .15 * p).toFixed(3) + ')'; }
-    if(buch && buch.dataset.state !== 'open'){ var bb = buch.getBoundingClientRect(), q = Math.min(1, Math.max(0, (innerHeight - bb.top) / (innerHeight * .55))); buch.style.transform = 'translateY(' + ((1 - q) * 22).toFixed(1) + 'px)'; }
-    else if(buch) buch.style.transform = '';
-  }
-  addEventListener('scroll', function(){ if(!tick){ tick = true; requestAnimationFrame(tr); } }, {passive:true}); tr();
-  /* 11 Goldglanz einmal beim Erscheinen; 6 Ecke hebt sich auf dem Telefon einmal */
-  if('IntersectionObserver' in window && !RM){
-    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) return; var t = e.target; io.unobserve(t);
-      if(t.id === 'bk-open'){ if(matchMedia('(hover:none)').matches){ t.classList.add('p-lift'); setTimeout(function(){ t.classList.remove('p-lift'); }, 1400); } return; }
-      t.classList.add('p-shine'); }); }, {threshold:.6});
-    ['.bk-cv-t', '.p-brass', '.p-bye', '#bk-open'].forEach(function(s){ var e = D.querySelector(s); if(e) io.observe(e); });
-  }
-  /* 7 Э3: Name wählt das grosse Foto */
-  var nb = [].slice.call(D.querySelectorAll('.p-names button')), fr = [].slice.call(D.querySelectorAll('.p-frame'));
-  function pick(i){ nb.forEach(function(b, k){ b.setAttribute('aria-pressed', String(k === i)); }); fr.forEach(function(f, k){ f.classList.toggle('on', k === i); }); }
-  nb.forEach(function(b){ var i = +b.getAttribute('data-i'); b.addEventListener('click', function(){ pick(i); }); b.addEventListener('mouseenter', function(){ pick(i); }); b.addEventListener('focus', function(){ pick(i); }); });
-  /* 8 Zitate: alle 6 s, Pause über dem Block, Pfeile */
-  var qs = [].slice.call(D.querySelectorAll('.p-quote')), dots = [].slice.call(D.querySelectorAll('.p-dots i')), qi = 0, hold = false, qbox = D.getElementById('p-q');
-  function showQ(i){ qi = (i + qs.length) % qs.length; qs.forEach(function(q, k){ q.classList.toggle('on', k === qi); if(k === qi) q.removeAttribute('aria-hidden'); else q.setAttribute('aria-hidden', 'true'); }); dots.forEach(function(d, k){ d.classList.toggle('on', k === qi); }); }
-  var pv = D.getElementById('p-qprev'), nx = D.getElementById('p-qnext');
-  if(pv) pv.addEventListener('click', function(){ showQ(qi - 1); }); if(nx) nx.addEventListener('click', function(){ showQ(qi + 1); });
-  if(qbox){ qbox.addEventListener('mouseenter', function(){ hold = true; }); qbox.addEventListener('mouseleave', function(){ hold = false; }); }
-  if(!RM && qs.length) setInterval(function(){ if(!hold && !D.hidden) showQ(qi + 1); }, 6000);
-  /* 3 Telefon: Leiste unten erst nach dem ersten Bildschirm; weg, wenn das Buch offen oder der Fuss sichtbar ist */
-  var dock = D.getElementById('p-dock'), foot = D.querySelector('.foot');
-  function dk(){ if(!dock) return; var past = hero ? hero.getBoundingClientRect().bottom < innerHeight * .35 : true;
-    var fv = foot ? foot.getBoundingClientRect().top < innerHeight - 10 : false; var open = buch && buch.dataset.state === 'open';
-    var lst = D.getElementById('karte-liste'); var sheet = lst && !lst.hidden;
-    dock.classList.toggle('show', past && !fv && !open && !sheet); }
-  addEventListener('scroll', dk, {passive:true}); setInterval(dk, 700); dk();
+  var D=document;
+  /* Premium: Ideen 1 und 2 immer an, Schalter verstecken */
+  [].forEach.call(D.querySelectorAll('.vw-ix button[data-ix="1"],.vw-ix button[data-ix="2"]'),function(b){ if(b.getAttribute('aria-pressed')!=='true') b.click(); });
+  var ix=D.querySelector('.vw-ix'); if(ix) ix.style.display='none';
+  /* Kapitel I–V */
+  var R=['I','II','III','IV','V','VI'],n=0;
+  [].forEach.call(D.querySelectorAll('main .kicker, .gb-kopf h2'),function(k){ if(k.closest('.hero')) return; var s=D.createElement('span'); s.className='p2-num'; s.textContent=R[n++]+' ·'; k.insertBefore(s,k.firstChild); });
+  /* Fallblatt */
+  var rows=D.querySelectorAll('table.hours tr, table.zeiten tr');
+  [].forEach.call(rows,function(tr,r){ var td=tr.querySelector('td'); if(!td) return;
+    var txt=td.textContent.trim(); td.setAttribute('aria-label',txt); var out='<span class="p2-flap" aria-hidden="true">', i=0;
+    for(var c of txt){ if(c===' ') continue; var sep=/[–.\-]/.test(c); out+='<span class="fl'+(sep?' sep':'')+'" style="--i:'+(i++)+';--r:'+r+'">'+c+'</span>'; }
+    td.innerHTML=out+'</span>'; });
+  var tb=D.querySelector('table.hours, table.zeiten');
+  if(tb){ if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ tb.classList.add('p2-go'); io.disconnect(); } }); },{threshold:.35}); io.observe(tb); } else tb.classList.add('p2-go'); }
+  /* Adresskarte dreht sich */
+  var br=D.querySelector('.place .brass');
+  if(br){ var w=D.createElement('div'); w.className='p2-flip'; w.setAttribute('role','button'); w.tabIndex=0; w.setAttribute('aria-label','Adresskarte umdrehen');
+    var inn=D.createElement('div'); inn.className='p2-flip-in'; br.parentNode.insertBefore(w,br); w.appendChild(inn); inn.appendChild(br);
+    var hint=D.createElement('span'); hint.className='p2-hint'; hint.textContent='Karte umdrehen ↻'; br.appendChild(hint);
+    var bk=D.createElement('div'); bk.className='brass p2-flip-back';
+    bk.innerHTML='<b>So finden Sie uns</b><span>Ca. 6 Min. zu Fuss vom Bahnhof Flawil.</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Kaffe+de+Keyff+Degersheimerstrasse+1+Flawil" target="_blank" rel="noopener">Route planen →</a><a href="tel:+41715544224">071 554 42 24</a>';
+    inn.appendChild(bk);
+    var busy=false; function t(){ if(busy) return; busy=true; w.classList.add('turn'); setTimeout(function(){ w.classList.toggle('on'); w.classList.remove('turn'); setTimeout(function(){busy=false;},340); },330); } w.addEventListener('click',function(e){ if(e.target.closest('a')) return; t(); }); w.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); t(); } }); }
+  /* Siegel */
+  var pl=D.querySelector('.foot .plate-lg');
+  if(pl){ pl.insertAdjacentHTML('beforeend','<svg class="p2-ring" viewBox="0 0 176 176" aria-hidden="true"><defs><path id="p2c" d="M88,88 m-70,0 a70,70 0 1,1 140,0 a70,70 0 1,1 -140,0"/></defs><text><textPath href="#p2c">KAFFE DE KEYFF · DEGERSHEIMERSTRASSE 1 · FLAWIL ·</textPath></text></svg>'); }
 })();</script>
 </body>
 </html>
